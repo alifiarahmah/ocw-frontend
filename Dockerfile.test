@@ -1,9 +1,0 @@
-FROM node:lts-slim
-
-COPY . /app
-WORKDIR /app
-
-RUN yarn install
-
-STOPSIGNAL SIGKILL
-ENTRYPOINT [ "yarn", "test" ]
