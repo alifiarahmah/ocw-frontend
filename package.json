@@ -8,20 +8,25 @@
     "start": "next start",
     "lint": "next lint",
     "test": "cypress run",
+    "style": "prettier --write src/**/*.{js,jsx,ts,tsx}",
     "cypress": "cypress open"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@fontsource/merriweather": "^4.5.14",
+    "@fontsource/poppins": "^4.5.10",
     "@next/font": "13.1.6",
     "axios": "^1.3.1",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "framer-motion": "^9.0.0",
     "next": "13.1.6",
+    "prettier": "^2.8.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.7.1",
     "typescript": "4.9.5"
   },
   "devDependencies": {
