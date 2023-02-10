@@ -1,5 +1,18 @@
-import { extendTheme } from "@chakra-ui/react";
+// extend chakra theme
 
-const theme = extendTheme({});
+import { extendTheme } from '@chakra-ui/react'
 
-export default theme;
+export const theme = extendTheme({
+  fonts: {
+    heading: 'Merriweather, serif',
+    body: 'Poppins, sans-serif',
+  },
+  colors: {
+    biru: {
+      100: '#CFF5E7',
+      200: '#A0E4CB',
+      500: '#59C1BD',
+      600: '#0D4C92',
+    },
+  },
+})
