@@ -34,6 +34,7 @@ const Register = () => {
                     <Checkbox>Saya ingin menjadi kontributor</Checkbox>
                     <Text>Dengan menekan tombol daftar di bawah ini, saya menyetujui Persyaratan Layanan dan Kebijakan Privasi kami.</Text> 
                     <Button className={styles.button} backgroundColor='#0d4c92' color='white'>Daftar</Button>
+                    <Center>Sudah punya akun? Login sekarang!</Center>
                 </Container>
             </div>
         </>
