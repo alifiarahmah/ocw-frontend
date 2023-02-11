@@ -61,4 +61,8 @@
 
 - Baru sadar ada salah pesan di beberapa commit sebelumnya?
 
-  Gunakan `git rebase -i HEAD~<jumlah commit sebelumnya>` untuk mengubah pesan commit dari commit terakhir hingga beberapa sebelumnya. Jika sudah selesai, push ulang branch anda ke remote dengan `git push -f`.
+  Gunakan `git rebase -i HEAD~<jumlah commit sebelumnya>` untuk mengubah pesan commit dari commit terakhir hingga beberapa sebelumnya.
+
+  Pada kumpulan commit tersebut, ubah `pick` menjadi `reword` atau `r` pada commit yang ingin diubah pesannya, lalu simpan (`ctrl + x`, `y`, `enter` di editor nano) dan keluar. Selanjutnya akan ada editor untuk mengubah pesan commit tersebut, yang akan satu persatu sesuai dengan urutan commit yang ingin diubah.
+
+  Jika sudah selesai, push ulang branch anda ke remote dengan `git push -f`. Untuk detail lebih lanjut, baca selengkapnya [di sini](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/changing-a-commit-message).
