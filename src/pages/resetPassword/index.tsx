@@ -30,7 +30,7 @@ export default function ResetPassword() {
     const onSubmit = (data: any) => {
         // TODO: Shoot Email
         setFilled(true);
-        setDT(new Date().getTime() + 1800000);
+        setDT(new Date().getTime() + 1801000);
     };
 
     const handleResend = () => {
@@ -39,8 +39,6 @@ export default function ResetPassword() {
     };
 
     useEffect(() => {
-        console.log("i ran");
-
         if (filled == true) {
             const interval = setInterval(() => {
                 const diff = destinationTime - new Date().getTime();
