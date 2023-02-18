@@ -10,10 +10,13 @@
     background-color: white;
     width: fit-content;
     height: fit-content;
-    display: flex;
-    flex-direction: column;
     padding: 20px;
     border-radius: 10px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
 }
 
 .button {
