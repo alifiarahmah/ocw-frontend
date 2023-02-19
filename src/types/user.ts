@@ -1,7 +1,9 @@
 export interface User {
-	username: string;
-	name: string;
-	role: string;
-	isActivated: boolean;
-	email: string;
+	CreatedAt: string;
+	Email: string;
+	IsActivated: boolean;
+	Name: string;
+	Password?: string;
+	Role: string;
+	UpdatedAt: string;
 }
