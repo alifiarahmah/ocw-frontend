@@ -21,34 +21,10 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { MdAdd } from 'react-icons/md'
 import RowAction from '../components/admin/row-action'
-
-// TODO: fetch data from API
-const dummy: User[] = [
-  {
-    username: 'bayu',
-    name: 'Bayu',
-    email: 'bayu@bayu.id',
-    role: 'admin',
-    isActivated: true,
-  },
-  {
-    username: 'seorangalip',
-    name: 'Alip',
-    email: 'alip@alip.id',
-    role: 'contributor',
-    isActivated: true,
-  },
-  {
-    username: 'mahasiswarandom',
-    name: 'Mahasiswa Univ Random',
-    email: 'mahasiswa@unran.ac.id',
-    role: 'member',
-    isActivated: true,
-  },
-]
 
 export default function Admin() {
   const {
@@ -67,15 +43,41 @@ export default function Admin() {
     onClose: onCloseDelete,
   } = useDisclosure()
   const toast = useToast()
-  const [users, setUsers] = useState<User[]>(dummy)
-  const [selectedUser, setSelectedUser] = useState<User>(dummy[0])
+  const [users, setUsers] = useState<User[]>([])
+  const [selectedUser, setSelectedUser] = useState<User>({
+    CreatedAt: '',
+    Email: '',
+    IsActivated: false,
+    Name: '',
+    Password: '',
+    Role: '',
+    UpdatedAt: '',
+  })
   // for input form
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [role, setRole] = useState('member')
 
+  useEffect(() => {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/admin/user`).then((res) => {
+      setUsers(res.data.data)
+      setSelectedUser(res.data[0])
+    }).catch((err) => {
+      toast({
+        title: 'Gagal mengambil data pengguna.',
+        description: err.message,
+        status: 'error',
+        duration: 1000,
+        isClosable: true,
+      })
+    })
+  }, [])
+
   const handleEditButton = (user: User) => {
     setSelectedUser(user)
+    setName(user.Name)
+    setEmail(user.Email)
+    setRole(user.Role)
     onOpenEdit()
   }
 
@@ -84,11 +86,19 @@ export default function Admin() {
     onOpenDelete()
   }
 
-  const handleAdd = (user: User) => {
+  const handleAdd = () => {
     // TODO: change to use API
     setUsers([
       ...users,
-      { name, email, role, username: name.toLowerCase(), isActivated: false },
+      {
+        CreatedAt: '',
+        Email: email,
+        IsActivated: false,
+        Name: name,
+        Password: '',
+        Role: role,
+        UpdatedAt: '',
+      },
     ])
     toast({
       title: `Pengguna ${name} berhasil ditambahkan.`,
@@ -101,6 +111,19 @@ export default function Admin() {
 
   const handleEdit = (user: User) => {
     // TODO: change to use API
+    setUsers(
+      users.map((u) => {
+        if (u.Email === user.Email) {
+          return {
+            ...u,
+            Name: name,
+            Email: email,
+            Role: role,
+          }
+        }
+        return u
+      })
+    )
     toast({
       title: `Data pengguna ${name} berhasil diubah.`,
       status: 'success',
@@ -112,6 +135,7 @@ export default function Admin() {
 
   const handleDelete = (user: User) => {
     // TODO: change to use API
+    setUsers(users.filter((u) => u.Email !== user.Email))
     toast({
       title: `Pengguna ${name} berhasil dihapus.`,
       status: 'success',
@@ -149,14 +173,18 @@ export default function Admin() {
             </Thead>
             <Tbody>
               {users.map((u: User) => (
-                <Tr key={u.username}>
-                  <Td>{u.name}</Td>
-                  <Td>{u.email}</Td>
-                  <Td>{u.role}</Td>
+                <Tr key={u.Email}>
+                  <Td>{u.Name}</Td>
+                  <Td>{u.Email}</Td>
+                  <Td>{u.Role}</Td>
                   <Td>
                     <RowAction
-                      onOpenEdit={() => handleEditButton(u)}
-                      onOpenDelete={() => handleDeleteButton(u)}
+                      onOpenEdit={() => {
+                        handleEditButton(u)}
+                      }
+                      onOpenDelete={() => {
+                        handleDeleteButton(u)}
+                      }
                     />
                   </Td>
                 </Tr>
@@ -169,7 +197,7 @@ export default function Admin() {
       <Modal
         isOpen={isOpenAdd}
         onClose={onCloseAdd}
-        onConfirm={() => handleAdd(selectedUser)}
+        onConfirm={() => handleAdd()}
         header="Tambah Pengguna"
       >
         <Stack>
@@ -212,7 +240,7 @@ export default function Admin() {
             <Input
               name="name"
               placeholder="John Doe"
-              value={selectedUser.name}
+              value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </FormControl>
@@ -221,7 +249,7 @@ export default function Admin() {
             <Input
               name="email"
               placeholder="john@doe.com"
-              value={selectedUser.email}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
@@ -229,7 +257,7 @@ export default function Admin() {
             <FormLabel>Role</FormLabel>
             <Select
               name="role"
-              value={selectedUser.role}
+              value={role}
               onChange={(e) => setRole(e.target.value)}
             >
               <option value="member">Member</option>
