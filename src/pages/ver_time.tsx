@@ -11,6 +11,14 @@ import Image from 'next/image';
 import emailpic from '../asset/email.png';
 import Layout from '@/components/layout';
 import {CountdownCircleTimer} from 'react-countdown-circle-timer'
+import { Flex } from '@chakra-ui/react';
+import {
+    StatLabel,
+    StatNumber,
+    Spacer,
+    Stat
+} from "@chakra-ui/react";
+import { useState } from 'react';
 
 
 const poppins = Poppins({weight:"100", subsets:['latin'],})
@@ -20,6 +28,7 @@ const merriweather = Merriweather({weight:"300", subsets:['latin'],})
 
 
 export default function ver_time(){
+    const [timeInSec, setTime] = useState(1800);
     return(
         <>
             <Head>
@@ -63,6 +72,45 @@ export default function ver_time(){
                         >
                             {({ remainingTime }) => remainingTime}
                         </CountdownCircleTimer> */}
+                        <Stat placeSelf={"center"}>
+                            <Flex
+                                position={"relative"}
+                                direction={"column"}
+                            >
+                                <StatLabel
+                                    fontSize={"lg"}
+                                    placeSelf={"center"}
+                                >
+                                    Time Remaining:
+                                </StatLabel>
+                                <StatNumber
+                                    fontSize={"9xl"}
+                                    placeSelf={"center"}
+                                >
+                                    {(~~(timeInSec / 60))
+                                        .toString()
+                                        .padStart(2, "0")}
+                                    :
+                                    {(timeInSec % 60)
+                                        .toString()
+                                        .padStart(2, "0")}
+                                </StatNumber>
+                                {timeInSec <= 3 ? (
+                                    <Text
+                                        bottom={0}
+                                        position={"absolute"}
+                                        color={"red.500"}
+                                        placeSelf={"center"}
+                                    >
+                                        You will be redirected shortly.
+                                    </Text>
+                                ) : (
+                                    <Spacer />
+                                )}
+                            </Flex>
+                        </Stat>
+
+
                     </Container>
                 </div>     
             </Layout>
