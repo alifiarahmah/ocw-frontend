@@ -1,38 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ITBOpenCourseWare Frontend
 
-## Getting Started
+## Development Guide
 
-First, run the development server:
+1. Checkout ke branch staging + pull
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+   ```sh
+   git checkout staging
+   git pull
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Buat branch baru dari staging dengan format `feat/s<nomor sprint>-sb<nomor sb>-<nama fitur dipisah dengan strip (-)>`. Jika membuat perubahan dari fitur yang sudah ada di staging, formatnya menjadi `fix/s<nomor sprint>-sb<nomor sb>-<apa yang diubah dari fitur tersebut>`
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+   ```sh
+   git checkout -b feat/s1-sb1-login
+   ```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+3. Lakukan perubahan pada branch tersebut, commit dengan format `feat(<scope fitur>): <isi perubahan>`. Jika melakukan perubahan pada fitur yang sudah ada, formatnya menjadi `fix(<scope fitur>): <isi perubahan>`, lain-lainnya bisa dilihat di [semantic commit](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+   ```sh
+   git commit -m "feat(login): add login page"
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. Push branch ke remote
 
-## Learn More
+   ```sh
+   git push origin feat/s1-sb1-login
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+5. Buat merge request ke branch staging, tambah assignee diri sendiri dan reviewer
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Handling Accidents
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Salah branch untuk commit?
 
-## Deploy on Vercel
+  Gunakan `git reset --soft HEAD~1` untuk menghapus commit terakhir, lalu `git checkout <branch yang benar>` untuk kembali ke branch yang benar. Commit ulang dengan format yang benar. Tapi hal ini hanya bisa dilakukan sebelum push ke remote.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  Baru sadar salah branch setelah beberapa commit? Gunakan `git reset --soft HEAD~<jumlah commit sebelumnya>`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Ada update baru dari staging ketika sedang mengerjakan pekerjaan di branch sendiri?
+
+  Sebenarnya jika itu pekerjaan orang yang tidak ada hubungannya dengan anda, tidak masalah.
+  
+  Tapi jika iya, contohnya ingin mengambil komponen yang baru ada di staging, gunakan `git rebase staging` untuk mengambil update dari staging. Jika ada konflik, selesaikan konflik tersebut, lalu `git add .` dan `git rebase --continue` untuk melanjutkan rebase. Jika sudah selesai, push ulang branch anda ke remote dengan `git push -f`.
+
+   Sistem kerja rebase *basically* memutuskan semua commit pekerjaan anda sampai commit terakhir yang sinkron dengan staging, git pull dari staging, lalu menyambungkan kembali sehingga dapat meminimalisir konflik, walaupun tetap bisa ada konflik, terutama jika ada perubahan di file sama. Selengkapnya bisa dilihat ilustrasinya sebagai berikut.
+
+   ![rebase illustration](https://www.blog.duomly.com/wp-content/uploads/2020/05/Rebase.png)
+
+- Ada konflik saat melakukan rebase?
+
+  Selesaikan konflik tersebut, lalu `git add .` dan `git rebase --continue` untuk melanjutkan rebase. Jika sudah selesai, push ulang branch anda ke remote dengan `git push -f`.
+
+- Ada konflik saat melakukan merge request?
+
+  Selesaikan konflik tersebut, lalu `git add .` dan `git commit --amend` untuk menggabungkan konflik tersebut ke commit terakhir (jika malas). Push ulang branch anda ke remote dengan `git push -f`.
+
+- Ada salah di pesan commit terakhir?
+
+  Gunakan `git commit --amend` untuk mengganti commit terakhir dengan commit baru. Jika sudah selesai, push ulang branch anda ke remote dengan `git push -f`.
+
+- Baru sadar ada salah pesan di beberapa commit sebelumnya?
+
+  Gunakan `git rebase -i HEAD~<jumlah commit sebelumnya>` untuk mengubah pesan commit dari commit terakhir hingga beberapa sebelumnya.
+
+  Pada kumpulan commit tersebut, ubah `pick` menjadi `reword` atau `r` pada commit yang ingin diubah pesannya, lalu simpan (`ctrl + x`, `y`, `enter` di editor nano) dan keluar. Selanjutnya akan ada editor untuk mengubah pesan commit tersebut, yang akan satu persatu sesuai dengan urutan commit yang ingin diubah.
+
+  Jika sudah selesai, push ulang branch anda ke remote dengan `git push -f`. Untuk detail lebih lanjut, baca selengkapnya [di sini](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/changing-a-commit-message).
