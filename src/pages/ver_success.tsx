@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import {
     Container,
+    Center,
     Text, 
     Button,
 }from '@chakra-ui/react';
@@ -18,7 +19,7 @@ const poppins = Poppins({weight:"100", subsets:['latin'],})
 const merriweather = Merriweather({weight:"300", subsets:['latin'],})
 
 
-export default function verification(){
+export default function ver_success(){
     return(
         <>
             <Head>
@@ -32,11 +33,11 @@ export default function verification(){
                     <Container className={styles.container}>
                         <a className={styles.h1}>
             
-                        <Text fontSize='4xl' className={merriweather.className}><strong> <span className={styles.boldtext}> Selamat Datang!</span> </strong>  </Text>
+                        <Text fontSize='4xl' className={merriweather.className}><strong> <span className={styles.boldtext}> E-mail telah terverifikasi!</span> </strong>  </Text>
                         </a>
                         <a className={styles.h2}>
                         <Text className={poppins.className }>
-                            <strong>  Kami tidak sabar untuk menemani Anda belajar. Sebelum mulai, Anda harus melakukan verifikasi email terlebih dahulu dengan <span className={styles.boldtext}> menekan tombol di bawah  </span></strong>
+                            <strong>  Selamat, akun Anda telah terverifikasi. tekan tombol di bawah ini untuk melanjutkan ke menu utama <span className={styles.boldtext}> menekan tombol di bawah  </span></strong>
                         </Text>
                         </a>
                         <Image
@@ -46,7 +47,7 @@ export default function verification(){
                             className={styles.images}
                         />
                         
-                        <Button size={'4xl'} textColor={'black'} colorScheme='cyan' rounded={'2xl'} className={styles.button}>Verifikasi E-mail</Button>
+                        <Button size={'4xl'} textColor={'black'} colorScheme='cyan' rounded={'2xl'} className={styles.button}>Mulai Belajar!</Button>
                     </Container>
                 </div>     
             </Layout>
