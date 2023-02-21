@@ -13,12 +13,14 @@ import {
 import styles from '@/styles/Login.module.css';
 import React, {useState} from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Login = () => {
     const [user, setUser] = useState({
         email : '',
         password : '',
     });
+    const router = useRouter();
     const handleChange = (type: string, e: any) => {
         let updatedValue = {};
         if(type == 'email'){
@@ -30,9 +32,10 @@ const Login = () => {
     };
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        axios.post('http://localhost:8080/auth/login', user)
+        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, user)
             .then((response) => {
                 console.log(response.data);
+                router.push('/admin');
             }, (error) => {
                 if(error.response.status === 400 || error.response.status === 403){
                     alert("Username atau password anda salah!");

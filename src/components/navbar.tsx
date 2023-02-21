@@ -17,9 +17,11 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { MdMenu, MdOutlineArrowDropDown } from 'react-icons/md'
+import { useRouter } from 'next/router'
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter()
 
   return (
     <>
@@ -54,7 +56,7 @@ export default function Navbar() {
               </HStack>
             </MenuButton>
             <MenuList color="black">
-              <MenuItem>Logout</MenuItem>
+              <MenuItem onClick={() => router.push('/login')}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </HStack>
