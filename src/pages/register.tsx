@@ -27,9 +27,9 @@ const Register = () => {
                         <FormLabel>Alamat Email</FormLabel>
                         <Input placeholder='Alamat Email'></Input>
                         <FormLabel>Kata Sandi</FormLabel>
-                        <Input placeholder='Kata Sandi'></Input>
+                        <Input placeholder='Kata Sandi' type="password"></Input>
                         <FormLabel>Konfirmasi Kata Sandi</FormLabel>
-                        <Input placeholder='Konfirmasi Kata Sandi'></Input>
+                        <Input placeholder='Konfirmasi Kata Sandi' type="password"></Input>
                     </FormControl>
                     <Checkbox>Saya ingin menjadi kontributor</Checkbox>
                     <Text>Dengan menekan tombol daftar di bawah ini, saya menyetujui Persyaratan Layanan dan Kebijakan Privasi kami.</Text> 
