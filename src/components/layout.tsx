@@ -14,10 +14,15 @@ const Layout: React.FC<LayoutProps> = ({ bg, children, title, ...props }) => {
   return (
     <>
       <Head>
-        <title>{title ? `${title} |` : null} ITBOpenCourseWare</title>
-        <meta name="description" content="Platform pembelajaran kuliah untuk publik yang disediakan oleh Institut Teknologi Bandung." />
+        <title>
+          {title ? `${title} | ITBOpenCourseWare` : `ITBOpenCourseWare`}
+        </title>
+        <meta
+          name="description"
+          content="Platform pembelajaran kuliah untuk publik yang disediakan oleh Institut Teknologi Bandung."
+        />
       </Head>
-      <Flex direction="column" minH="100vh" bg={bg ?? 'biru.100'}>
+      <Flex direction="column" minH="100vh" bg={bg ?? "biru.100"}>
         <Navbar />
         <Box
           px={props.p ?? props.px ?? { base: 5, md: 20 }}
@@ -28,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ bg, children, title, ...props }) => {
         </Box>
       </Flex>
     </>
-  )
+  );
 }
 
 export default Layout
