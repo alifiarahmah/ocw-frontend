@@ -1,14 +1,12 @@
-import Head from 'next/head';
-import {
-    Container,
-    Text, 
-    Button,
-}from '@chakra-ui/react';
+import Layout from '@/components/layout';
 import styles from '@/styles/verifcation.module.css';
-import { Poppins, Merriweather } from '@next/font/google';
+import {
+    Button, Container,
+    Text
+} from '@chakra-ui/react';
+import { Merriweather, Poppins } from '@next/font/google';
 import Image from 'next/image';
 import emailpic from '../asset/email.png';
-import Layout from '@/components/layout';
 
 
 
@@ -20,14 +18,7 @@ const merriweather = Merriweather({weight:"300", subsets:['latin'],})
 
 export default function verification(){
     return(
-        <>
-            <Head>
-                <title>
-                    Account Verification
-                </title>
-        
-            </Head>  
-            <Layout>
+            <Layout title="Account Verification">
                 <div className={styles.background}>
                     <Container className={styles.container}>
                         <a className={styles.h1}>
@@ -50,6 +41,5 @@ export default function verification(){
                     </Container>
                 </div>     
             </Layout>
-        </>
     )
 }

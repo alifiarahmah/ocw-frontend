@@ -17,11 +17,7 @@ export default function VerTime() {
   const [timeInSec, setTime] = useState(1800);
 
   return (
-    <>
-      <Head>
-        <title>Account Verification</title>
-      </Head>
-      <Layout>
+      <Layout title="Account Verification">
         <div className={styles.background}>
           <Container className={styles.container}>
             <a className={styles.h1}>
@@ -97,6 +93,5 @@ export default function VerTime() {
           </Container>
         </div>
       </Layout>
-    </>
   );
 }

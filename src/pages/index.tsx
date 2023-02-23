@@ -33,7 +33,6 @@ export default function Home() {
     <Layout
       px={{ base: 5, md: 20 }}
       py={{ base: 5, md: 10 }}
-      title="Admin Page"
     >
       <main className={styles.main}>
         <div className={styles.description}>
