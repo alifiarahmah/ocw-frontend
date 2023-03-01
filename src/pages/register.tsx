@@ -14,7 +14,7 @@ import styles from '@/styles/Register.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { update } from 'cypress/types/lodash';
-import axios from 'axios';
+import http from '../http';
 import Link from 'next/link';
 import isEmail from 'validator/lib/isEmail';
 
@@ -55,9 +55,10 @@ const Register = () => {
             "password" : password,
             "password_validation" : confirmPassword,
         };
-        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, user)
+        http.post('/auth/register', user)
             .then((response) => {
                 alert("Success");
+                router.push('/login')
             }, (error) => {
                 alert("Terjadi kesalahan dalam registrasi");
             }).finally(() => {
@@ -113,7 +114,7 @@ const Register = () => {
                         <Text>Dengan menekan tombol daftar di bawah ini, saya menyetujui Persyaratan Layanan dan Kebijakan Privasi kami.</Text> 
                         <Button className={styles.button} backgroundColor='#0d4c92' color='white' type='submit' isDisabled={disableSubmit()} isLoading={isLoading}>Daftar</Button>
                     </form>
-                    <Center>Sudah punya akun? <Link href={'/login'}>Login sekarang!</Link></Center>
+                    <Center>Sudah punya akun? <Link href={'/login'} className={styles.login}>Login sekarang!</Link></Center>
                 </Container>
             </div>
         </>
