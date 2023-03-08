@@ -10,57 +10,57 @@ import Layout from "@/components/layout";
 
 // const merriweather = Merriweather({weight:"300", subsets:['latin'],})
 
+const poppins = Poppins({ weight: "100", subsets: ["latin"] });
+
+const merriweather = Merriweather({ weight: "300", subsets: ["latin"] });
+
 export default function ver_success() {
-  //   return (
-  //     <>
-  //       <Head>
-  //         <title>Account Verification</title>
-  //       </Head>
-  //       <Layout>
-  //         <div className={styles.background}>
-  //           <Container className={styles.container}>
-  //             <a className={styles.h1}>
-  //               <Text fontSize="4xl" className={merriweather.className}>
-  //                 <strong>
-  //                   {" "}
-  //                   <span className={styles.boldtext}>
-  //                     {" "}
-  //                     E-mail telah terverifikasi!
-  //                   </span>{" "}
-  //                 </strong>{" "}
-  //               </Text>
-  //             </a>
-  //             <a className={styles.h2}>
-  //               <Text className={poppins.className}>
-  //                 <strong>
-  //                   {" "}
-  //                   Selamat, akun Anda telah terverifikasi. tekan tombol di bawah
-  //                   ini untuk melanjutkan ke menu utama{" "}
-  //                   <span className={styles.boldtext}>
-  //                     {" "}
-  //                     menekan tombol di bawah{" "}
-  //                   </span>
-  //                 </strong>
-  //               </Text>
-  //             </a>
-  //             <Image
-  //               src={emailpic}
-  //               alt="verification icon"
-  //               placeholder="blur"
-  //               className={styles.images}
-  //             />
-  //             <Button
-  //               size={"4xl"}
-  //               textColor={"black"}
-  //               colorScheme="cyan"
-  //               rounded={"2xl"}
-  //               className={styles.button}
-  //             >
-  //               Mulai Belajar!
-  //             </Button>
-  //           </Container>
-  //         </div>
-  //       </Layout>
-  //     </>
-  //   );
+  return (
+    <Layout title="Account Verification">
+      <div className={styles.background}>
+        <Container className={styles.container}>
+          <a className={styles.h1}>
+            <Text fontSize="4xl" className={merriweather.className}>
+              <strong>
+                {" "}
+                <span className={styles.boldtext}>
+                  {" "}
+                  E-mail telah terverifikasi!
+                </span>{" "}
+              </strong>{" "}
+            </Text>
+          </a>
+          <a className={styles.h2}>
+            <Text className={poppins.className}>
+              <strong>
+                {" "}
+                Selamat, akun Anda telah terverifikasi. tekan tombol di bawah
+                ini untuk melanjutkan ke menu utama{" "}
+                <span className={styles.boldtext}>
+                  {" "}
+                  menekan tombol di bawah{" "}
+                </span>
+              </strong>
+            </Text>
+          </a>
+          <Image
+            src={emailpic}
+            alt="verification icon"
+            placeholder="blur"
+            className={styles.images}
+          />
+
+          <Button
+            size={"4xl"}
+            textColor={"black"}
+            colorScheme="cyan"
+            rounded={"2xl"}
+            className={styles.button}
+          >
+            Mulai Belajar!
+          </Button>
+        </Container>
+      </div>
+    </Layout>
+  );
 }
