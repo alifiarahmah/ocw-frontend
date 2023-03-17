@@ -12,10 +12,11 @@ import {
   Input,
   Select,
   Stack,
+  Container,
 } from "@chakra-ui/react";
-import { MdArrowBackIos, MdSearch } from "react-icons/md";
+import { MdArrowBackIos } from "react-icons/md";
 
-export default function Courses() {
+export default function EditContent() {
   return (
     <Layout title="Edit Content">
       <Stack
@@ -36,26 +37,27 @@ export default function Courses() {
       </Stack>
       <Card mt={10}>
         <CardHeader>
-          <Heading size="md" className="center">Menambah Handout Materi</Heading>
+          <Heading size="md" className="center">Menambah Video Materi</Heading>
         </CardHeader>
         <CardBody>
           <form>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Judul Handout</FormLabel>
               <Input/>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Downloadable</FormLabel>
-              <Select placeholder="Select option">
+              <Select>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </Select>
             </FormControl>
             <FormControl>
-              <FormLabel>Upload File</FormLabel>
-              <Input type="file"></Input>
+              <FormLabel>Link Youtube</FormLabel>
+              <Input></Input>
             </FormControl>
-            <Button type="submit">Tambah</Button>
+            <Container height={30}/>
+            <Button type="submit" backgroundColor="blue.400">Tambah</Button>
           </form>
         </CardBody>
       </Card>
