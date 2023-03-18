@@ -20,6 +20,17 @@
     border-radius: 40px;
 }
 
+.containercontent{
+    background-color: #FFFFFF;
+    height: 70vh; 
+    width : 100vh; 
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-right: 20;
+    padding-bottom: 0vh;
+    max-width: max-content;
+    max-height: max-content;
+}
 
 .h1{
     align-self: center;
@@ -59,7 +70,6 @@
 .button:hover{
     opacity: 0.5;
     color: white;
-
 }
 
 .boldtext{
