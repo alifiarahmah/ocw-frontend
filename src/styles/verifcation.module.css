@@ -70,18 +70,8 @@
 .button:hover{
     opacity: 0.5;
     color: white;
-
 }
 
 .boldtext{
     font-weight : bold;
-}
-
-.button_content{
-}
-
-
-.button_content:hover{
-    
-    
 }
