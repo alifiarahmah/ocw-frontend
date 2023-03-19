@@ -15,7 +15,7 @@ import {
   MenuItem,
   MenuList,
   Text,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -29,6 +29,7 @@ export default function Navbar() {
     <>
       <HStack
         as="nav"
+        h="10vh"
         py={5}
         px={7}
         justifyContent="space-between"
