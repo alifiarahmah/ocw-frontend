@@ -1,144 +1,56 @@
-import Layout from '@/components/layout'
-import Modal from '@/components/modal'
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  Heading,
-  HStack,
-  Input,
-  Select,
-  Stack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  useToast,
-} from '@chakra-ui/react'
-import styles from '@/styles/Home.module.css'
-import { Inter } from '@next/font/google'
-import Head from 'next/head'
-import Image from 'next/image'
-
-const inter = Inter({ subsets: ['latin'] })
+import CourseCard from "@/components/course_card";
+import HomeSidebar from "@/components/home_sidebar";
+import Layout from "@/components/layout";
+import { SelectSearch } from "@/components/select_search";
+import { Box, Heading, HStack, SimpleGrid, Stack } from "@chakra-ui/react";
 
 export default function Home() {
   return (
-    <>
-    <Layout
-      px={{ base: 5, md: 20 }}
-      py={{ base: 5, md: 10 }}
-    >
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+    <Layout py={0} px={0}>
+      <HStack minH="90vh" alignItems="stretch">
+        <HomeSidebar />
+        <Stack w="100%" p={10} alignItems="center" gap={10}>
+          <SelectSearch />
+          <Box
+            bg="white"
+            borderRadius="lg"
+            px={{ base: 5, lg: 10 }}
+            py={{ base: 3, lg: 7 }}
+            mt={{ base: 3, lg: 7 }}
+          >
+            <Heading fontSize="2xl">Featured Courses</Heading>
+            <SimpleGrid
+              columns={{ base: 2, lg: 3 }}
+              gap={{ base: 3, lg: 7 }}
+              alignItems="stretch"
+              mt={{ base: 3, lg: 7 }}
             >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+              {Array(6)
+                .fill(0)
+                .map((_, i) => (
+                  <CourseCard
+                    key={i}
+                    href="/courses/IF3270"
+                    courseCode="IF3270"
+                    major="Teknik Informatika"
+                    courseName="Pembelajaran Mesin"
+                    lecturer="Dr. Nur Ulfa Maulidevi, ST, M.Sc."
+                    bgColor={
+                      i % 3 === 0
+                        ? "birukartu.200"
+                        : i % 3 === 1
+                        ? "birukartu.300"
+                        : "birukartu.100"
+                    }
+                    majorColor={i % 3 === 2 ? "biru.600" : "white"}
+                    courseNameColor={i % 3 === 2 ? "biru.600" : "white"}
+                    lecturerColor={i % 3 === 2 ? "biru.600" : "white"}
+                  />
+                ))}
+            </SimpleGrid>
+          </Box>
+        </Stack>
+      </HStack>
     </Layout>
-    </>
-  )
+  );
 }

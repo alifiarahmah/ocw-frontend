@@ -29,7 +29,7 @@ export default function CourseCard({
   return (
     <Link href={href} passHref>
       <Card
-        p={4}
+        p={{ base: 3, lg: 4 }}
         borderRadius={{ base: "lg", lg: "2xl" }}
         bg={bgColor}
         boxShadow="lg"
@@ -39,12 +39,17 @@ export default function CourseCard({
           src={thumbnail ?? "https://via.placeholder.com/150x100"}
           borderRadius="inherit"
         />
-        <Box mt={5} mb={2}>
+        <Box mt={{ base: 2, lg: 5 }} mb={2}>
           <Text
             fontSize="xs"
             color={majorColor}
           >{`${courseCode} | ${major}`}</Text>
-          <Text fontSize="xl" fontWeight="bold" my={2} color={courseNameColor}>
+          <Text
+            fontSize={{ base: "lg", lg: "xl" }}
+            fontWeight="bold"
+            my={{ lg: 2 }}
+            color={courseNameColor}
+          >
             {courseName}
           </Text>
           <Text fontSize="sm" color={lecturerColor}>
