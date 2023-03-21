@@ -16,11 +16,17 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { MdArrowBackIos } from "react-icons/md";
+import { useState } from "react";
 
 export default function EditContent() {
+  const [courseBannerProps, setCourseBannerProps] = useState({
+    course_code : 'IF3270',
+    course_name : 'Pembelajaran Mesin',
+    lecturer : 'Dr. Nur Ulfa Maulidevi, ST, M.Sc.',
+  });
   return (
     <Layout title="Edit Content" py={0} px={0}>
-      <CourseBanner course_code="IF3000" course_name="Pembeleajarajran amesin" lecturer="Bu ulfa">
+      <CourseBanner {...courseBannerProps}>
         <Stack>
           <Stack
             justifyContent="space-between"
