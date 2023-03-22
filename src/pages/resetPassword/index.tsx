@@ -17,25 +17,61 @@ import {
     StatLabel,
     StatNumber,
     Flex,
+    useToast,
 } from "@chakra-ui/react";
+import axios from 'axios';
 import { EmailIcon } from "@chakra-ui/icons";
 
 export default function ResetPassword() {
     const router = useRouter();
+    const toast = useToast();
     const [filled, setFilled] = useState(false);
     const [timeInSec, setTime] = useState(1800);
+    const [cachedEmail, setEmail] = useState('');
     const [destinationTime, setDT]: any[] = useState();
     const { register, handleSubmit } = useForm();
 
     const onSubmit = (data: any) => {
-        // TODO: Shoot Email
-        setFilled(true);
-        setDT(new Date().getTime() + 1801000);
+        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/reset/request`,
+        {
+            email: data.email,
+        }).then(res => {
+            // Request returned 200
+            setEmail(data.email)
+            setFilled(true);
+            setDT(new Date().getTime() + 1801000);
+        }).catch(err => {
+            // Display Error
+            toast({
+                title: 'Request Reset Email Failed.',
+                description: err.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            })
+        })
     };
 
     const handleResend = () => {
         // TODO: Shoot Email
-        setDT(new Date().getTime() + 1801000);
+        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/reset/request`,
+        {
+            email: cachedEmail,
+        }).then(res => {
+            // Request returned 200
+            setDT(new Date().getTime() + 1801000);
+        }).catch(err => {
+            // Display Error
+            toast({
+                title: 'Internal Error.',
+                description: err.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            })
+        })
     };
 
     useEffect(() => {

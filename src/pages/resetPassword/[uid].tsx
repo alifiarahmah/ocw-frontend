@@ -33,9 +33,31 @@ import {
     StatLabel,
     StatNumber,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
+import axios from "axios";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-export default function ResetPassword() {
+type Return = {
+    uid: string;
+};
+
+export async function getServerSideProps(context: any) {
+    // Fetch data from external API
+    await axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/reset/validate`, {
+            headers: {
+                Authorization: "Bearer " + context.query.uid,
+            },
+        })
+        .catch((err) => {
+            // Redirect to a 404
+            context.res.writeHead(307, { Location: "/404" });
+            context.res.end();
+        });
+
+    return { props: { uid: context.query.uid } };
+}
+
+function ResetPassword({ uid }: Return) {
     // States
     const [filled, setFilled] = useState(false);
     const [canSee, setSee] = useState(false);
@@ -48,12 +70,6 @@ export default function ResetPassword() {
 
     // Router
     const router = useRouter();
-    const uid = router.query.uid;
-
-    const invalid = (uid: string | string[] | undefined) => {
-        // TODO: Get Validation from API
-        return uid != "123456";
-    };
 
     const failCheck = (data: any) => {
         let error = "";
@@ -98,20 +114,22 @@ export default function ResetPassword() {
         if (failCheck(data)) return;
 
         // TODO: Send Data to server
+        axios.put(
+            `${process.env.NEXT_PUBLIC_API_URL}/reset/confirm`,
+            {
+                password: data.password,
+                password_validation: data.repeat,
+            },
+            {
+                headers: {
+                    Authorization: "Bearer " + uid,
+                },
+            }
+        );
+
         setFilled(true);
         setDT(new Date().getTime() + 31000);
     };
-
-    // Effect for guarding against invalid uid
-    useEffect(() => {
-        // Workaround for annoying nodejs router bs
-        if (!router.isReady) return;
-
-        // Guard Clause for invalid uid
-        if (invalid(uid)) {
-            router.push("/404");
-        }
-    }, [router.isReady]);
 
     // Effect for page update
     useEffect(() => {}, [errorMsg, canSee]);
@@ -128,7 +146,8 @@ export default function ResetPassword() {
             });
             return () => clearInterval(interval);
         }
-    }, [filled])
+    }, [filled]);
+
     return (
         <>
             <Layout
@@ -169,8 +188,9 @@ export default function ResetPassword() {
                                         />
                                         <Input
                                             {...register("password")}
+                                            id="password"
                                             type={canSee ? "text" : "password"}
-                                            placeholder="Masukan Password Baru Anda di Sini"
+                                            placeholder="Masukkan Password Baru Anda di Sini"
                                             isRequired
                                         />
                                         <Popover
@@ -225,8 +245,9 @@ export default function ResetPassword() {
                                         <Input
                                             {...register("repeat")}
                                             // isInvalid={}
+                                            id="repeat"
                                             type={canSee ? "text" : "password"}
-                                            placeholder="Masukan Password Baru Anda di Sini"
+                                            placeholder="Masukkan Ulang Password Anda"
                                             isRequired
                                         />
                                         {canSee ? (
@@ -320,3 +341,5 @@ export default function ResetPassword() {
         </>
     );
 }
+
+export default ResetPassword;
