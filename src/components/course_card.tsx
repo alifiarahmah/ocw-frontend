@@ -49,6 +49,7 @@ export default function CourseCard({
             fontWeight="bold"
             my={{ lg: 2 }}
             color={courseNameColor}
+            isTruncated
           >
             {courseName}
           </Text>

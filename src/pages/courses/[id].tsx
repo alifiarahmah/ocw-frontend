@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CourseCard from "@/components/course_card";
 import Layout from "@/components/layout";
 import http from "@/http";
 import { Course } from "@/types/course";
+import { Major } from "@/types/major";
 import {
   Heading,
   IconButton,
@@ -12,18 +14,26 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdArrowBackIos, MdSearch } from "react-icons/md";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [major, setMajor] = useState<Major>();
   const toast = useToast();
 
+  const router = useRouter();
+  // get id
+  const id = router.query.id;
+
   useEffect(() => {
+    if (!id) return;
     const getCourses = async () => {
       try {
-        const res = await http.get("/course");
+        const res = await http.get(`/course/major/courses/${id}`);
         setCourses(res.data.data);
+        console.log(courses);
       } catch (err) {
         toast({
           title: "Error",
@@ -33,7 +43,24 @@ export default function Courses() {
       }
     };
     getCourses();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    const getMajor = async () => {
+      try {
+        const res = await http.get(`/course/major/${id}`);
+        setMajor(res.data.data);
+      } catch (err) {
+        toast({
+          title: "Error",
+          description: "Gagal mengambil data jurusan.",
+          status: "error",
+        });
+      }
+    };
+    getMajor();
+  }, [id]);
 
   return (
     <Layout title="Courses List">
@@ -55,6 +82,9 @@ export default function Courses() {
             <Input name="search" placeholder="Cari Mata Kuliah" bg="white" />
           </InputGroup>
         </Stack>
+        <Heading size="lg">
+          {major?.Faculty.Abbreviation} | {major?.Name}
+        </Heading>
       </Stack>
       <Heading size="lg" mt={10} mb={5} as="h1">
         Daftar Mata Kuliah
@@ -88,4 +118,7 @@ export default function Courses() {
       </SimpleGrid>
     </Layout>
   );
+}
+function useParams<T>(): { id: any } {
+  throw new Error("Function not implemented.");
 }
