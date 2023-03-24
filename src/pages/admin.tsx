@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Layout from '@/components/layout'
 import Modal from '@/components/modal'
 import { User } from '@/types/user'
