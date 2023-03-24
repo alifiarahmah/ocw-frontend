@@ -33,6 +33,7 @@ export default function Courses() {
       }
     };
     getCourses();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

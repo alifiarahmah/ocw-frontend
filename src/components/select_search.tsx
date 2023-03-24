@@ -1,3 +1,5 @@
+import http from "@/http";
+import { Major } from "@/types/major";
 import {
   Flex,
   Input,
@@ -9,9 +11,25 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { MdOutlineArrowDropDown, MdSearch } from "react-icons/md";
 
 export function SelectSearch() {
+  const [majors, setMajors] = useState<Major[]>([]);
+
+  useEffect(() => {
+    try {
+      const getMajors = async () => {
+        const res = await http.get("/course/major");
+        setMajors(res.data.data);
+      };
+      getMajors();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <Flex justifyContent="center">
       <Menu>
@@ -31,9 +49,14 @@ export function SelectSearch() {
           </InputGroup>
         </MenuButton>
         <MenuList>
-          <MenuItem display="flex" w="50rem">
-            Sekolah Teknik Elektro dan Informatika
-          </MenuItem>
+          {/* TODO: list all major and faculty */}
+          {majors.map((major: Major) => (
+            <Link href={`/courses/${major.ID}`} key={major.ID}>
+              <MenuItem display="flex" w="50rem">
+                {major.Name}
+              </MenuItem>
+            </Link>
+          ))}
         </MenuList>
       </Menu>
     </Flex>
