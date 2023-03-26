@@ -1,0 +1,29 @@
+.background {
+    background-color: #CFF5E7;
+    display: flex;
+    height: 100vh;
+}
+
+.container {
+    align-self: center;
+    justify-content: center;
+    background-color: white;
+    width: fit-content;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.button {
+    align-self: flex-end;
+    background-color: #0D4C92;
+}
+
+.login {
+    color: #0D4C92;
+}

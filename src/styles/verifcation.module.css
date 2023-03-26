@@ -20,21 +20,32 @@
     border-radius: 40px;
 }
 
+.containercontent{
+    background-color: #FFFFFF;
+    height: 70vh; 
+    width : 100vh; 
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-right: 20;
+    padding-bottom: 0vh;
+    max-width: max-content;
+    max-height: max-content;
+}
 
 .h1{
     align-self: center;
     justify-self: center;
     margin-top: 1vh;
-    margin-bottom: 1vh;
+    margin-bottom: 1vh; 
     text-align: center;
-    font-size: 100vh;
+    font-size: 10vh;
 }
 
 .h2{
     align-content: center;
     justify-content: center;
-    margin-top: 2vh;
-    margin-bottom: 10vh;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
     text-align: center;
 }
 
@@ -43,7 +54,7 @@
     width: 10vh;
     height: 10vh;
     align-self: center;
-    margin-bottom: 0vh;
+    
 }
 
 .button{
@@ -59,7 +70,6 @@
 .button:hover{
     opacity: 0.5;
     color: white;
-
 }
 
 .boldtext{

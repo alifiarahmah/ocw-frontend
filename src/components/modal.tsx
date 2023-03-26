@@ -9,15 +9,15 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps as ChakraModalProps,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 
 interface ModalProps extends ChakraModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onConfirm?: () => void
-  header?: string
-  confirmText?: string
-  footer?: 'none' | React.ReactNode | React.ReactNode[]
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm?: () => void;
+  header?: string;
+  confirmText?: string;
+  footer?: 'none' | React.ReactNode | React.ReactNode[];
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -60,7 +60,7 @@ const Modal: React.FC<ModalProps> = ({
         )}
       </ModalContent>
     </ChakraModal>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;

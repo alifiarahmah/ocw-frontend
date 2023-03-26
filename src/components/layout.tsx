@@ -1,11 +1,11 @@
-import { Box, BoxProps, Flex } from '@chakra-ui/react'
-import Head from 'next/head'
-import Navbar from './navbar'
+import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import Head from 'next/head';
+import Navbar from './navbar';
 
 export interface LayoutProps extends BoxProps {
-  bg?: string
-  title?: string
-  children: React.ReactNode
+  bg?: string;
+  title?: string;
+  children: React.ReactNode;
 }
 // with extends BoxProps, we can pass any props that Box can accept
 // example: <Layout p={10}>
@@ -14,8 +14,13 @@ const Layout: React.FC<LayoutProps> = ({ bg, children, title, ...props }) => {
   return (
     <>
       <Head>
-        <title>{title ? `${title} |` : null} ITBOpenCourseWare</title>
-        <meta name="description" content="Platform pembelajaran kuliah untuk publik yang disediakan oleh Institut Teknologi Bandung." />
+        <title>
+          {title ? `${title} | ITBOpenCourseWare` : `ITBOpenCourseWare`}
+        </title>
+        <meta
+          name="description"
+          content="Platform pembelajaran kuliah untuk publik yang disediakan oleh Institut Teknologi Bandung."
+        />
       </Head>
       <Flex direction="column" minH="100vh" bg={bg ?? 'biru.100'}>
         <Navbar />
@@ -28,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ bg, children, title, ...props }) => {
         </Box>
       </Flex>
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
