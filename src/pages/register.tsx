@@ -14,7 +14,7 @@ import styles from '@/styles/Register.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { update } from 'cypress/types/lodash';
-import http from '../http';
+import http from '../lib/http';
 import Link from 'next/link';
 import isEmail from 'validator/lib/isEmail';
 
