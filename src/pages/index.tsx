@@ -2,7 +2,7 @@ import CourseCard from "@/components/course_card";
 import HomeSidebar from "@/components/home_sidebar";
 import Layout from "@/components/layout";
 import { SelectSearch } from "@/components/select_search";
-import http from "@/http";
+import http from "@/lib/http";
 import { Course } from "@/types/course";
 import { Box, Heading, HStack, SimpleGrid, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";

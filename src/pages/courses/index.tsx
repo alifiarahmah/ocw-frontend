@@ -1,6 +1,6 @@
 import CourseCard from "@/components/course_card";
 import Layout from "@/components/layout";
-import http from "@/http";
+import http from "@/lib/http";
 import { Course } from "@/types/course";
 import {
   Heading,
