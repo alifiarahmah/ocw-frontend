@@ -74,6 +74,7 @@ export default function Courses() {
             aria-label="back"
             icon={<MdArrowBackIos />}
             variant="ghost"
+            onClick={router.back}
           />
           <InputGroup borderRadius={20}>
             <InputLeftElement>

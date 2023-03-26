@@ -12,12 +12,15 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdArrowBackIos, MdSearch } from 'react-icons/md';
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
   const toast = useToast();
+
+  const router = useRouter()
 
   useEffect(() => {
     const getCourses = async () => {
@@ -48,6 +51,7 @@ export default function Courses() {
             aria-label="back"
             icon={<MdArrowBackIos />}
             variant="ghost"
+            onClick={router.back}
           />
           <InputGroup borderRadius={20}>
             <InputLeftElement>
