@@ -1,4 +1,4 @@
-import { Major } from "./major";
+import { Major } from './major';
 
 export interface Course {
   Abbreviation: string;

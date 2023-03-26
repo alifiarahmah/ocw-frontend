@@ -1,5 +1,5 @@
-import http from "@/lib/http";
-import { Major } from "@/types/major";
+import http from '@/lib/http';
+import { Major } from '@/types/major';
 import {
   Flex,
   Input,
@@ -10,10 +10,10 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { MdOutlineArrowDropDown, MdSearch } from "react-icons/md";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { MdOutlineArrowDropDown, MdSearch } from 'react-icons/md';
 
 export function SelectSearch() {
   const [majors, setMajors] = useState<Major[]>([]);
@@ -21,7 +21,7 @@ export function SelectSearch() {
   useEffect(() => {
     try {
       const getMajors = async () => {
-        const res = await http.get("/course/major");
+        const res = await http.get('/course/major');
         setMajors(res.data.data);
       };
       getMajors();
@@ -34,7 +34,7 @@ export function SelectSearch() {
     <Flex justifyContent="center">
       <Menu>
         <MenuButton>
-          <InputGroup borderRadius={20} w={{ lg: "50rem" }}>
+          <InputGroup borderRadius={20} w={{ lg: '50rem' }}>
             <InputLeftElement>
               <MdSearch />
             </InputLeftElement>

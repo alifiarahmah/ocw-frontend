@@ -1,7 +1,7 @@
-import { TOKEN_ACCESS_KEY, TOKEN_REFRESH_KEY } from "@/constants";
-import { HttpResponse } from "@/types/HttpResponse";
-import axios from "axios";
-import { unsetToken } from "./token";
+import { TOKEN_ACCESS_KEY, TOKEN_REFRESH_KEY } from '@/constants';
+import { HttpResponse } from '@/types/HttpResponse';
+import axios from 'axios';
+import { unsetToken } from './token';
 
 const http = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
@@ -10,7 +10,7 @@ const http = axios.create({
 http.interceptors.request.use(
   async (config) => {
     const accessToken = sessionStorage.getItem(TOKEN_ACCESS_KEY);
- 
+
     if (accessToken) {
       /*config.headers = {
         ...config.headers,
@@ -18,12 +18,12 @@ http.interceptors.request.use(
       };*/
       config.headers.setAuthorization(`Bearer ${accessToken}`);
     }
- 
+
     return config;
   },
   (config) => Promise.reject(config)
 );
- 
+
 http.interceptors.response.use(
   (response) => response,
   async (err) => {
@@ -32,18 +32,18 @@ http.interceptors.response.use(
       if (
         (err.response?.status == HttpResponse.Unauthorized ||
           err.response?.status == HttpResponse.UnprocessableEntity) &&
-        config.url === "/auth/refresh"
+        config.url === '/auth/refresh'
       ) {
         unsetToken();
       }
- 
+
       if (
         err.response?.status == HttpResponse.Unauthorized &&
         !config?.sent &&
         config.url !== `/auth/refresh`
       ) {
         const refreshKey = localStorage.getItem(TOKEN_REFRESH_KEY);
- 
+
         if (refreshKey) {
           try {
             const {
@@ -57,10 +57,10 @@ http.interceptors.response.use(
                 },
               }
             );
- 
+
             const newToken = data.token.access as string;
             sessionStorage.setItem(TOKEN_ACCESS_KEY, newToken);
- 
+
             config.sent = true;
             config.headers = {
               ...config.headers,
@@ -75,10 +75,10 @@ http.interceptors.response.use(
                 unsetToken();
               }
             }
- 
+
             return Promise.reject(err);
           }
- 
+
           const result = await axios(config);
           return result;
         } else {

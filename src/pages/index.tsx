@@ -1,11 +1,11 @@
-import CourseCard from "@/components/course_card";
-import HomeSidebar from "@/components/home_sidebar";
-import Layout from "@/components/layout";
-import { SelectSearch } from "@/components/select_search";
-import http from "@/lib/http";
-import { Course } from "@/types/course";
-import { Box, Heading, HStack, SimpleGrid, Stack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import CourseCard from '@/components/course_card';
+import HomeSidebar from '@/components/home_sidebar';
+import Layout from '@/components/layout';
+import { SelectSearch } from '@/components/select_search';
+import http from '@/lib/http';
+import { Course } from '@/types/course';
+import { Box, Heading, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     const getCourses = async () => {
       try {
-        const res = await http.get("/course");
+        const res = await http.get('/course');
         setCourses(res.data.data);
       } catch (err) {
         console.log(err);
@@ -53,14 +53,14 @@ export default function Home() {
                   lecturer={c.Lecturer}
                   bgColor={
                     i % 3 === 0
-                      ? "birukartu.200"
+                      ? 'birukartu.200'
                       : i % 3 === 1
-                      ? "birukartu.300"
-                      : "birukartu.100"
+                      ? 'birukartu.300'
+                      : 'birukartu.100'
                   }
-                  majorColor={i % 3 === 2 ? "biru.600" : "white"}
-                  courseNameColor={i % 3 === 2 ? "biru.600" : "white"}
-                  lecturerColor={i % 3 === 2 ? "biru.600" : "white"}
+                  majorColor={i % 3 === 2 ? 'biru.600' : 'white'}
+                  courseNameColor={i % 3 === 2 ? 'biru.600' : 'white'}
+                  lecturerColor={i % 3 === 2 ? 'biru.600' : 'white'}
                 />
               ))}
             </SimpleGrid>

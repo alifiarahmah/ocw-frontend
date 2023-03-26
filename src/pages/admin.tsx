@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Layout from '@/components/layout'
-import Modal from '@/components/modal'
-import { User } from '@/types/user'
+import Layout from '@/components/layout';
+import Modal from '@/components/modal';
+import { User } from '@/types/user';
 import {
   Button,
   FormControl,
@@ -21,30 +21,30 @@ import {
   Tr,
   useDisclosure,
   useToast,
-} from '@chakra-ui/react'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { MdAdd } from 'react-icons/md'
-import RowAction from '../components/admin/row-action'
+} from '@chakra-ui/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { MdAdd } from 'react-icons/md';
+import RowAction from '../components/admin/row-action';
 
 export default function Admin() {
   const {
     isOpen: isOpenAdd,
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
-  } = useDisclosure()
+  } = useDisclosure();
   const {
     isOpen: isOpenEdit,
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
-  } = useDisclosure()
+  } = useDisclosure();
   const {
     isOpen: isOpenDelete,
     onOpen: onOpenDelete,
     onClose: onCloseDelete,
-  } = useDisclosure()
-  const toast = useToast()
-  const [users, setUsers] = useState<User[]>([])
+  } = useDisclosure();
+  const toast = useToast();
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>({
     CreatedAt: '',
     Email: '',
@@ -53,39 +53,42 @@ export default function Admin() {
     Password: '',
     Role: '',
     UpdatedAt: '',
-  })
+  });
   // for input form
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [role, setRole] = useState('member')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('member');
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/admin/user`).then((res) => {
-      setUsers(res.data.data)
-      setSelectedUser(res.data[0])
-    }).catch((err) => {
-      toast({
-        title: 'Gagal mengambil data pengguna.',
-        description: err.message,
-        status: 'error',
-        duration: 1000,
-        isClosable: true,
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/admin/user`)
+      .then((res) => {
+        setUsers(res.data.data);
+        setSelectedUser(res.data[0]);
       })
-    })
-  }, [])
+      .catch((err) => {
+        toast({
+          title: 'Gagal mengambil data pengguna.',
+          description: err.message,
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+      });
+  }, []);
 
   const handleEditButton = (user: User) => {
-    setSelectedUser(user)
-    setName(user.Name)
-    setEmail(user.Email)
-    setRole(user.Role)
-    onOpenEdit()
-  }
+    setSelectedUser(user);
+    setName(user.Name);
+    setEmail(user.Email);
+    setRole(user.Role);
+    onOpenEdit();
+  };
 
   const handleDeleteButton = (user: User) => {
-    setSelectedUser(user)
-    onOpenDelete()
-  }
+    setSelectedUser(user);
+    onOpenDelete();
+  };
 
   const handleAdd = () => {
     // TODO: change to use API
@@ -100,15 +103,15 @@ export default function Admin() {
         Role: role,
         UpdatedAt: '',
       },
-    ])
+    ]);
     toast({
       title: `Pengguna ${name} berhasil ditambahkan.`,
       status: 'success',
       duration: 1000,
       isClosable: true,
-    })
-    onCloseAdd()
-  }
+    });
+    onCloseAdd();
+  };
 
   const handleEdit = (user: User) => {
     // TODO: change to use API
@@ -120,31 +123,31 @@ export default function Admin() {
             Name: name,
             Email: email,
             Role: role,
-          }
+          };
         }
-        return u
+        return u;
       })
-    )
+    );
     toast({
       title: `Data pengguna ${name} berhasil diubah.`,
       status: 'success',
       duration: 1000,
       isClosable: true,
-    })
-    onCloseEdit()
-  }
+    });
+    onCloseEdit();
+  };
 
   const handleDelete = (user: User) => {
     // TODO: change to use API
-    setUsers(users.filter((u) => u.Email !== user.Email))
+    setUsers(users.filter((u) => u.Email !== user.Email));
     toast({
       title: `Pengguna ${name} berhasil dihapus.`,
       status: 'success',
       duration: 1000,
       isClosable: true,
-    })
-    onCloseDelete()
-  }
+    });
+    onCloseDelete();
+  };
 
   return (
     <>
@@ -181,11 +184,11 @@ export default function Admin() {
                   <Td>
                     <RowAction
                       onOpenEdit={() => {
-                        handleEditButton(u)}
-                      }
+                        handleEditButton(u);
+                      }}
                       onOpenDelete={() => {
-                        handleDeleteButton(u)}
-                      }
+                        handleDeleteButton(u);
+                      }}
                     />
                   </Td>
                 </Tr>
@@ -278,5 +281,5 @@ export default function Admin() {
         <Text>Apakah anda yakin ingin menghapus pengguna ini?</Text>
       </Modal>
     </>
-  )
+  );
 }

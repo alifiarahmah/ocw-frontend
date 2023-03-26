@@ -1,6 +1,6 @@
-import { TOKEN_ACCESS_KEY, TOKEN_REFRESH_KEY } from "@/constants";
-import { User } from "@/types/user";
-import jwt from "jwt-decode";
+import { TOKEN_ACCESS_KEY, TOKEN_REFRESH_KEY } from '@/constants';
+import { User } from '@/types/user';
+import jwt from 'jwt-decode';
 
 export const setToken = (refreshToken: string, accessToken: string) => {
   localStorage.setItem(TOKEN_REFRESH_KEY, refreshToken);

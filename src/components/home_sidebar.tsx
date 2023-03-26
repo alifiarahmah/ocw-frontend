@@ -1,15 +1,15 @@
-import { routes } from "@/routes";
-import { Box, Flex, Stack, StackProps, Text } from "@chakra-ui/react";
-import Link from "next/link";
+import { routes } from '@/routes';
+import { Box, Flex, Stack, StackProps, Text } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export interface HomeSidebarProps extends StackProps {
   currentPath?: string;
 }
 
-function HomeSidebar({ currentPath = "/", ...props }: HomeSidebarProps) {
+function HomeSidebar({ currentPath = '/', ...props }: HomeSidebarProps) {
   console.log(currentPath);
   return (
-    <Stack bg="teal.400" gap={0} display={{ base: "none", lg: "flex" }}>
+    <Stack bg="teal.400" gap={0} display={{ base: 'none', lg: 'flex' }}>
       {/* TODO: make loop */}
       {routes.map((r) => (
         <Link href={r.path} key={r.path}>
@@ -19,8 +19,8 @@ function HomeSidebar({ currentPath = "/", ...props }: HomeSidebarProps) {
             py={5}
             justifyContent="space-between"
             color="white"
-            bg={currentPath === r.path ? "teal.500" : "teal.400"}
-            _hover={{ bg: "teal.300", color: "black" }}
+            bg={currentPath === r.path ? 'teal.500' : 'teal.400'}
+            _hover={{ bg: 'teal.300', color: 'black' }}
           >
             <Flex alignItems="center">
               {r.icon}
@@ -28,10 +28,7 @@ function HomeSidebar({ currentPath = "/", ...props }: HomeSidebarProps) {
                 {r.name}
               </Text>
             </Flex>
-            <Box
-              display={currentPath === r.path ? "block" : "none"}
-              mr={-1}
-            >
+            <Box display={currentPath === r.path ? 'block' : 'none'} mr={-1}>
               <svg
                 width="20"
                 height="43"

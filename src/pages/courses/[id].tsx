@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import CourseCard from "@/components/course_card";
-import Layout from "@/components/layout";
-import http from "@/lib/http";
-import { Course } from "@/types/course";
-import { Major } from "@/types/major";
+import CourseCard from '@/components/course_card';
+import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { Course } from '@/types/course';
+import { Major } from '@/types/major';
 import {
   Heading,
   IconButton,
@@ -13,10 +13,10 @@ import {
   SimpleGrid,
   Stack,
   useToast,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { MdArrowBackIos, MdSearch } from "react-icons/md";
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { MdArrowBackIos, MdSearch } from 'react-icons/md';
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -36,9 +36,9 @@ export default function Courses() {
         console.log(courses);
       } catch (err) {
         toast({
-          title: "Error",
-          description: "Gagal mengambil data mata kuliah.",
-          status: "error",
+          title: 'Error',
+          description: 'Gagal mengambil data mata kuliah.',
+          status: 'error',
         });
       }
     };
@@ -53,9 +53,9 @@ export default function Courses() {
         setMajor(res.data.data);
       } catch (err) {
         toast({
-          title: "Error",
-          description: "Gagal mengambil data jurusan.",
-          status: "error",
+          title: 'Error',
+          description: 'Gagal mengambil data jurusan.',
+          status: 'error',
         });
       }
     };
@@ -66,7 +66,7 @@ export default function Courses() {
     <Layout title="Courses List">
       <Stack
         justifyContent="space-between"
-        direction={{ base: "column-reverse", lg: "row" }}
+        direction={{ base: 'column-reverse', lg: 'row' }}
         gap={3}
       >
         <Stack direction="row">
@@ -105,14 +105,14 @@ export default function Courses() {
             lecturer={c.Lecturer}
             bgColor={
               i % 3 === 0
-                ? "birukartu.200"
+                ? 'birukartu.200'
                 : i % 3 === 1
-                ? "birukartu.300"
-                : "birukartu.100"
+                ? 'birukartu.300'
+                : 'birukartu.100'
             }
-            majorColor={i % 3 === 2 ? "biru.600" : "white"}
-            courseNameColor={i % 3 === 2 ? "biru.600" : "white"}
-            lecturerColor={i % 3 === 2 ? "biru.600" : "white"}
+            majorColor={i % 3 === 2 ? 'biru.600' : 'white'}
+            courseNameColor={i % 3 === 2 ? 'biru.600' : 'white'}
+            lecturerColor={i % 3 === 2 ? 'biru.600' : 'white'}
           />
         ))}
       </SimpleGrid>
@@ -120,5 +120,5 @@ export default function Courses() {
   );
 }
 function useParams<T>(): { id: any } {
-  throw new Error("Function not implemented.");
+  throw new Error('Function not implemented.');
 }

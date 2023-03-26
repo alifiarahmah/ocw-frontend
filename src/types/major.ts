@@ -1,4 +1,4 @@
-import { Faculty } from "./faculty";
+import { Faculty } from './faculty';
 
 export interface Major {
   ID: string;

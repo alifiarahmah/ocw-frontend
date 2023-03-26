@@ -1,7 +1,7 @@
-import CourseCard from "@/components/course_card";
-import Layout from "@/components/layout";
-import http from "@/lib/http";
-import { Course } from "@/types/course";
+import CourseCard from '@/components/course_card';
+import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { Course } from '@/types/course';
 import {
   Heading,
   IconButton,
@@ -11,9 +11,9 @@ import {
   SimpleGrid,
   Stack,
   useToast,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { MdArrowBackIos, MdSearch } from "react-icons/md";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { MdArrowBackIos, MdSearch } from 'react-icons/md';
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -22,25 +22,25 @@ export default function Courses() {
   useEffect(() => {
     const getCourses = async () => {
       try {
-        const res = await http.get("/course");
+        const res = await http.get('/course');
         setCourses(res.data.data);
       } catch (err) {
         toast({
-          title: "Error",
-          description: "Gagal mengambil data mata kuliah.",
-          status: "error",
+          title: 'Error',
+          description: 'Gagal mengambil data mata kuliah.',
+          status: 'error',
         });
       }
     };
     getCourses();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Layout title="Courses List">
       <Stack
         justifyContent="space-between"
-        direction={{ base: "column-reverse", lg: "row" }}
+        direction={{ base: 'column-reverse', lg: 'row' }}
         gap={3}
       >
         <Stack direction="row">
@@ -76,14 +76,14 @@ export default function Courses() {
             lecturer={c.Lecturer}
             bgColor={
               i % 3 === 0
-                ? "birukartu.200"
+                ? 'birukartu.200'
                 : i % 3 === 1
-                ? "birukartu.300"
-                : "birukartu.100"
+                ? 'birukartu.300'
+                : 'birukartu.100'
             }
-            majorColor={i % 3 === 2 ? "biru.600" : "white"}
-            courseNameColor={i % 3 === 2 ? "biru.600" : "white"}
-            lecturerColor={i % 3 === 2 ? "biru.600" : "white"}
+            majorColor={i % 3 === 2 ? 'biru.600' : 'white'}
+            courseNameColor={i % 3 === 2 ? 'biru.600' : 'white'}
+            lecturerColor={i % 3 === 2 ? 'biru.600' : 'white'}
           />
         ))}
       </SimpleGrid>

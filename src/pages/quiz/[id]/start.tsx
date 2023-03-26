@@ -1,5 +1,5 @@
-import Layout from "@/components/layout";
-import { useCountdown } from "@/utils/useCountdown";
+import Layout from '@/components/layout';
+import { useCountdown } from '@/utils/useCountdown';
 import {
   Box,
   Button,
@@ -9,11 +9,11 @@ import {
   RadioGroup,
   Stack,
   Text,
-} from "@chakra-ui/react";
-import { MdTimer } from "react-icons/md";
+} from '@chakra-ui/react';
+import { MdTimer } from 'react-icons/md';
 
 function Quiz() {
-  const { hours, minutes, seconds } = useCountdown("2023-03-22T20:00:00");
+  const { hours, minutes, seconds } = useCountdown('2023-03-22T20:00:00');
 
   return (
     <>
@@ -54,13 +54,13 @@ function Quiz() {
         w="100%"
         alignItems="center"
         pl={5}
-        justifyContent={{ base: "center", md: "flex-start" }}
+        justifyContent={{ base: 'center', md: 'flex-start' }}
       >
         <MdTimer />
         <Text ml={1}>
-          {hours < 10 ? 0 : ""}
-          {hours}:{minutes < 10 ? 0 : ""}
-          {minutes}:{seconds < 10 ? 0 : ""}
+          {hours < 10 ? 0 : ''}
+          {hours}:{minutes < 10 ? 0 : ''}
+          {minutes}:{seconds < 10 ? 0 : ''}
           {seconds}
         </Text>
       </Flex>

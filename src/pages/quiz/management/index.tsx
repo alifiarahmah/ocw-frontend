@@ -1,6 +1,6 @@
-import RowAction from "@/components/admin/row-action";
-import Layout from "@/components/layout";
-import { Quiz } from "@/types/quiz";
+import RowAction from '@/components/admin/row-action';
+import Layout from '@/components/layout';
+import { Quiz } from '@/types/quiz';
 import {
   Button,
   Heading,
@@ -13,23 +13,23 @@ import {
   Th,
   Thead,
   Tr,
-} from "@chakra-ui/react";
-import { MdAdd } from "react-icons/md";
+} from '@chakra-ui/react';
+import { MdAdd } from 'react-icons/md';
 
 const quizzes = [
   {
     id: 1,
-    title: "Latihan Soal Clustering 1",
+    title: 'Latihan Soal Clustering 1',
     week: 1,
   },
   {
     id: 2,
-    title: "Latihan Soal Clustering 2",
+    title: 'Latihan Soal Clustering 2',
     week: 2,
   },
   {
     id: 3,
-    title: "Latihan Soal Clustering 3",
+    title: 'Latihan Soal Clustering 3',
     week: 3,
   },
 ];
@@ -49,13 +49,13 @@ export default function QuizManagement() {
         <Heading>Daftar Latihan</Heading>
         <Button bg="biru.600" color="white">
           <MdAdd />
-          <Text ml={2} display={{ base: "none", lg: "flex" }}>
+          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
             Latihan Baru
           </Text>
         </Button>
       </HStack>
       <TableContainer>
-        <Table variant="simple" bg={"white"} borderRadius="lg" mt={5}>
+        <Table variant="simple" bg={'white'} borderRadius="lg" mt={5}>
           <Thead textTransform="capitalize">
             <Tr>
               <Th>Judul Latihan Soal</Th>
