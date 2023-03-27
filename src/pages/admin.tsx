@@ -22,7 +22,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import axios from 'axios';
+import http from '@/lib/http';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import RowAction from '../components/admin/row-action';
@@ -60,7 +60,7 @@ export default function Admin() {
   const [role, setRole] = useState('member');
 
   useEffect(() => {
-    axios
+    http
       .get(`${process.env.NEXT_PUBLIC_API_URL}/admin/user`)
       .then((res) => {
         setUsers(res.data.data);
