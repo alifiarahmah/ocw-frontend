@@ -3,25 +3,18 @@ import Layout from '@/components/layout';
 import AddCourseModal from '@/components/management/course/add-course-modal';
 import DeleteCourseModal from '@/components/management/course/delete-course-modal';
 import EditCourseModal from '@/components/management/course/edit-course-modal';
-import Modal from '@/components/modal';
 import http from '@/lib/http';
 import { Course } from '@/types/course';
 import { Major } from '@/types/major';
 import {
   Button,
-  FormControl,
-  FormLabel,
   Heading,
   HStack,
-  Input,
-  Select,
-  Stack,
   Table,
   TableContainer,
   Tbody,
   Td,
   Text,
-  Textarea,
   Th,
   Thead,
   Tr,
