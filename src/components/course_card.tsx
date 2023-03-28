@@ -1,5 +1,5 @@
-import { Box, Card, Image, Text } from "@chakra-ui/react";
-import Link from "next/link";
+import { Box, Card, Image, Text } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export interface CourseCardProps {
   courseCode: string;
@@ -29,22 +29,28 @@ export default function CourseCard({
   return (
     <Link href={href} passHref>
       <Card
-        p={4}
-        borderRadius={{ base: "lg", lg: "2xl" }}
+        p={{ base: 3, lg: 4 }}
+        borderRadius={{ base: 'lg', lg: '2xl' }}
         bg={bgColor}
         boxShadow="lg"
       >
         <Image
           alt="Course Thumbnail"
-          src={thumbnail ?? "https://via.placeholder.com/150x100"}
+          src={thumbnail ?? 'https://via.placeholder.com/150x100'}
           borderRadius="inherit"
         />
-        <Box mt={5} mb={2}>
+        <Box mt={{ base: 2, lg: 5 }} mb={2}>
           <Text
             fontSize="xs"
             color={majorColor}
           >{`${courseCode} | ${major}`}</Text>
-          <Text fontSize="xl" fontWeight="bold" my={2} color={courseNameColor}>
+          <Text
+            fontSize={{ base: 'lg', lg: 'xl' }}
+            fontWeight="bold"
+            my={{ lg: 2 }}
+            color={courseNameColor}
+            isTruncated
+          >
             {courseName}
           </Text>
           <Text fontSize="sm" color={lecturerColor}>

@@ -1,9 +1,9 @@
-import { Button, HStack, Text } from '@chakra-ui/react'
-import { MdDelete, MdEdit } from 'react-icons/md'
+import { Button, HStack, Text } from '@chakra-ui/react';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
 interface RowActionProps {
-  onOpenEdit: () => void
-  onOpenDelete: () => void
+  onOpenEdit: () => void;
+  onOpenDelete: () => void;
 }
 
 export default function RowAction({
@@ -25,5 +25,5 @@ export default function RowAction({
         </Text>
       </Button>
     </HStack>
-  )
+  );
 }

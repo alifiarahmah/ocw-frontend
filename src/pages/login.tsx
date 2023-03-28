@@ -1,19 +1,13 @@
-import Head from 'next/head';
-import {
-    Container,
-    Center,
-    Text,
-    Input,
-    Checkbox,
-    Button,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText } from '@chakra-ui/react';
 import styles from '@/styles/Login.module.css';
-import React, {useState} from 'react';
+import {
+    Button, Center, Container, FormControl,
+    FormLabel, Input
+} from '@chakra-ui/react';
 import axios from 'axios';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { setToken } from '@/lib/token';
 
 const Login = () => {
     const [user, setUser] = useState({
@@ -34,8 +28,14 @@ const Login = () => {
         e.preventDefault();
         axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, user)
             .then((response) => {
-                console.log(response.data);
-                router.push('/admin');
+                // save token to local storage
+                setToken(response.data.data.refresh_token, response.data.data.access_token);
+                // redirect to home page
+                if (user.email == 'admin@example.com'){ // TODO: change this
+                    router.push('/admin');
+                } else {
+                    router.push('/');
+                }
             }, (error) => {
                 if(error.response.status === 400 || error.response.status === 403){
                     alert("Username atau password anda salah!");

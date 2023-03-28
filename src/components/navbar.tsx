@@ -16,10 +16,10 @@ import {
   MenuList,
   Text,
   useDisclosure,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { MdMenu, MdOutlineArrowDropDown } from "react-icons/md";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { MdMenu, MdOutlineArrowDropDown } from 'react-icons/md';
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -29,12 +29,13 @@ export default function Navbar() {
     <>
       <HStack
         as="nav"
+        h="10vh"
         py={5}
         px={7}
         justifyContent="space-between"
         bg="biru.600"
         color="white"
-        boxShadow={{ base: "none", md: "md" }}
+        boxShadow={{ base: 'none', md: 'md' }}
       >
         <Link href="/">
           <HStack gap={2}>
@@ -52,10 +53,10 @@ export default function Navbar() {
           variant="unstyled"
           aria-label="Menu"
           icon={<MdMenu size="2rem" />}
-          display={{ base: "block", md: "none" }}
+          display={{ base: 'block', md: 'none' }}
           onClick={onOpen}
         />
-        <HStack display={{ base: "none", md: "flex" }}>
+        <HStack display={{ base: 'none', md: 'flex' }}>
           <Menu>
             <MenuButton>
               <HStack>
@@ -65,7 +66,7 @@ export default function Navbar() {
               </HStack>
             </MenuButton>
             <MenuList color="black">
-              <MenuItem onClick={() => router.push("/login")}>Logout</MenuItem>
+              <MenuItem onClick={() => router.push('/login')}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </HStack>
