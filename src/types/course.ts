@@ -4,7 +4,7 @@ export interface Course {
   id: string;
   name: string;
   major_id: string;
-  // major: Major;
+  major: string | Major | null;
   description: string;
   email?: string;
   abbreviation: string;

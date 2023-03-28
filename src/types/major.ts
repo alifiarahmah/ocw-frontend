@@ -4,6 +4,6 @@ export interface Major {
   id: string;
   name: string;
   fac_id: string;
-  faculty: Faculty;
+  faculty: string | Faculty | null;
   abbreviation: string;
 }
