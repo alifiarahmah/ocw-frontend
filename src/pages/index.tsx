@@ -4,8 +4,17 @@ import Layout from '@/components/layout';
 import { SelectSearch } from '@/components/select_search';
 import http from '@/lib/http';
 import { Course } from '@/types/course';
-import { Box, Heading, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  HStack,
+  SimpleGrid,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { MdNavigateNext } from 'react-icons/md';
 
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -64,6 +73,12 @@ export default function Home() {
                 />
               ))}
             </SimpleGrid>
+            <Link href="/courses">
+              <HStack justifyContent="right" alignItems="center" mt={7}>
+                <Text>See all courses</Text>
+                <MdNavigateNext />
+              </HStack>
+            </Link>
           </Box>
         </Stack>
       </HStack>
