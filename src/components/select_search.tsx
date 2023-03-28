@@ -64,17 +64,23 @@ export function SelectSearch() {
         </MenuButton>
         <MenuList>
           {/* TODO: list all major and faculty */}
+          <MenuItem display="flex" w="50rem" isDisabled>
+            Fakultas
+          </MenuItem>
           {faculty.map((faculty: Faculty) => (
             <Link href={`/courses/faculty/${faculty.id}`} key={faculty.id}>
               <MenuItem display="flex" w="50rem">
-                {faculty.name}
+                {faculty.abbreviation} - {faculty.name}
               </MenuItem>
             </Link>
           ))}
+          <MenuItem display="flex" w="50rem" isDisabled>
+            Jurusan
+          </MenuItem>
           {majors.map((major: Major) => (
             <Link href={`/courses/major/${major.id}`} key={major.id}>
               <MenuItem display="flex" w="50rem">
-                {major.name}
+                {major.abbreviation} - {major.name}
               </MenuItem>
             </Link>
           ))}
