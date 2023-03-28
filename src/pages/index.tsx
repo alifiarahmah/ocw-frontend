@@ -45,12 +45,12 @@ export default function Home() {
             >
               {courses.map((c, i) => (
                 <CourseCard
-                  key={c.ID}
-                  href={`/courses/${c.ID}`}
-                  courseCode={c.ID}
-                  major={c.Major.Name}
-                  courseName={c.Name}
-                  lecturer={c.Lecturer}
+                  key={c.id}
+                  href={`/courses/details/${c.id}`}
+                  courseCode={c.id}
+                  major="Teknik Informatika" // TODO: ask backend to return major name
+                  courseName={c.name}
+                  lecturer={c.lecturer}
                   bgColor={
                     i % 3 === 0
                       ? 'birukartu.200'

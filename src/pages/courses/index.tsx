@@ -20,7 +20,7 @@ export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
   const toast = useToast();
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const getCourses = async () => {
@@ -72,12 +72,12 @@ export default function Courses() {
       >
         {courses.map((c, i) => (
           <CourseCard
-            key={c.ID}
-            href={`/courses/${c.ID}`}
-            courseCode={c.ID}
-            major={c.Major.Name}
-            courseName={c.Name}
-            lecturer={c.Lecturer}
+            key={c.id}
+            href={`/courses/details/${c.id}`}
+            courseCode={c.id}
+            major="Teknik Informatika"
+            courseName={c.name}
+            lecturer={c.lecturer}
             bgColor={
               i % 3 === 0
                 ? 'birukartu.200'
