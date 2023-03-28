@@ -4,8 +4,10 @@ import AddCourseModal from '@/components/management/course/add-course-modal';
 import DeleteCourseModal from '@/components/management/course/delete-course-modal';
 import EditCourseModal from '@/components/management/course/edit-course-modal';
 import http from '@/lib/http';
+import { getAvailableUserData } from '@/lib/token';
 import { Course } from '@/types/course';
 import { Major } from '@/types/major';
+import { User } from '@/types/user';
 import {
   Button,
   Heading,
@@ -56,8 +58,20 @@ export default function CourseManagement() {
   const [description, setDescription] = useState('');
   const [lecturer, setLecturer] = useState('');
   const [abbreviation, setAbbreviation] = useState('');
+  const [email, setEmail] = useState('');
 
   const toast = useToast();
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const userData = getAvailableUserData();
+      if (userData) {
+        const user = userData as User;
+        setEmail(user.Email);
+      }
+    };
+    getUserData();
+  }, []);
 
   useEffect(() => {
     const getCourses = async () => {
@@ -74,7 +88,7 @@ export default function CourseManagement() {
     };
     getCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [courses]);
 
   useEffect(() => {
     const getMajors = async () => {
@@ -86,7 +100,7 @@ export default function CourseManagement() {
       }
     };
     getMajors();
-  }, []);
+  }, [majors]);
 
   const handleEditButton = (course: Course) => {
     // TODO
