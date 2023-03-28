@@ -1,4 +1,5 @@
 import http from '@/lib/http';
+import { Faculty } from '@/types/faculty';
 import { Major } from '@/types/major';
 import {
   Flex,
@@ -17,6 +18,7 @@ import { MdOutlineArrowDropDown, MdSearch } from 'react-icons/md';
 
 export function SelectSearch() {
   const [majors, setMajors] = useState<Major[]>([]);
+  const [faculty, setFaculty] = useState<Faculty[]>([]);
 
   useEffect(() => {
     try {
@@ -25,6 +27,18 @@ export function SelectSearch() {
         setMajors(res.data.data);
       };
       getMajors();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const getFaculty = async () => {
+        const res = await http.get('/course/faculty');
+        setFaculty(res.data.data);
+      };
+      getFaculty();
     } catch (error) {
       console.log(error);
     }
@@ -50,10 +64,17 @@ export function SelectSearch() {
         </MenuButton>
         <MenuList>
           {/* TODO: list all major and faculty */}
-          {majors.map((major: Major) => (
-            <Link href={`/courses/${major.ID}`} key={major.ID}>
+          {faculty.map((faculty: Faculty) => (
+            <Link href={`/courses/faculty/${faculty.id}`} key={faculty.id}>
               <MenuItem display="flex" w="50rem">
-                {major.Name}
+                {faculty.name}
+              </MenuItem>
+            </Link>
+          ))}
+          {majors.map((major: Major) => (
+            <Link href={`/courses/major/${major.id}`} key={major.id}>
+              <MenuItem display="flex" w="50rem">
+                {major.name}
               </MenuItem>
             </Link>
           ))}
