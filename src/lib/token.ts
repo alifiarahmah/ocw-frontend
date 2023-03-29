@@ -1,5 +1,5 @@
 import { TOKEN_ACCESS_KEY, TOKEN_REFRESH_KEY } from '@/constants';
-import { User } from '@/types/user';
+import { UserClaim } from '@/types/token';
 import jwt from 'jwt-decode';
 
 export const setToken = (refreshToken: string, accessToken: string) => {
@@ -22,7 +22,7 @@ export const getAccessToken = () => {
 
 export const getUserData = (token: string) => {
   const data = jwt(token);
-  return data as User;
+  return data as UserClaim;
 };
 
 export const getAvailableUserData = () => {
