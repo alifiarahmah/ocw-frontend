@@ -4,8 +4,17 @@ import Layout from '@/components/layout';
 import { SelectSearch } from '@/components/select_search';
 import http from '@/lib/http';
 import { Course } from '@/types/course';
-import { Box, Heading, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  HStack,
+  SimpleGrid,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { MdNavigateNext } from 'react-icons/md';
 
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -45,12 +54,12 @@ export default function Home() {
             >
               {courses.map((c, i) => (
                 <CourseCard
-                  key={c.ID}
-                  href={`/courses/${c.ID}`}
-                  courseCode={c.ID}
-                  major={c.Major.Name}
-                  courseName={c.Name}
-                  lecturer={c.Lecturer}
+                  key={c.id}
+                  href={`/courses/details/${c.id}`}
+                  courseCode={c.id}
+                  major="Teknik Informatika" // TODO: ask backend to return major name
+                  courseName={c.name}
+                  lecturer={c.lecturer}
                   bgColor={
                     i % 3 === 0
                       ? 'birukartu.200'
@@ -64,6 +73,12 @@ export default function Home() {
                 />
               ))}
             </SimpleGrid>
+            <Link href="/courses">
+              <HStack justifyContent="right" alignItems="center" mt={7}>
+                <Text>See all courses</Text>
+                <MdNavigateNext />
+              </HStack>
+            </Link>
           </Box>
         </Stack>
       </HStack>

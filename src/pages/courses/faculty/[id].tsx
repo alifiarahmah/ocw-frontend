@@ -3,7 +3,7 @@ import CourseCard from '@/components/course_card';
 import Layout from '@/components/layout';
 import http from '@/lib/http';
 import { Course } from '@/types/course';
-import { Major } from '@/types/major';
+import { Faculty } from '@/types/faculty';
 import {
   Heading,
   IconButton,
@@ -20,7 +20,7 @@ import { MdArrowBackIos, MdSearch } from 'react-icons/md';
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [major, setMajor] = useState<Major>();
+  const [faculty, setFaculty] = useState<Faculty>();
   const toast = useToast();
 
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function Courses() {
     if (!id) return;
     const getCourses = async () => {
       try {
-        const res = await http.get(`/course/major/courses/${id}`);
+        const res = await http.get(`/course/faculty/courses/${id}`);
         setCourses(res.data.data);
         console.log(courses);
       } catch (err) {
@@ -47,10 +47,10 @@ export default function Courses() {
 
   useEffect(() => {
     if (!id) return;
-    const getMajor = async () => {
+    const getFaculty = async () => {
       try {
-        const res = await http.get(`/course/major/${id}`);
-        setMajor(res.data.data);
+        const res = await http.get(`/course/faculty/${id}`);
+        setFaculty(res.data.data);
       } catch (err) {
         toast({
           title: 'Error',
@@ -59,7 +59,7 @@ export default function Courses() {
         });
       }
     };
-    getMajor();
+    getFaculty();
   }, [id]);
 
   return (
@@ -84,7 +84,7 @@ export default function Courses() {
           </InputGroup>
         </Stack>
         <Heading size="lg">
-          {major?.Faculty.Abbreviation} | {major?.Name}
+          {faculty?.abbreviation} | {faculty?.name}
         </Heading>
       </Stack>
       <Heading size="lg" mt={10} mb={5} as="h1">
@@ -98,12 +98,12 @@ export default function Courses() {
       >
         {courses.map((c, i) => (
           <CourseCard
-            key={c.ID}
-            href={`/courses/${c.ID}`}
-            courseCode={c.ID}
-            major={c.Major.Name}
-            courseName={c.Name}
-            lecturer={c.Lecturer}
+            key={c.id}
+            href={`/courses/details/${c.id}`}
+            courseCode={c.id}
+            major="Teknik Informatika" // TODO: ask backend to return major name
+            courseName={c.name}
+            lecturer={c.lecturer}
             bgColor={
               i % 3 === 0
                 ? 'birukartu.200'

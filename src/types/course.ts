@@ -1,12 +1,12 @@
 import { Major } from './major';
 
 export interface Course {
-  Abbreviation: string;
-  Description: string;
-  Email?: string;
-  ID: string;
-  Lecturer: string;
-  Major_id: string;
-  Major: Major;
-  Name: string;
+  id: string;
+  name: string;
+  major_id: string;
+  major: string | Major | null;
+  description: string;
+  email?: string;
+  abbreviation: string;
+  lecturer: string;
 }
