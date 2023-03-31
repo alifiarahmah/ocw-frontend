@@ -24,7 +24,6 @@ export interface AddCourseModalProps {
   setAbbreviation: (abbreviation: string) => void;
   selectedMajorId: string;
   setSelectedMajorId: (selectedMajorId: string) => void;
-
 }
 
 export default function AddCourseModal({
@@ -43,7 +42,6 @@ export default function AddCourseModal({
   selectedMajorId,
   setSelectedMajorId,
 }: AddCourseModalProps) {
-
   return (
     <Modal
       isOpen={isOpen}
@@ -54,13 +52,17 @@ export default function AddCourseModal({
       <Stack>
         <FormControl isRequired>
           <FormLabel>Course Name</FormLabel>
-          <Input name="name" onChange={(e) => setName(e.target.value)} />
+          <Input name="name" />
+        </FormControl>
+        <FormControl isRequired>
+          <FormLabel>Abbreviation</FormLabel>
+          <Input name="abbreviation" />
         </FormControl>
         <FormControl isRequired>
           <FormLabel>Major</FormLabel>
-          <Select>
+          <Select name="majabbr">
             {majors.map((m: Major) => (
-              <option key={m.id} value={m.id}>
+              <option key={m.abbreviation} value={m.abbreviation}>
                 {m.name}
               </option>
             ))}
@@ -68,24 +70,16 @@ export default function AddCourseModal({
         </FormControl>
         <FormControl>
           <FormLabel>Description</FormLabel>
-          <Textarea
-            name="description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <Textarea name="description" />
         </FormControl>
-        <FormControl isRequired>
+        <FormControl>
           <FormLabel>Lecturer</FormLabel>
-          <Input
-            name="lecturer"
-            onChange={(e) => setLecturer(e.target.value)}
-          />
+          <Input name="lecturer" />
         </FormControl>
         <FormControl isRequired>
+          {/* IFXXXX */}
           <FormLabel>Course Code</FormLabel>
-          <Input
-            name="code"
-            onChange={(e) => setAbbreviation(e.target.value)}
-          />
+          <Input name="id" placeholder="XXYYYY" />
         </FormControl>
       </Stack>
     </Modal>

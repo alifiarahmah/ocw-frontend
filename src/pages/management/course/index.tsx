@@ -4,10 +4,10 @@ import AddCourseModal from '@/components/management/course/add-course-modal';
 import DeleteCourseModal from '@/components/management/course/delete-course-modal';
 import EditCourseModal from '@/components/management/course/edit-course-modal';
 import http from '@/lib/http';
-import { getAvailableUserData } from '@/lib/token';
+import { getAccessToken, getAvailableUserData } from '@/lib/token';
 import { Course } from '@/types/course';
 import { Major } from '@/types/major';
-import { User } from '@/types/user';
+import { UserClaim } from '@/types/token';
 import {
   Button,
   Heading,
@@ -66,8 +66,8 @@ export default function CourseManagement() {
     const getUserData = async () => {
       const userData = getAvailableUserData();
       if (userData) {
-        const user = userData as User;
-        setEmail(user.Email);
+        const user = userData as UserClaim;
+        setEmail(user.email);
       }
     };
     getUserData();
@@ -108,7 +108,7 @@ export default function CourseManagement() {
   };
 
   const handleDeleteButton = (course: Course) => {
-    // TODO
+    setSelectedCourse(course);
     onOpenDelete();
   };
 
@@ -136,15 +136,32 @@ export default function CourseManagement() {
     onCloseEdit();
   };
 
-  const handleDelete = (course: Course) => {
-    // TODO: change to use API
-    toast({
-      title: 'Success',
-      description: 'Berhasil menghapus course.',
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+  const handleDelete = () => {
+    http
+      .delete(`/course/${selectedCourse.id}`, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+      })
+      .then((res) => {
+        toast({
+          title: 'Success',
+          description: 'Berhasil menghapus course.',
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          title: 'Gagal menghapus course.',
+          description: `${err.response.statusText}`,
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+      });
     onCloseDelete();
   };
 
@@ -232,7 +249,7 @@ export default function CourseManagement() {
       <DeleteCourseModal
         isOpen={isOpenDelete}
         onClose={onCloseDelete}
-        handleConfirm={() => handleDelete(selectedCourse)}
+        handleConfirm={() => handleDelete()}
       />
     </>
   );
