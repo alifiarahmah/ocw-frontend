@@ -100,7 +100,7 @@ export default function CourseManagement() {
       }
     };
     getMajors();
-  }, [majors]);
+  }, []);
 
   const handleEditButton = (course: Course) => {
     // TODO
