@@ -66,7 +66,10 @@ export default function Navbar() {
               </HStack>
             </MenuButton>
             <MenuList color="black">
-              <MenuItem onClick={() => router.push('/login')}>Logout</MenuItem>
+              <MenuItem onClick={() => 
+                {
+                  router.push('/login');
+                }}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </HStack>

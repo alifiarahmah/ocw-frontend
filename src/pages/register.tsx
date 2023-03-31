@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormErrorMessage,
   FormHelperText,
+  useToast,
 } from '@chakra-ui/react';
 import styles from '@/styles/Register.module.css';
 import { useState } from 'react';
@@ -26,17 +27,20 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const toast = useToast();
 
   const isPasswordValid = (pass: string) => {
     const consistUppercase = pass != pass.toLowerCase();
     const consistLowercase = pass != pass.toUpperCase();
     const consistNumber = /\d/.test(pass);
+    const consistSymbol = /[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\{\[\}\]\|\\\:\;\"\'\<\,\>\.\?\/]/.test(pass);
     return (
       pass.length >= 8 &&
       pass.length <= 18 &&
       consistUppercase &&
       consistLowercase &&
-      consistNumber
+      consistNumber &&
+      consistSymbol
     );
   };
 
@@ -58,14 +62,26 @@ const Register = () => {
       password_validation: confirmPassword,
     };
     http
-      .post('/auth/register', user)
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, user)
       .then(
         (response) => {
-          alert('Success');
+          toast({
+            title: 'Register Success',
+            description: "Pendaftaran berhasil",
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+          });
           router.push('/login');
         },
         (error) => {
-          alert('Terjadi kesalahan dalam registrasi');
+          toast({
+            title: 'Register failed',
+            description: "Terjadi kesalahan dalam registrasi!",
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+        });
         }
       )
       .finally(() => {
@@ -114,7 +130,8 @@ const Register = () => {
               />
               <FormErrorMessage>
                 Kata sandi harus mengandung 8-18 karakter dan setidaknya
-                terdapat satu huruf kapital, satu huruf kecil, satu angka
+                terdapat satu huruf kapital, satu huruf kecil, satu angka,
+                dan satu simbol.
               </FormErrorMessage>
             </FormControl>
             <FormControl
