@@ -10,8 +10,8 @@ import { Major } from '@/types/major';
 import { UserClaim } from '@/types/token';
 import {
   Button,
-  Heading,
   HStack,
+  Heading,
   Table,
   TableContainer,
   Tbody,
@@ -53,12 +53,14 @@ export default function CourseManagement() {
     lecturer: '',
   });
   const [majors, setMajors] = useState<Major[]>([]);
+  const [courseId, setCourseId] = useState('');
   const [name, setName] = useState('');
-  const [selectedMajorId, setSelectedMajorId] = useState('');
+  const [majabbr, setMajabbr] = useState('');
+  const [courseAbbr, setCourseAbbr] = useState('');
   const [description, setDescription] = useState('');
   const [lecturer, setLecturer] = useState('');
-  const [abbreviation, setAbbreviation] = useState('');
-  const [email, setEmail] = useState('');
+
+  const [email, setEmail] = useState(''); // taken from token
 
   const toast = useToast();
 
@@ -95,6 +97,7 @@ export default function CourseManagement() {
       try {
         const res = await http.get('/course/major');
         setMajors(res.data.data);
+        setMajabbr(majors[0].abbreviation);
       } catch (error) {
         console.log(error);
       }
@@ -103,7 +106,7 @@ export default function CourseManagement() {
   }, []);
 
   const handleEditButton = (course: Course) => {
-    // TODO
+    setSelectedCourse(course);
     onOpenEdit();
   };
 
@@ -114,6 +117,14 @@ export default function CourseManagement() {
 
   const handleAdd = () => {
     // TODO: change to use API
+    console.log({
+      courseId,
+      name,
+      majabbr,
+      courseAbbr,
+      description,
+      lecturer,
+    })
     toast({
       title: 'Success',
       description: 'Berhasil menambah course.',
@@ -167,7 +178,7 @@ export default function CourseManagement() {
 
   return (
     <>
-      <Layout>
+      <Layout title="Course Management">
         <HStack justifyContent="space-between">
           <Heading>Daftar Course</Heading>
           <Button bg="biru.600" color="white" onClick={onOpenAdd}>
@@ -215,35 +226,39 @@ export default function CourseManagement() {
       <AddCourseModal
         isOpen={isOpenAdd}
         onClose={onCloseAdd}
-        handleConfirm={handleAdd}
-        majors={majors}
+        handleConfirm={() => handleAdd()}
+        id={courseId}
+        setId={setCourseId}
         name={name}
         setName={setName}
+        majors={majors}
+        majabbr={majabbr}
+        setMajabbr={setMajabbr}
+        abbreviation={courseAbbr}
+        setAbbreviation={setCourseAbbr}
         description={description}
         setDescription={setDescription}
-        selectedMajorId={selectedMajorId}
-        setSelectedMajorId={setSelectedMajorId}
         lecturer={lecturer}
         setLecturer={setLecturer}
-        abbreviation={abbreviation}
-        setAbbreviation={setAbbreviation}
       />
 
       <EditCourseModal
         isOpen={isOpenEdit}
         onClose={onCloseEdit}
         handleConfirm={() => handleEdit(selectedCourse)}
-        majors={majors}
+        id={courseId}
+        setId={setCourseId}
         name={name}
         setName={setName}
+        majors={majors}
+        majabbr={majabbr}
+        setMajabbr={setMajabbr}
+        abbreviation={courseAbbr}
+        setAbbreviation={setCourseAbbr}
         description={description}
         setDescription={setDescription}
-        selectedMajorId={selectedMajorId}
-        setSelectedMajorId={setSelectedMajorId}
         lecturer={lecturer}
         setLecturer={setLecturer}
-        abbreviation={abbreviation}
-        setAbbreviation={setAbbreviation}
       />
 
       <DeleteCourseModal

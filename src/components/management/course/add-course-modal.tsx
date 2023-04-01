@@ -13,34 +13,38 @@ export interface AddCourseModalProps {
   isOpen: boolean;
   onClose: () => void;
   handleConfirm: () => void;
-  majors: Major[];
+  id: string;
+  setId: (id: string) => void;
   name: string;
   setName: (name: string) => void;
+  majors: Major[];
+  majabbr: string;
+  setMajabbr: (majabbr: string) => void;
+  abbreviation: string;
+  setAbbreviation: (abbreviation: string) => void;
   description: string;
   setDescription: (description: string) => void;
   lecturer: string;
   setLecturer: (lecturer: string) => void;
-  abbreviation: string;
-  setAbbreviation: (abbreviation: string) => void;
-  selectedMajorId: string;
-  setSelectedMajorId: (selectedMajorId: string) => void;
 }
 
 export default function AddCourseModal({
   isOpen,
   onClose,
   handleConfirm,
-  majors,
+  id,
+  setId,
   name,
   setName,
+  majors,
+  majabbr,
+  setMajabbr,
+  abbreviation,
+  setAbbreviation,
   description,
   setDescription,
   lecturer,
   setLecturer,
-  abbreviation,
-  setAbbreviation,
-  selectedMajorId,
-  setSelectedMajorId,
 }: AddCourseModalProps) {
   return (
     <Modal
@@ -51,16 +55,28 @@ export default function AddCourseModal({
     >
       <Stack>
         <FormControl isRequired>
+          {/* IFXXXX */}
+          <FormLabel>Course Code</FormLabel>
+          <Input
+            name="id"
+            placeholder="XXYYYY"
+            onChange={(e) => setId(e.target.value)}
+          />
+        </FormControl>
+        <FormControl isRequired>
           <FormLabel>Course Name</FormLabel>
-          <Input name="name" />
+          <Input name="name" onChange={(e) => setName(e.target.value)} />
         </FormControl>
         <FormControl isRequired>
           <FormLabel>Abbreviation</FormLabel>
-          <Input name="abbreviation" />
+          <Input
+            name="abbreviation"
+            onChange={(e) => setAbbreviation(e.target.value)}
+          />
         </FormControl>
         <FormControl isRequired>
           <FormLabel>Major</FormLabel>
-          <Select name="majabbr">
+          <Select name="majabbr" onChange={(e) => setMajabbr(e.target.value)}>
             {majors.map((m: Major) => (
               <option key={m.abbreviation} value={m.abbreviation}>
                 {m.name}
@@ -70,16 +86,17 @@ export default function AddCourseModal({
         </FormControl>
         <FormControl>
           <FormLabel>Description</FormLabel>
-          <Textarea name="description" />
+          <Textarea
+            name="description"
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </FormControl>
         <FormControl>
           <FormLabel>Lecturer</FormLabel>
-          <Input name="lecturer" />
-        </FormControl>
-        <FormControl isRequired>
-          {/* IFXXXX */}
-          <FormLabel>Course Code</FormLabel>
-          <Input name="id" placeholder="XXYYYY" />
+          <Input
+            name="lecturer"
+            onChange={(e) => setLecturer(e.target.value)}
+          />
         </FormControl>
       </Stack>
     </Modal>
