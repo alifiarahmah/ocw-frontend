@@ -44,15 +44,6 @@ export default function CourseManagement() {
     onClose: onCloseDelete,
   } = useDisclosure();
   const [courses, setCourses] = useState<Course[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<Course>({
-    id: '',
-    name: '',
-    major_id: '',
-    major: '',
-    description: '',
-    abbreviation: '',
-    lecturer: '',
-  });
   const [majors, setMajors] = useState<Major[]>([]);
   const [courseId, setCourseId] = useState('');
   const [name, setName] = useState('');
@@ -91,7 +82,7 @@ export default function CourseManagement() {
     };
     getCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courses]);
+  }, []);
 
   useEffect(() => {
     const getMajors = async () => {
@@ -104,28 +95,24 @@ export default function CourseManagement() {
       }
     };
     getMajors();
-  }, []);
+  }, [courses]);
 
   const handleEditButton = (course: Course) => {
-    setSelectedCourse(course);
+    setCourseId(course.id);
+    setName(course.name);
+    setMajabbr(course.id.slice(0, 2));
+    setCourseAbbr(course.abbreviation);
+    setDescription(course.description);
+    setLecturer(course.lecturer);
     onOpenEdit();
   };
 
   const handleDeleteButton = (course: Course) => {
-    setSelectedCourse(course);
+    setCourseId(course.id);
     onOpenDelete();
   };
 
   const handleAdd = () => {
-    console.log({
-      id: courseId,
-      name,
-      majabbr,
-      email,
-      abbreviation: courseAbbr,
-      description,
-      lecturer,
-    });
     http
       .put(
         '/course',
@@ -165,21 +152,48 @@ export default function CourseManagement() {
     onCloseAdd();
   };
 
-  const handleEdit = (course: Course) => {
-    // TODO: change to use API
-    toast({
-      title: 'Success',
-      description: 'Berhasil mengedit course.',
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+  const handleEdit = () => {
+    http
+      .patch(
+        `/course/${courseId}`,
+        {
+          name,
+          majabbr,
+          email,
+          abbreviation: courseAbbr,
+          description,
+          lecturer,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast({
+          title: 'Success',
+          description: 'Berhasil mengedit course.',
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err: AxiosError) => {
+        toast({
+          title: 'Gagal mengedit course.',
+          description: `${err.response?.data}`,
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+      });
     onCloseEdit();
   };
 
   const handleDelete = () => {
     http
-      .delete(`/course/${selectedCourse.id}`, {
+      .delete(`/course/${courseId}`, {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
         },
@@ -275,9 +289,8 @@ export default function CourseManagement() {
       <EditCourseModal
         isOpen={isOpenEdit}
         onClose={onCloseEdit}
-        handleConfirm={() => handleEdit(selectedCourse)}
+        handleConfirm={() => handleEdit()}
         id={courseId}
-        setId={setCourseId}
         name={name}
         setName={setName}
         majors={majors}
