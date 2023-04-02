@@ -247,8 +247,9 @@ export default function CourseManagement() {
               {courses.map((c: Course) => (
                 <Tr key={c.id}>
                   <Td>{c.name}</Td>
-                  <Td>{c.major as string}</Td>
-                  <Td>{c.lecturer}</Td>
+                  {/* TODO: ask backend for abbreviation */}
+                  <Td>{c.id.slice(0, 2)}</Td>
+                  <Td>{c.lecturer.length > 0 ? c.lecturer : '-'}</Td>
                   <Td>{c.id}</Td>
                   <Td>
                     <RowAction
