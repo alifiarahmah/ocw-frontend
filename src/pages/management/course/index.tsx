@@ -10,8 +10,8 @@ import { Major } from '@/types/major';
 import { UserClaim } from '@/types/token';
 import {
   Button,
-  HStack,
   Heading,
+  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -23,6 +23,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
@@ -116,22 +117,51 @@ export default function CourseManagement() {
   };
 
   const handleAdd = () => {
-    // TODO: change to use API
     console.log({
-      courseId,
+      id: courseId,
       name,
       majabbr,
-      courseAbbr,
+      email,
+      abbreviation: courseAbbr,
       description,
       lecturer,
-    })
-    toast({
-      title: 'Success',
-      description: 'Berhasil menambah course.',
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
     });
+    http
+      .put(
+        '/course',
+        {
+          id: courseId,
+          name,
+          majabbr,
+          email,
+          abbreviation: courseAbbr,
+          description,
+          lecturer,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast({
+          title: 'Success',
+          description: 'Berhasil menambah course.',
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err: AxiosError) => {
+        toast({
+          title: 'Gagal menambah course.',
+          description: `${err.response?.data}`,
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+      });
     onCloseAdd();
   };
 
