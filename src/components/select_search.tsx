@@ -21,27 +21,25 @@ export function SelectSearch() {
   const [faculty, setFaculty] = useState<Faculty[]>([]);
 
   useEffect(() => {
-    try {
-      const getMajors = async () => {
-        const res = await http.get('/course/major');
+    http
+      .get('/course/major')
+      .then((res) => {
         setMajors(res.data.data);
-      };
-      getMajors();
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   useEffect(() => {
-    try {
-      const getFaculty = async () => {
-        const res = await http.get('/course/faculty');
+    http
+      .get('/course/faculty')
+      .then((res) => {
         setFaculty(res.data.data);
-      };
-      getFaculty();
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
