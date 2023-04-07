@@ -68,33 +68,36 @@ export default function CourseManagement() {
   }, []);
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const res = await http.get('/course');
+    http
+      .get('/course')
+      .then((res) => {
         setCourses(res.data.data);
-      } catch (err) {
+      })
+      .catch((err) => {
         toast({
           title: 'Error',
-          description: 'Gagal mengambil data course.',
+          description: 'Gagal mengambil data mata kuliah.',
           status: 'error',
         });
-      }
-    };
-    getCourses();
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const getMajors = async () => {
-      try {
-        const res = await http.get('/course/major');
+    http
+      .get(`/course/major`)
+      .then((res) => {
         setMajors(res.data.data);
-        setMajabbr(majors[0].abbreviation);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getMajors();
+        setMajabbr(res.data.data[0].abbreviation);
+      })
+      .catch((err) => {
+        toast({
+          title: 'Error',
+          description: 'Gagal mengambil data jurusan.',
+          status: 'error',
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courses]);
 
   const handleEditButton = (course: Course) => {

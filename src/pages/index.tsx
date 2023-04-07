@@ -20,15 +20,14 @@ export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const res = await http.get('/course');
+    http
+      .get('/course')
+      .then((res) => {
         setCourses(res.data.data);
-      } catch (err) {
+      })
+      .catch((err) => {
         console.log(err);
-      }
-    };
-    getCourses();
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

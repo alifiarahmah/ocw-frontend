@@ -23,19 +23,18 @@ export default function Courses() {
   const router = useRouter();
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const res = await http.get('/course');
+    http
+      .get('/course')
+      .then((res) => {
         setCourses(res.data.data);
-      } catch (err) {
+      })
+      .catch((err) => {
         toast({
           title: 'Error',
           description: 'Gagal mengambil data mata kuliah.',
           status: 'error',
         });
-      }
-    };
-    getCourses();
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
