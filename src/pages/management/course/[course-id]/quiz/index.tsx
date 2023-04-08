@@ -14,6 +14,8 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { MdAdd } from 'react-icons/md';
 
 const quizzes = [
@@ -35,6 +37,8 @@ const quizzes = [
 ];
 
 export default function QuizManagement() {
+  const router = useRouter();
+
   const handleEditButton = (quiz: Quiz) => {
     // TODO
   };
@@ -47,12 +51,14 @@ export default function QuizManagement() {
     <Layout>
       <HStack justifyContent="space-between">
         <Heading>Daftar Latihan</Heading>
-        <Button bg="biru.600" color="white">
-          <MdAdd />
-          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
-            Latihan Baru
-          </Text>
-        </Button>
+        <Link href={`${router.asPath}/add`}>
+          <Button bg="biru.600" color="white">
+            <MdAdd />
+            <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
+              Latihan Baru
+            </Text>
+          </Button>
+        </Link>
       </HStack>
       <TableContainer>
         <Table variant="simple" bg={'white'} borderRadius="lg" mt={5}>
