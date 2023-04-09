@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CourseCard from '@/components/course_card';
 import Layout from '@/components/layout';
 import http from '@/lib/http';
 import { Course } from '@/types/course';
+import { Major } from '@/types/major';
 import {
   Heading,
   IconButton,
@@ -18,25 +20,44 @@ import { MdArrowBackIos, MdSearch } from 'react-icons/md';
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [major, setMajor] = useState<Major>();
   const toast = useToast();
 
   const router = useRouter();
+  // get id
+  const id = router.query.id;
 
   useEffect(() => {
+    if (!id) return;
     http
-      .get('/course')
+      .get(`/course/major/courses/${id}`)
       .then((res) => {
         setCourses(res.data.data);
       })
       .catch((err) => {
         toast({
           title: 'Error',
-          description: 'Gagal mengambil data mata kuliah.',
+          description: 'Gagal mengambil data jurusan.',
           status: 'error',
         });
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    http
+      .get(`/course/major/${id}`)
+      .then((res) => {
+        setMajor(res.data.data);
+      })
+      .catch((err) => {
+        toast({
+          title: 'Error',
+          description: 'Gagal mengambil data jurusan.',
+          status: 'error',
+        });
+      });
+  }, [id]);
 
   return (
     <Layout title="Courses List">
@@ -59,6 +80,9 @@ export default function Courses() {
             <Input name="search" placeholder="Cari Mata Kuliah" bg="white" />
           </InputGroup>
         </Stack>
+        <Heading size="lg">
+          {major?.abbreviation} | {major?.name}
+        </Heading>
       </Stack>
       <Heading size="lg" mt={10} mb={5} as="h1">
         Daftar Mata Kuliah
@@ -74,7 +98,7 @@ export default function Courses() {
             key={c.id}
             href={`/courses/details/${c.id}`}
             courseCode={c.id}
-            major="Teknik Informatika"
+            major="Teknik Informatika" // TODO: ask backend to return major name
             courseName={c.name}
             lecturer={c.lecturer}
             bgColor={
@@ -92,4 +116,7 @@ export default function Courses() {
       </SimpleGrid>
     </Layout>
   );
+}
+function useParams<T>(): { id: any } {
+  throw new Error('Function not implemented.');
 }

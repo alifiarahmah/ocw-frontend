@@ -13,7 +13,7 @@ export interface BannerProps extends BoxProps {
   course_code: string;
   course_name: string;
   lecturer: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const CourseBanner: React.FC<BannerProps> = ({

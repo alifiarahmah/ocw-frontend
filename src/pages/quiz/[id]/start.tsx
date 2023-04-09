@@ -1,5 +1,4 @@
 import Layout from '@/components/layout';
-import { useCountdown } from '@/utils/useCountdown';
 import {
   Box,
   Button,
@@ -10,10 +9,35 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { MdTimer } from 'react-icons/md';
 
 function Quiz() {
-  const { hours, minutes, seconds } = useCountdown('2023-03-22T20:00:00');
+  // create countdown from 100 minutes
+  const [minutes, setMinutes] = useState(30);
+  const [seconds, setSeconds] = useState(0);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setMinutes(minutes - 1);
+          setSeconds(59);
+        }
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [minutes, seconds]);
+
+  const hours = Math.floor(minutes / 60);
 
   return (
     <>
@@ -39,7 +63,11 @@ function Quiz() {
             ))}
           </Stack>
           <Flex justifyContent="flex-end" mt={20}>
-            <Button bg="biru.600" color="white">
+            <Button
+              bg="biru.600"
+              color="white"
+              onClick={() => router.push(router.asPath + '/../result')}
+            >
               Selesai
             </Button>
           </Flex>
@@ -58,7 +86,6 @@ function Quiz() {
       >
         <MdTimer />
         <Text ml={1}>
-          {hours < 10 ? 0 : ''}
           {hours}:{minutes < 10 ? 0 : ''}
           {minutes}:{seconds < 10 ? 0 : ''}
           {seconds}

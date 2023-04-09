@@ -1,4 +1,5 @@
 import http from '@/lib/http';
+import { Faculty } from '@/types/faculty';
 import { Major } from '@/types/major';
 import {
   Flex,
@@ -17,17 +18,28 @@ import { MdOutlineArrowDropDown, MdSearch } from 'react-icons/md';
 
 export function SelectSearch() {
   const [majors, setMajors] = useState<Major[]>([]);
+  const [faculty, setFaculty] = useState<Faculty[]>([]);
 
   useEffect(() => {
-    try {
-      const getMajors = async () => {
-        const res = await http.get('/course/major');
+    http
+      .get('/course/major')
+      .then((res) => {
         setMajors(res.data.data);
-      };
-      getMajors();
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    http
+      .get('/course/faculty')
+      .then((res) => {
+        setFaculty(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -50,10 +62,23 @@ export function SelectSearch() {
         </MenuButton>
         <MenuList>
           {/* TODO: list all major and faculty */}
-          {majors.map((major: Major) => (
-            <Link href={`/courses/${major.ID}`} key={major.ID}>
+          <MenuItem display="flex" w="50rem" isDisabled>
+            Fakultas
+          </MenuItem>
+          {faculty.map((faculty: Faculty) => (
+            <Link href={`/courses/faculty/${faculty.id}`} key={faculty.id}>
               <MenuItem display="flex" w="50rem">
-                {major.Name}
+                {faculty.abbreviation} - {faculty.name}
+              </MenuItem>
+            </Link>
+          ))}
+          <MenuItem display="flex" w="50rem" isDisabled>
+            Jurusan
+          </MenuItem>
+          {majors.map((major: Major) => (
+            <Link href={`/courses/major/${major.id}`} key={major.id}>
+              <MenuItem display="flex" w="50rem">
+                {major.abbreviation} - {major.name}
               </MenuItem>
             </Link>
           ))}

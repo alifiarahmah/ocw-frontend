@@ -1,15 +1,16 @@
 import styles from '@/styles/Login.module.css';
 import {
     Button, Center, Container, FormControl,
-    FormLabel, Input
+    FormLabel, Input, useToast
 } from '@chakra-ui/react';
-import axios from 'axios';
+import http from '@/lib/http';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { setToken } from '@/lib/token';
 
 const Login = () => {
+    const toast = useToast();
     const [user, setUser] = useState({
         email : '',
         password : '',
@@ -26,7 +27,7 @@ const Login = () => {
     };
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, user)
+        http.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, user)
             .then((response) => {
                 // save token to local storage
                 setToken(response.data.data.refresh_token, response.data.data.access_token);
@@ -37,10 +38,22 @@ const Login = () => {
                     router.push('/');
                 }
             }, (error) => {
-                if(error.response.status === 400 || error.response.status === 403){
-                    alert("Username atau password anda salah!");
+                if(error.response?.status === 400 || error.response?.status === 403){
+                    toast({
+                        title: 'Login failed',
+                        description: "Username atau password anda salah!",
+                        status: 'error',
+                        duration: 9000,
+                        isClosable: true,
+                    });
                 }else{
-                    alert("Gaboleh -,-");
+                    toast({
+                        title: 'Login failed',
+                        description: "Terjadi masalah saat login",
+                        status: 'error',
+                        duration: 9000,
+                        isClosable: true,
+                    });
                 }
             });
     }
