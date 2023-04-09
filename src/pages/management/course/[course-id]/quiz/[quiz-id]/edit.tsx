@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Question } from '@/types/question';
 
-export default function NewQuiz() {
+export default function EditQuiz() {
   const router = useRouter();
   const toast = useToast();
   const [questions, setQuestions] = useState<Question[]>(
@@ -34,7 +34,7 @@ export default function NewQuiz() {
 
   return (
     <Layout title="Latihan Baru">
-      <Heading my={5}>Latihan Baru</Heading>
+      <Heading my={5}>Ubah Latihan</Heading>
       <Box p={5} borderRadius="lg" bg="white">
         <FormLabel htmlFor="title">Judul Latihan</FormLabel>
         <Input name="title" />

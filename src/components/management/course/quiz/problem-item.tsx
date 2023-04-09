@@ -1,35 +1,66 @@
 import {
   Box,
+  Button,
   FormLabel,
   HStack,
+  IconButton,
   Input,
+  InputGroup,
+  InputRightElement,
   Select,
   Stack,
   Text,
   Textarea,
 } from '@chakra-ui/react';
+import { MdAdd, MdDelete } from 'react-icons/md';
+import { useState } from 'react';
+import { Question } from '@/types/question';
 
-export interface Problem {
+export interface ProblemItemProps {
   id: number;
-  question: string;
-  options: string[];
-  answer: string;
-  explanation: string;
+  question: Question;
 }
 
-export default function ProblemItem() {
-  const options: string[] = [];
+export default function ProblemItem({ id, question }: ProblemItemProps) {
+  const [options, setOptions] = useState(Array(1).fill(''));
 
   return (
     <HStack width="100%" alignItems="flex-start">
-      <Box>
-        <Text fontWeight="bold">Nomor 1</Text>
+      <Box w="40%">
+        <Text fontWeight="bold">Nomor {id}</Text>
         <Textarea name="question" placeholder="Pertanyaan..." my={5} />
         <Stack gap={2}>
-          <Input placeholder="Jawaban A" />
-          <Input placeholder="Jawaban B" />
-          <Input placeholder="Jawaban C" />
-          <Input placeholder="Jawaban D" />
+          {options.map((o, i) => (
+            <InputGroup key={i}>
+              <Input
+                placeholder={`opsi ${i + 1}`}
+                onChange={(e) => {
+                  setOptions(
+                    options.map((o, j) => (i === j ? e.target.value : o))
+                  );
+                }}
+                value={o}
+              />
+              <InputRightElement>
+                <IconButton
+                  aria-label={'Delete'}
+                  icon={<MdDelete />}
+                  onClick={() => {
+                    setOptions(options.filter((o, j) => i !== j));
+                  }}
+                />
+              </InputRightElement>
+            </InputGroup>
+          ))}
+
+          <Button
+            leftIcon={<MdAdd />}
+            onClick={() => {
+              setOptions([...options, '']);
+            }}
+          >
+            Tambah opsi
+          </Button>
         </Stack>
       </Box>
       <Box flexGrow="1">
@@ -37,10 +68,9 @@ export default function ProblemItem() {
           Kunci Jawaban
         </FormLabel>
         <Select name="answer">
-          <option value="a">A</option>
-          <option value="b">B</option>
-          <option value="c">C</option>
-          <option value="d">D</option>
+          {options.map((o) => (
+            <option value={o}>{o}</option>
+          ))}
         </Select>
         <FormLabel htmlFor="explanation" mt={5}>
           Pembahasan
