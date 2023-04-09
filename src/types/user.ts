@@ -1,9 +1,8 @@
 export interface User {
-  CreatedAt: string;
-  Email: string;
-  IsActivated: boolean;
-  Name: string;
-  Password?: string;
-  Role: string;
-  UpdatedAt: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'contributor' | 'student';
+  activated: boolean;
+  created_at: string;
+  updated_at: string;
 }
