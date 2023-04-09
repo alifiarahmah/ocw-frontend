@@ -26,6 +26,8 @@ import http from '@/lib/http';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import RowAction from '../components/admin/row-action';
+import { getAvailableUserData } from '@/lib/token';
+import { useRouter } from 'next/router';
 
 export default function Admin() {
   const {
@@ -43,25 +45,32 @@ export default function Admin() {
     onOpen: onOpenDelete,
     onClose: onCloseDelete,
   } = useDisclosure();
-  const toast = useToast();
+
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>({
-    CreatedAt: '',
-    Email: '',
-    IsActivated: false,
-    Name: '',
-    Password: '',
-    Role: '',
-    UpdatedAt: '',
+    email: '',
+    name: '',
+    role: 'student',
+    activated: false,
+    created_at: '',
+    updated_at: '',
   });
   // for input form
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('member');
 
+  // const user = getAvailableUserData();
+  const toast = useToast();
+  const router = useRouter();
+
   useEffect(() => {
     http
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/admin/user`)
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/admin/user`, {
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
+      })
       .then((res) => {
         setUsers(res.data.data);
         setSelectedUser(res.data[0]);
@@ -79,9 +88,9 @@ export default function Admin() {
 
   const handleEditButton = (user: User) => {
     setSelectedUser(user);
-    setName(user.Name);
-    setEmail(user.Email);
-    setRole(user.Role);
+    setName(user.name);
+    setEmail(user.email);
+    setRole(user.role);
     onOpenEdit();
   };
 
@@ -95,13 +104,12 @@ export default function Admin() {
     setUsers([
       ...users,
       {
-        CreatedAt: '',
-        Email: email,
-        IsActivated: false,
-        Name: name,
-        Password: '',
-        Role: role,
-        UpdatedAt: '',
+        email: '',
+        name: '',
+        role: 'student',
+        activated: false,
+        created_at: '',
+        updated_at: '',
       },
     ]);
     toast({
@@ -117,13 +125,13 @@ export default function Admin() {
     // TODO: change to use API
     setUsers(
       users.map((u) => {
-        if (u.Email === user.Email) {
+        if (u.email === user.email) {
           return {
             ...u,
-            Name: name,
-            Email: email,
-            Role: role,
-          };
+            name,
+            email,
+            role,
+          } as User;
         }
         return u;
       })
@@ -139,7 +147,7 @@ export default function Admin() {
 
   const handleDelete = (user: User) => {
     // TODO: change to use API
-    setUsers(users.filter((u) => u.Email !== user.Email));
+    setUsers(users.filter((u) => u.email !== user.email));
     toast({
       title: `Pengguna ${name} berhasil dihapus.`,
       status: 'success',
@@ -149,6 +157,7 @@ export default function Admin() {
     onCloseDelete();
   };
 
+  // if (user?.role === 'admin') {
   return (
     <>
       <Layout
@@ -177,10 +186,10 @@ export default function Admin() {
             </Thead>
             <Tbody>
               {users.map((u: User) => (
-                <Tr key={u.Email}>
-                  <Td>{u.Name}</Td>
-                  <Td>{u.Email}</Td>
-                  <Td>{u.Role}</Td>
+                <Tr key={u.email}>
+                  <Td>{u.name}</Td>
+                  <Td>{u.email}</Td>
+                  <Td>{u.role}</Td>
                   <Td>
                     <RowAction
                       onOpenEdit={() => {
@@ -282,4 +291,8 @@ export default function Admin() {
       </Modal>
     </>
   );
+  // } else {
+  //   router.push('/');
+  //   return;
+  // }
 }
