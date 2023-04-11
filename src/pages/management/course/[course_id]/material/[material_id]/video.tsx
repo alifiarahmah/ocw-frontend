@@ -24,6 +24,7 @@ import { getAvailableUserData } from '@/lib/token';
 import { useRouter } from 'next/router';
 import { UserClaim } from '@/types/token';
 import { stringify } from 'querystring';
+import { AxiosResponse } from 'axios';
 
 interface CourseBannerProps {
   course_code : string;
@@ -66,11 +67,11 @@ const EditContentPage = ({
     http
       .post(`${process.env.NEXT_PUBLIC_API_URL}/material/${material_code}`, content)
       .then(
-        res => {
+        (res) => {
           //pass
           toast({
             title: 'Adding material success!',
-            description: res.message,
+            description: res.data.message,
             status: 'success',
             duration: 9000,
             isClosable: true,
@@ -213,6 +214,7 @@ const EditContent = () => {
         status: 404,
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[router.isReady]);
 
   console.log(data);

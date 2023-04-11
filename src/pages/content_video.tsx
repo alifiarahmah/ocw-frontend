@@ -5,7 +5,7 @@ import { useState } from 'react';
 import CourseBanner from '@/components/course_banner';
 import { Center } from '@chakra-ui/react';
 
-export default function contentVideo() {
+export default function ContentVideo() {
   const [courseBannerProps, setCourseBannerProps] = useState({
     course_code: 'IF3270',
     course_name: 'Pembelajaran Mesin',
@@ -14,7 +14,7 @@ export default function contentVideo() {
   return (
     <Layout title="Content Layout" py={0} px={0}>
       <CourseBanner {...courseBannerProps}>
-        
+
           <HStack spacing={'30px'}>
             <Button
               _hover={{ color: 'darkgrey', opacity: '100%' }}
@@ -32,14 +32,14 @@ export default function contentVideo() {
             maxHeight={'7xl'}
             className={styles.containercontent}
           >
-            <iframe 
-            width="100%" height="100%" 
-            src="https://youtube.com/embed/zBUe2ma_14A" 
-            title="video player" 
+            <iframe
+            width="100%" height="100%"
+            src="https://youtube.com/embed/zBUe2ma_14A"
+            title="video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/>
 
           </Container>
-          
+
         </Center>
       </CourseBanner>
     </Layout>
