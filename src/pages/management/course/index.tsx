@@ -81,7 +81,7 @@ export default function CourseManagement() {
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [courses]);
 
   useEffect(() => {
     http

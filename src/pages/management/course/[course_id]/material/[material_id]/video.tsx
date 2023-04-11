@@ -169,31 +169,31 @@ const EditContent = () => {
           material_code : null
         };
         const course = await http.get(`${process.env.NEXT_PUBLIC_API_URL}/course/${course_id}`);
-      
+
         if(course.status != 200){
           res.status = 404;
           setData(res);
           return;
         }
-      
+
         res.course_code = course.data.data.id;
         res.course_name = course.data.data.name;
         res.lecturer = course.data.data.lecturer;
-      
+
         let user : UserClaim | null = getAvailableUserData();
         if(!user || (user.role != "admin" && user.email != course.data.data.email)){
           res.status = 403;
           setData(res);
           return;
         }
-      
+
         /*
         const material = await http.get(`${process.env.NEXT_PUBLIC_API_URL}/material/${material_id}`);
         if(material.status != 200 || material.data.data.course_code != course_id){
           res.status = 404;
           return res;
         }*/
-      
+
         res.material_code = material_id;
         setData(res);
       }
