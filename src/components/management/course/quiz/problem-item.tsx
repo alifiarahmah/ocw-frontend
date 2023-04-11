@@ -69,7 +69,9 @@ export default function ProblemItem({ id, question }: ProblemItemProps) {
         </FormLabel>
         <Select name="answer">
           {options.map((o) => (
-            <option value={o} key={o}>{o}</option>
+            <option value={o} key={o}>
+              {o}
+            </option>
           ))}
         </Select>
         <FormLabel htmlFor="explanation" mt={5}>

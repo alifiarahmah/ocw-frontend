@@ -33,7 +33,10 @@ const Register = () => {
     const consistUppercase = pass != pass.toLowerCase();
     const consistLowercase = pass != pass.toUpperCase();
     const consistNumber = /\d/.test(pass);
-    const consistSymbol = /[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\{\[\}\]\|\\\:\;\"\'\<\,\>\.\?\/]/.test(pass);
+    const consistSymbol =
+      /[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\{\[\}\]\|\\\:\;\"\'\<\,\>\.\?\/]/.test(
+        pass
+      );
     return (
       pass.length >= 8 &&
       pass.length <= 18 &&
@@ -67,7 +70,7 @@ const Register = () => {
         (response) => {
           toast({
             title: 'Register Success',
-            description: "Pendaftaran berhasil",
+            description: 'Pendaftaran berhasil',
             status: 'success',
             duration: 9000,
             isClosable: true,
@@ -77,11 +80,11 @@ const Register = () => {
         (error) => {
           toast({
             title: 'Register failed',
-            description: "Terjadi kesalahan dalam registrasi!",
+            description: 'Terjadi kesalahan dalam registrasi!',
             status: 'error',
             duration: 9000,
             isClosable: true,
-        });
+          });
         }
       )
       .finally(() => {
@@ -130,8 +133,8 @@ const Register = () => {
               />
               <FormErrorMessage>
                 Kata sandi harus mengandung 8-18 karakter dan setidaknya
-                terdapat satu huruf kapital, satu huruf kecil, satu angka,
-                dan satu simbol.
+                terdapat satu huruf kapital, satu huruf kecil, satu angka, dan
+                satu simbol.
               </FormErrorMessage>
             </FormControl>
             <FormControl
