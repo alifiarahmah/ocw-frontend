@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "message": "success",
+  "data": [
+    {
+      "id": "0",
+      "name": "Sekolah Teknik Elektro dan Informatika",
+      "abbreviation": "STEI"
+    },
+    {
+      "id": "1",
+      "name": "Fakultas Teknik Industri",
+      "abbreviation": "FTI"
+    }
+  ]
+}
