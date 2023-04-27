@@ -65,10 +65,7 @@ const EditContentPage = ({
       type: 'video',
     };
     http
-      .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/material/${material_code}`,
-        content
-      )
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/material/${material_code}/content`, content)
       .then(
         (res) => {
           //pass
@@ -79,9 +76,9 @@ const EditContentPage = ({
             duration: 9000,
             isClosable: true,
           });
-        },
-        (res) => {
-          console.log(res);
+        }, res => {
+          console.log(res.config.url);
+          console.log(res.config.data);
           toast({
             title: 'Adding material failed!',
             description: res.message,
@@ -146,7 +143,7 @@ const EditContentPage = ({
                 />
               </FormControl>
               <Container height={30} />
-              <Button type="submit" backgroundColor="blue.400">
+              <Button type="submit" backgroundColor="blue.400" isLoading={isLoading}>
                 Tambah
               </Button>
             </form>
