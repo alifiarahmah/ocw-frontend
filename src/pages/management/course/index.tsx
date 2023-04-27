@@ -4,10 +4,10 @@ import AddCourseModal from '@/components/management/course/add-course-modal';
 import DeleteCourseModal from '@/components/management/course/delete-course-modal';
 import EditCourseModal from '@/components/management/course/edit-course-modal';
 import http from '@/lib/http';
-import { getAvailableUserData } from '@/lib/token';
+import { getAccessToken, getAvailableUserData } from '@/lib/token';
 import { Course } from '@/types/course';
 import { Major } from '@/types/major';
-import { User } from '@/types/user';
+import { UserClaim } from '@/types/token';
 import {
   Button,
   Heading,
@@ -23,6 +23,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
@@ -43,22 +44,15 @@ export default function CourseManagement() {
     onClose: onCloseDelete,
   } = useDisclosure();
   const [courses, setCourses] = useState<Course[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<Course>({
-    id: '',
-    name: '',
-    major_id: '',
-    major: '',
-    description: '',
-    abbreviation: '',
-    lecturer: '',
-  });
   const [majors, setMajors] = useState<Major[]>([]);
+  const [courseId, setCourseId] = useState('');
   const [name, setName] = useState('');
-  const [selectedMajorId, setSelectedMajorId] = useState('');
+  const [majabbr, setMajabbr] = useState('');
+  const [courseAbbr, setCourseAbbr] = useState('');
   const [description, setDescription] = useState('');
   const [lecturer, setLecturer] = useState('');
-  const [abbreviation, setAbbreviation] = useState('');
-  const [email, setEmail] = useState('');
+
+  const [email, setEmail] = useState(''); // taken from token
 
   const toast = useToast();
 
@@ -66,91 +60,172 @@ export default function CourseManagement() {
     const getUserData = async () => {
       const userData = getAvailableUserData();
       if (userData) {
-        const user = userData as User;
-        setEmail(user.Email);
+        const user = userData as UserClaim;
+        setEmail(user.email);
       }
     };
     getUserData();
   }, []);
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const res = await http.get('/course');
+    http
+      .get('/course')
+      .then((res) => {
         setCourses(res.data.data);
-      } catch (err) {
+      })
+      .catch((err) => {
         toast({
           title: 'Error',
-          description: 'Gagal mengambil data course.',
+          description: 'Gagal mengambil data mata kuliah.',
           status: 'error',
         });
-      }
-    };
-    getCourses();
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courses]);
 
   useEffect(() => {
-    const getMajors = async () => {
-      try {
-        const res = await http.get('/course/major');
+    http
+      .get(`/course/major`)
+      .then((res) => {
         setMajors(res.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getMajors();
-  }, [majors]);
+        setMajabbr(res.data.data[0].abbreviation);
+      })
+      .catch((err) => {
+        toast({
+          title: 'Error',
+          description: 'Gagal mengambil data jurusan.',
+          status: 'error',
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courses]);
 
   const handleEditButton = (course: Course) => {
-    // TODO
+    setCourseId(course.id);
+    setName(course.name);
+    setMajabbr(course.id.slice(0, 2));
+    setCourseAbbr(course.abbreviation);
+    setDescription(course.description);
+    setLecturer(course.lecturer);
     onOpenEdit();
   };
 
   const handleDeleteButton = (course: Course) => {
-    // TODO
+    setCourseId(course.id);
     onOpenDelete();
   };
 
   const handleAdd = () => {
-    // TODO: change to use API
-    toast({
-      title: 'Success',
-      description: 'Berhasil menambah course.',
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+    http
+      .put(
+        '/course',
+        {
+          id: courseId,
+          name,
+          majabbr,
+          email,
+          abbreviation: courseAbbr,
+          description,
+          lecturer,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast({
+          title: 'Success',
+          description: 'Berhasil menambah course.',
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err: AxiosError) => {
+        toast({
+          title: 'Gagal menambah course.',
+          description: `${err.response?.data}`,
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+      });
     onCloseAdd();
   };
 
-  const handleEdit = (course: Course) => {
-    // TODO: change to use API
-    toast({
-      title: 'Success',
-      description: 'Berhasil mengedit course.',
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+  const handleEdit = () => {
+    http
+      .patch(
+        `/course/${courseId}`,
+        {
+          name,
+          majabbr,
+          email,
+          abbreviation: courseAbbr,
+          description,
+          lecturer,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast({
+          title: 'Success',
+          description: 'Berhasil mengedit course.',
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err: AxiosError) => {
+        toast({
+          title: 'Gagal mengedit course.',
+          description: `${err.response?.data}`,
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+      });
     onCloseEdit();
   };
 
-  const handleDelete = (course: Course) => {
-    // TODO: change to use API
-    toast({
-      title: 'Success',
-      description: 'Berhasil menghapus course.',
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+  const handleDelete = () => {
+    http
+      .delete(`/course/${courseId}`, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+      })
+      .then((res) => {
+        toast({
+          title: 'Success',
+          description: 'Berhasil menghapus course.',
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          title: 'Gagal menghapus course.',
+          description: `${err.response.statusText}`,
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+      });
     onCloseDelete();
   };
 
   return (
     <>
-      <Layout>
+      <Layout title="Course Management">
         <HStack justifyContent="space-between">
           <Heading>Daftar Course</Heading>
           <Button bg="biru.600" color="white" onClick={onOpenAdd}>
@@ -175,8 +250,9 @@ export default function CourseManagement() {
               {courses.map((c: Course) => (
                 <Tr key={c.id}>
                   <Td>{c.name}</Td>
-                  <Td>{c.major as string}</Td>
-                  <Td>{c.lecturer}</Td>
+                  {/* TODO: ask backend for abbreviation */}
+                  <Td>{c.id.slice(0, 2)}</Td>
+                  <Td>{c.lecturer.length > 0 ? c.lecturer : '-'}</Td>
                   <Td>{c.id}</Td>
                   <Td>
                     <RowAction
@@ -198,41 +274,44 @@ export default function CourseManagement() {
       <AddCourseModal
         isOpen={isOpenAdd}
         onClose={onCloseAdd}
-        handleConfirm={handleAdd}
-        majors={majors}
+        handleConfirm={() => handleAdd()}
+        id={courseId}
+        setId={setCourseId}
         name={name}
         setName={setName}
+        majors={majors}
+        majabbr={majabbr}
+        setMajabbr={setMajabbr}
+        abbreviation={courseAbbr}
+        setAbbreviation={setCourseAbbr}
         description={description}
         setDescription={setDescription}
-        selectedMajorId={selectedMajorId}
-        setSelectedMajorId={setSelectedMajorId}
         lecturer={lecturer}
         setLecturer={setLecturer}
-        abbreviation={abbreviation}
-        setAbbreviation={setAbbreviation}
       />
 
       <EditCourseModal
         isOpen={isOpenEdit}
         onClose={onCloseEdit}
-        handleConfirm={() => handleEdit(selectedCourse)}
-        majors={majors}
+        handleConfirm={() => handleEdit()}
+        id={courseId}
         name={name}
         setName={setName}
+        majors={majors}
+        majabbr={majabbr}
+        setMajabbr={setMajabbr}
+        abbreviation={courseAbbr}
+        setAbbreviation={setCourseAbbr}
         description={description}
         setDescription={setDescription}
-        selectedMajorId={selectedMajorId}
-        setSelectedMajorId={setSelectedMajorId}
         lecturer={lecturer}
         setLecturer={setLecturer}
-        abbreviation={abbreviation}
-        setAbbreviation={setAbbreviation}
       />
 
       <DeleteCourseModal
         isOpen={isOpenDelete}
         onClose={onCloseDelete}
-        handleConfirm={() => handleDelete(selectedCourse)}
+        handleConfirm={() => handleDelete()}
       />
     </>
   );

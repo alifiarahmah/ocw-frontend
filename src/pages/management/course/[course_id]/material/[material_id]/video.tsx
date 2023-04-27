@@ -24,19 +24,20 @@ import { getAvailableUserData } from '@/lib/token';
 import { useRouter } from 'next/router';
 import { UserClaim } from '@/types/token';
 import { stringify } from 'querystring';
+import { AxiosResponse } from 'axios';
 
 interface CourseBannerProps {
-  course_code : string;
-  course_name : string;
-  lecturer : string;
-};
+  course_code: string;
+  course_name: string;
+  lecturer: string;
+}
 
 interface GetContentProps {
-  status : number;
-  course_code : string | null;
-  course_name : string | null;
-  lecturer : string | null;
-  material_code : string | null;
+  status: number;
+  course_code: string | null;
+  course_name: string | null;
+  lecturer: string | null;
+  material_code: string | null;
 }
 
 const EditContentPage = ({
@@ -44,10 +45,10 @@ const EditContentPage = ({
   course_code,
   course_name,
   lecturer,
-  material_code
-} : GetContentProps) : ReactElement => {
+  material_code,
+}: GetContentProps): ReactElement => {
   const toast = useToast();
-  const courseBannerProps : CourseBannerProps = {
+  const courseBannerProps: CourseBannerProps = {
     course_code: course_code!,
     course_name: course_name!,
     lecturer: lecturer!,
@@ -56,21 +57,21 @@ const EditContentPage = ({
   const [downloadable, setDownloadable] = useState<boolean>(true);
   const [contentPath, setContentPath] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const handleSubmit = (e : any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setIsLoading(true);
     const content = {
       link: contentPath,
-      type: "video"
-    }
+      type: 'video',
+    };
     http
       .post(`${process.env.NEXT_PUBLIC_API_URL}/material/${material_code}/content`, content)
       .then(
-        res => {
+        (res) => {
           //pass
           toast({
             title: 'Adding material success!',
-            description: res.message,
+            description: res.data.message,
             status: 'success',
             duration: 9000,
             isClosable: true,
@@ -86,7 +87,10 @@ const EditContentPage = ({
             isClosable: true,
           });
         }
-      ).finally(() => {setIsLoading(false);});
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
   return (
     <Layout title="Edit Content" py={0} px={0}>
@@ -117,18 +121,26 @@ const EditContentPage = ({
             <form onSubmit={handleSubmit}>
               <FormControl isRequired>
                 <FormLabel>Judul Handout</FormLabel>
-                <Input value={title} onChange={e => setTitle(e.target.value)}/>
+                <Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
               </FormControl>
               <FormControl isRequired>
                 <FormLabel>Downloadable</FormLabel>
-                <Select onChange={e => setDownloadable(e.target.value === 'yes')}>
+                <Select
+                  onChange={(e) => setDownloadable(e.target.value === 'yes')}
+                >
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
                 </Select>
               </FormControl>
               <FormControl>
                 <FormLabel>Link Youtube</FormLabel>
-                <Input value={contentPath} onChange={e => setContentPath(e.target.value)} />
+                <Input
+                  value={contentPath}
+                  onChange={(e) => setContentPath(e.target.value)}
+                />
               </FormControl>
               <Container height={30} />
               <Button type="submit" backgroundColor="blue.400" isLoading={isLoading}>
@@ -140,7 +152,7 @@ const EditContentPage = ({
       </CourseBanner>
     </Layout>
   );
-}
+};
 
 const EditContent = () => {
   const router = useRouter();
@@ -150,78 +162,80 @@ const EditContent = () => {
 
   const [data, setData] = useState<GetContentProps>({
     status: 200,
-    course_code : null,
-    course_name : null,
-    lecturer : null,
-    material_code : null
+    course_code: null,
+    course_name: null,
+    lecturer: null,
+    material_code: null,
   });
 
-  useEffect(()=>{
-    if(!router.isReady) return;
+  useEffect(() => {
+    if (!router.isReady) return;
 
-    if(course_id && material_id){
-
-      const getContent = async (course_id : string, material_id : string) => {
-        let res : GetContentProps = {
+    if (course_id && material_id) {
+      const getContent = async (course_id: string, material_id: string) => {
+        let res: GetContentProps = {
           status: 200,
-          course_code : null,
-          course_name : null,
-          lecturer : null,
-          material_code : null
+          course_code: null,
+          course_name: null,
+          lecturer: null,
+          material_code: null,
         };
-        const course = await http.get(`${process.env.NEXT_PUBLIC_API_URL}/course/${course_id}`);
-      
-        if(course.status != 200){
+        const course = await http.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/course/${course_id}`
+        );
+
+        if (course.status != 200) {
           res.status = 404;
           setData(res);
           return;
         }
-      
+
         res.course_code = course.data.data.id;
         res.course_name = course.data.data.name;
         res.lecturer = course.data.data.lecturer;
-      
-        let user : UserClaim | null = getAvailableUserData();
-        if(!user || (user.role != "admin" && user.email != course.data.data.email)){
+
+        let user: UserClaim | null = getAvailableUserData();
+        if (
+          !user ||
+          (user.role != 'admin' && user.email != course.data.data.email)
+        ) {
           res.status = 403;
           setData(res);
           return;
         }
-      
+
         /*
         const material = await http.get(`${process.env.NEXT_PUBLIC_API_URL}/material/${material_id}`);
         if(material.status != 200 || material.data.data.course_code != course_id){
           res.status = 404;
           return res;
         }*/
-      
+
         res.material_code = material_id;
         setData(res);
-      }
+      };
 
-      getContent(course_id as string, material_id as string)
-        .catch(
-          res => {
-            setData({
-              ...data,
-              status: 404,
-            });
-          }
-        );
+      getContent(course_id as string, material_id as string).catch((res) => {
+        setData({
+          ...data,
+          status: 404,
+        });
+      });
     } else {
       setData({
         ...data,
         status: 404,
       });
     }
-  },[router.isReady]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady]);
 
   console.log(data);
-  if(data.status != 200){
+  if (data.status != 200) {
     return <NotFound />;
   }
 
-  return <EditContentPage {...data}/>;
-}
+  return <EditContentPage {...data} />;
+};
 
 export default EditContent;

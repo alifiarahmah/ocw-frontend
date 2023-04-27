@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "cypress run",
-    "style": "prettier --write src/**/*.{js,jsx,ts,tsx}",
+    "style": "prettier --write src/**/*.{js,jsx,ts,tsx} && prettier --write cypress/**/*.{js,jsx,ts,tsx}",
     "cypress": "cypress open"
   },
   "dependencies": {
@@ -35,10 +35,11 @@
     "validator": "^13.9.0"
   },
   "devDependencies": {
-    "@types/node": "18.11.18",
+    "@types/node": "18.15.11",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "@types/validator": "^13.7.12",
-    "cypress": "^12.5.1"
+    "cypress": "^12.5.1",
+    "husky": "^8.0.0"
   }
 }

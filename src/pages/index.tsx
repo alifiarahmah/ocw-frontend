@@ -1,4 +1,5 @@
 import CourseCard from '@/components/course_card';
+import CourseCardSkeleton from '@/components/course_card_skeleton';
 import HomeSidebar from '@/components/home_sidebar';
 import Layout from '@/components/layout';
 import { SelectSearch } from '@/components/select_search';
@@ -18,17 +19,20 @@ import { MdNavigateNext } from 'react-icons/md';
 
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const res = await http.get('/course');
+    http
+      .get('/course')
+      .then((res) => {
         setCourses(res.data.data);
-      } catch (err) {
+      })
+      .catch((err) => {
         console.log(err);
-      }
-    };
-    getCourses();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -52,26 +56,30 @@ export default function Home() {
               alignItems="stretch"
               mt={{ base: 3, lg: 7 }}
             >
-              {courses.map((c, i) => (
-                <CourseCard
-                  key={c.id}
-                  href={`/courses/details/${c.id}`}
-                  courseCode={c.id}
-                  major="Teknik Informatika" // TODO: ask backend to return major name
-                  courseName={c.name}
-                  lecturer={c.lecturer}
-                  bgColor={
-                    i % 3 === 0
-                      ? 'birukartu.200'
-                      : i % 3 === 1
-                      ? 'birukartu.300'
-                      : 'birukartu.100'
-                  }
-                  majorColor={i % 3 === 2 ? 'biru.600' : 'white'}
-                  courseNameColor={i % 3 === 2 ? 'biru.600' : 'white'}
-                  lecturerColor={i % 3 === 2 ? 'biru.600' : 'white'}
-                />
-              ))}
+              {isLoading
+                ? Array.from({ length: 6 }).map((_, i) => (
+                    <CourseCardSkeleton key={i} />
+                  ))
+                : courses.map((c, i) => (
+                    <CourseCard
+                      key={c.id}
+                      href={`/courses/details/${c.id}`}
+                      courseCode={c.id}
+                      major="Teknik Informatika" // TODO: ask backend to return major name
+                      courseName={c.name}
+                      lecturer={c.lecturer}
+                      bgColor={
+                        i % 3 === 0
+                          ? 'birukartu.200'
+                          : i % 3 === 1
+                          ? 'birukartu.300'
+                          : 'birukartu.100'
+                      }
+                      majorColor={i % 3 === 2 ? 'biru.600' : 'white'}
+                      courseNameColor={i % 3 === 2 ? 'biru.600' : 'white'}
+                      lecturerColor={i % 3 === 2 ? 'biru.600' : 'white'}
+                    />
+                  ))}
             </SimpleGrid>
             <Link href="/courses">
               <HStack justifyContent="right" alignItems="center" mt={7}>

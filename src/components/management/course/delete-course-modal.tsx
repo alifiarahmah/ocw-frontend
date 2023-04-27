@@ -2,9 +2,9 @@ import Modal from '@/components/modal';
 import { Text } from '@chakra-ui/react';
 
 export interface DeleteCourseModalProps {
-	isOpen: boolean;
-	onClose: () => void;
-	handleConfirm: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+  handleConfirm: () => void;
 }
 
 export default function DeleteCourseModal({

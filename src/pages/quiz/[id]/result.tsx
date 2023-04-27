@@ -1,7 +1,10 @@
 import Layout from '@/components/layout';
 import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 function Result() {
+  const router = useRouter();
   return (
     <Layout>
       <Flex w="100%" h="70vh" justifyContent="center" alignItems="center">
@@ -22,12 +25,16 @@ function Result() {
             justifyContent="space-between"
             direction={{ base: 'column', lg: 'row' }}
           >
-            <Button bg="#4F4F4F" color="white">
-              Cek Pembahasan
-            </Button>
-            <Button bg="biru.600" color="white">
-              Kembali ke Course
-            </Button>
+            <Link href={router.asPath + '/../pembahasan'}>
+              <Button bg="#4F4F4F" color="white">
+                Cek Pembahasan
+              </Button>
+            </Link>
+            <Link href={`/`}>
+              <Button bg="biru.600" color="white">
+                Kembali ke Course
+              </Button>
+            </Link>
           </Stack>
         </Box>
       </Flex>

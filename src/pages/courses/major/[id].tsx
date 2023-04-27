@@ -29,37 +29,34 @@ export default function Courses() {
 
   useEffect(() => {
     if (!id) return;
-    const getCourses = async () => {
-      try {
-        const res = await http.get(`/course/major/courses/${id}`);
+    http
+      .get(`/course/major/courses/${id}`)
+      .then((res) => {
         setCourses(res.data.data);
-        console.log(courses);
-      } catch (err) {
-        toast({
-          title: 'Error',
-          description: 'Gagal mengambil data mata kuliah.',
-          status: 'error',
-        });
-      }
-    };
-    getCourses();
-  }, [id]);
-
-  useEffect(() => {
-    if (!id) return;
-    const getMajor = async () => {
-      try {
-        const res = await http.get(`/course/major/${id}`);
-        setMajor(res.data.data);
-      } catch (err) {
+      })
+      .catch((err) => {
         toast({
           title: 'Error',
           description: 'Gagal mengambil data jurusan.',
           status: 'error',
         });
-      }
-    };
-    getMajor();
+      });
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    http
+      .get(`/course/major/${id}`)
+      .then((res) => {
+        setMajor(res.data.data);
+      })
+      .catch((err) => {
+        toast({
+          title: 'Error',
+          description: 'Gagal mengambil data jurusan.',
+          status: 'error',
+        });
+      });
   }, [id]);
 
   return (
