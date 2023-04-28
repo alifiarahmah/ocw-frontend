@@ -1,13 +1,13 @@
 import RowAction from '@/components/admin/row-action';
 import Layout from '@/components/layout';
+import Modal from '@/components/modal';
+import http from '@/lib/http';
 import { Quiz } from '@/types/quiz';
 import {
   Box,
   Button,
   Heading,
   HStack,
-  ModalContent,
-  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
@@ -22,7 +22,6 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MdAdd } from 'react-icons/md';
-import Modal from '@/components/modal';
 
 const quizzes = [
   {
@@ -45,18 +44,35 @@ export default function QuizManagement() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleConfirmDelete = () => {
-    toast({
-      title: 'Latihan berhasil dihapus',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
     onClose();
+    http
+      .delete(`/quiz/${router.query.quiz_id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      })
+      .then(() => {
+        toast({
+          title: 'Latihan berhasil dihapus',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Gagal menghapus latihan',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        console.log(err);
+      });
   };
 
   return (
     <>
-      <Layout>
+      <Layout title="Quiz Management">
         <HStack justifyContent="space-between">
           <Box>
             <Heading>Daftar Latihan</Heading>

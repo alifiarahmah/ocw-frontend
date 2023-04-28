@@ -15,17 +15,49 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function NewQuiz() {
   const router = useRouter();
   const toast = useToast();
-  const quizId = uuidv4();
+  const quizId = router.query.quiz_id as string;
   const course_id = router.query.course_id as string;
   const [quizName, setQuizName] = useState('');
   const [problems, setProblems] = useState<Problem[]>([]);
+
+  useEffect(() => {
+    if (!quizId) return;
+    http
+      .get(`/quiz/${quizId}`, {
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
+      })
+      .then((res) => {
+        setQuizName(res.data.data.nama);
+      })
+      .catch((err) => console.log(err));
+    http
+      .get(`/quiz/link/${quizId}`, {
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
+      })
+      .then((res) => {
+        // parse the link
+        const link = res.data.data.upload_link;
+        axios
+          .get(`${process.env.NEXT_PUBLIC_BUCKET_URL}/${link}`)
+          .then((res) => {
+            setProblems(res.data.problems);
+            console.log(problems);
+          });
+      })
+      .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quizId]);
 
   const handleSubmit = () => {
     http
@@ -55,7 +87,7 @@ export default function NewQuiz() {
             console.log(res.data);
             if (res.status === 200) {
               toast({
-                title: 'Latihan berhasil dibuat',
+                title: 'Latihan berhasil diubah',
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
@@ -80,14 +112,15 @@ export default function NewQuiz() {
   };
 
   return (
-    <Layout title="Latihan Baru">
-      <Heading my={5}>Latihan Baru</Heading>
+    <Layout title="Ubah Latihan">
+      <Heading my={5}>Ubah Latihan</Heading>
       <Box p={5} borderRadius="lg" bg="white">
         <FormLabel htmlFor="title">Judul Latihan</FormLabel>
         <Input
           name="title"
           isRequired
           onChange={(e) => setQuizName(e.target.value)}
+          value={quizName}
         />
         {/* <FormLabel htmlFor="week">Week</FormLabel>
         <Input name="week" /> */}
