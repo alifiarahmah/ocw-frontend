@@ -257,14 +257,14 @@ export default function CourseManagement() {
                     <HStack my={1}>
                       <Link href={router.asPath + '/'}>
                         <Button size="sm" onClick={onOpenEdit}>
-                          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
+                          <Text display={{ base: 'none', lg: 'flex' }}>
                             Materi
                           </Text>
                         </Button>
                       </Link>
-                      <Link href={router.asPath + '/'}>
+                      <Link href={router.asPath + `/${c.id}/quiz`}>
                         <Button size="sm" onClick={onOpenEdit}>
-                          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
+                          <Text display={{ base: 'none', lg: 'flex' }}>
                             Quiz
                           </Text>
                         </Button>
