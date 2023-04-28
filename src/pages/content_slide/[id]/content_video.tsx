@@ -32,7 +32,25 @@ export default function ContentVideo() {
       }
     }); 
     setLinks(material_url);
+    const course_id = res.data.data.course_id
+    http.get(`${process.env.NEXT_PUBLIC_API_URL}/course/${course_id}`)
+    .then((red) => {
+      setCourseBannerProps({
+        course_code : red.data.data.id,
+        course_name : red.data.data.name,
+        lecturer : red.data.data.lecturer,
+      });
     })
+    .catch((err) => {
+      toast({
+        title: 'Gagal mengambil data Course.',
+        description : err.message,
+        status: 'error',
+        duration : 9000,
+        isClosable: true,
+    });
+    });
+  })
     .catch((err) => {
       toast({
         title: 'Gagal mengambil data konten.',
