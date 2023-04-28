@@ -132,7 +132,7 @@ export default function CourseDetails() {
                       <Button size="sm" colorScheme="yellow">
                         <MdPlayArrow />
                         <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
-                          Video
+                          mulai
                         </Text>
                       </Button>
                     </Link>
