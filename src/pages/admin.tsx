@@ -100,51 +100,74 @@ export default function Admin() {
   };
 
   const handleAdd = () => {
-    // TODO: change to use API
-    console.log(name, email, role);
-    http.post(
-      `/admin/user`,
-      {
-        name,
-        email,
-        role,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${getAvailableUserData()}`,
+    http
+      .post(
+        `/admin/user`,
+        {
+          name,
+          email,
+          role,
         },
-      }
-    );
-    toast({
-      title: `Pengguna ${name} berhasil ditambahkan.`,
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+        {
+          headers: {
+            Authorization: `Bearer ${getAvailableUserData()}`,
+          },
+        }
+      )
+      .then(() => {
+        toast({
+          title: `Pengguna ${name} berhasil ditambahkan.`,
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     onCloseAdd();
   };
 
   const handleEdit = (user: User) => {
-    // TODO: change to use API
-    setUsers(
-      users.map((u) => {
-        if (u.email === user.email) {
-          return {
-            ...u,
-            name,
-            email,
-            role,
-          } as User;
+    // setUsers(
+    //   users.map((u) => {
+    //     if (u.email === user.email) {
+    //       return {
+    //         ...u,
+    //         name,
+    //         email,
+    //         role,
+    //       } as User;
+    //     }
+    //     return u;
+    //   })
+    // );
+    console.log(name, email, role);
+    http
+      .patch(
+        `/admin/user/${email}`,
+        {
+          name,
+          email,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getAvailableUserData()}`,
+          },
         }
-        return u;
+      )
+      .then(() => {
+        toast({
+          title: `Data pengguna ${name} berhasil diubah.`,
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
       })
-    );
-    toast({
-      title: `Data pengguna ${name} berhasil diubah.`,
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+      .catch((err) => {
+        console.log(err);
+      });
     onCloseEdit();
   };
 
@@ -266,6 +289,7 @@ export default function Admin() {
               name="email"
               placeholder="john@doe.com"
               value={email}
+              isDisabled
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
