@@ -1,0 +1,27 @@
+{
+  "status": "success",
+  "message": "success",
+  "data": [
+    {
+      "id": "0",
+      "name": "Teknik Informatika",
+      "fac_id": "0",
+      "faculty": "STEI",
+      "abbreviation": "IF"
+    },
+    {
+      "id": "1",
+      "name": "Sistem dan Teknologi Informasi",
+      "fac_id": "0",
+      "faculty": "STEI",
+      "abbreviation": "STI"
+    },
+    {
+      "id": "2",
+      "name": "Teknik Elektro",
+      "fac_id": "0",
+      "faculty": "STEI",
+      "abbreviation": "EL"
+    }
+  ]
+}

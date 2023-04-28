@@ -1,6 +1,8 @@
-import RowAction from '@/components/course/row_action';
 import CourseBanner from '@/components/course_banner';
 import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { Material } from '@/types/material';
+import { Quiz } from '@/types/quiz';
 import {
   Box,
   Button,
@@ -18,15 +20,39 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MdArrowBackIos, MdPlayArrow } from 'react-icons/md';
+import { useEffect, useState } from 'react';
+import { MdArrowBackIos, MdAttachFile, MdPlayArrow } from 'react-icons/md';
 
 export default function CourseDetails() {
   const router = useRouter();
+  const [courseName, setCourseName] = useState('');
+  const [lecturer, setLecturer] = useState('');
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+
+  useEffect(() => {
+    if (router.query.id) {
+      http.get(`/course/${router.query.id}`).then((res) => {
+        setCourseName(res.data.data.name);
+        setLecturer(res.data.data.lecturer);
+      });
+      http.get(`/course/${router.query.id}/materials`).then((res) => {
+        setMaterials(res.data.data);
+      });
+      http.get(`/course/${router.query.id}/quiz`).then((res) => {
+        setQuizzes(res.data.data);
+      });
+    }
+  }, [router.query.id]);
 
   return (
-    <Layout p={0}>
-      <HStack justifyContent="space-between" alignItems="flex-start">
-        <Box p={10}>
+    <Layout title={`${router.query.id} ${courseName}`} p={0}>
+      <CourseBanner
+        course_code={router.query.id as string}
+        course_name={courseName}
+        lecturer={lecturer}
+      >
+        <Box p={5}>
           <HStack my={5}>
             <IconButton
               aria-label="back"
@@ -36,79 +62,118 @@ export default function CourseDetails() {
             />
             <Heading>Daftar Materi</Heading>
           </HStack>
-          <TableContainer>
-            <Table
-              size="lg"
-              variant="simple"
-              bg={'white'}
-              borderRadius="lg"
-              mt={5}
-            >
-              <Thead textTransform="capitalize">
-                <Tr>
-                  <Th>Judul Materi</Th>
-                  <Th>Week</Th>
-                  <Th>Bahan</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr key="">
-                  <Td>Introduction</Td>
-                  <Td>1</Td>
-                  <Td>
-                    <RowAction
-                      videoLink="/content_video"
-                      handoutLink="/content_slide"
-                    />
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableContainer>
+          {materials.length > 0 ? (
+            <TableContainer>
+              <Table
+                size="lg"
+                variant="simple"
+                bg={'white'}
+                borderRadius="lg"
+                mt={5}
+              >
+                <Thead textTransform="capitalize">
+                  <Tr>
+                    <Th>Judul Materi</Th>
+                    <Th>Week</Th>
+                    <Th>Bahan</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {materials.map((material) => (
+                    <Tr key="">
+                      <Td>{material.name}</Td>
+                      <Td>{material.week}</Td>
+                      <Td>
+                        <HStack my={0} py={0}>
+                          {material.contents.map((content) => (
+                            <Link
+                              href={
+                                content.type === 'handout'
+                                  ? process.env.NEXT_PUBLIC_BUCKET_URL +
+                                    '/' +
+                                    content.link
+                                  : content.link
+                              }
+                              target="_blank"
+                              key={content.id}
+                            >
+                              <Button
+                                size="sm"
+                                colorScheme={
+                                  content.type === 'video' ? 'red' : 'yellow'
+                                }
+                              >
+                                {content.type === 'video' ? (
+                                  <MdPlayArrow />
+                                ) : (
+                                  <MdAttachFile />
+                                )}
+                                <Text
+                                  ml={2}
+                                  display={{ base: 'none', lg: 'flex' }}
+                                >
+                                  {content.type}
+                                </Text>
+                              </Button>
+                            </Link>
+                          ))}
+                        </HStack>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Text textAlign="center" my={10}>
+              Belum ada materi
+            </Text>
+          )}
 
           <Heading mt={10} mb={5}>
             Daftar Latihan Soal
           </Heading>
-          <TableContainer>
-            <Table
-              size="lg"
-              variant="simple"
-              bg={'white'}
-              borderRadius="lg"
-              mt={5}
-            >
-              <Thead textTransform="capitalize">
-                <Tr>
-                  <Th>Judul Latihan Soal</Th>
-                  <Th>Week</Th>
-                  <Th>Aksi</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr key="">
-                  <Td>Introduction</Td>
-                  <Td>1</Td>
-                  <Td>
-                    <Link href={'/quiz/1/start'}>
-                      <Button size="sm" colorScheme="yellow">
-                        <MdPlayArrow />
-                        <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
-                          Video
-                        </Text>
-                      </Button>
-                    </Link>
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableContainer>
+          {quizzes.length > 0 ? (
+            <TableContainer>
+              <Table
+                size="lg"
+                variant="simple"
+                bg={'white'}
+                borderRadius="lg"
+                mt={5}
+              >
+                <Thead textTransform="capitalize">
+                  <Tr>
+                    <Th>Judul Latihan Soal</Th>
+                    <Th>Aksi</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {quizzes.map((quiz) => (
+                    <Tr key={quiz.id}>
+                      <Td>{quiz.nama}</Td>
+                      <Td>
+                        <Link href={`/quiz/${quiz.id}/start`}>
+                          <Button size="sm" colorScheme="yellow">
+                            <MdPlayArrow />
+                            <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
+                              mulai
+                            </Text>
+                          </Button>
+                        </Link>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Text textAlign="center" my={10}>
+              Belum ada latihan soal
+            </Text>
+          )}
         </Box>
-        <CourseBanner
-          course_code="IF4020"
-          course_name="Pengantar Sistem Informasi"
-          lecturer="Siti Nuraini, S.Kom., M.Kom."
-        />
-      </HStack>
+      </CourseBanner>
     </Layout>
   );
 }

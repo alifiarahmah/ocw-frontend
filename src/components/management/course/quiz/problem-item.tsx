@@ -1,3 +1,5 @@
+import { AnswerOption } from '@/types/answer_option';
+import { Problem } from '@/types/problem';
 import {
   Box,
   Button,
@@ -12,42 +14,74 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { MdAdd, MdDelete } from 'react-icons/md';
-import { useState } from 'react';
-import { Question } from '@/types/question';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ProblemItemProps {
-  id: number;
-  question: Question;
+  number: number | string;
+  problem: Problem;
+  problems: Problem[];
+  setProblems: React.Dispatch<React.SetStateAction<Problem[]>>;
 }
 
-export default function ProblemItem({ id, question }: ProblemItemProps) {
-  const [options, setOptions] = useState(Array(1).fill(''));
+export default function ProblemItem({
+  number,
+  problem,
+  problems,
+  setProblems,
+}: ProblemItemProps) {
+  const [answers, setAnswers] = useState<AnswerOption[]>(problem.answers);
+
+  const handleChangeQuestion = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setProblems(
+      problems.map((p) =>
+        p.id === problem.id ? { ...p, question: e.target.value } : p
+      )
+    );
+  };
+
+  useEffect(() => {
+    setProblems(
+      problems.map((p) =>
+        p.id === problem.id ? { ...p, answers: answers } : p
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answers]);
 
   return (
     <HStack width="100%" alignItems="flex-start">
       <Box w="40%">
-        <Text fontWeight="bold">Nomor {id}</Text>
-        <Textarea name="question" placeholder="Pertanyaan..." my={5} />
+        <Text fontWeight="bold">Nomor {number}</Text>
+        <Textarea
+          name="question"
+          placeholder="Pertanyaan..."
+          my={5}
+          onChange={handleChangeQuestion}
+          value={problem.question}
+        />
         <Stack gap={2}>
-          {options.map((o, i) => (
+          {answers.map((o, i) => (
             <InputGroup key={i}>
               <Input
                 placeholder={`opsi ${i + 1}`}
                 onChange={(e) => {
-                  setOptions(
-                    options.map((o, j) => (i === j ? e.target.value : o))
+                  setAnswers(
+                    answers.map((a) =>
+                      a.id === o.id ? { ...a, answer: e.target.value } : a
+                    )
                   );
                 }}
-                value={o}
+                value={o.answer}
               />
               <InputRightElement>
                 <IconButton
                   aria-label={'Delete'}
                   icon={<MdDelete />}
-                  onClick={() => {
-                    setOptions(options.filter((o, j) => i !== j));
-                  }}
+                  // onClick={() => {
+                  //   setAnswers(answers.filter((o, j) => i !== j));
+                  // }}
                 />
               </InputRightElement>
             </InputGroup>
@@ -56,7 +90,15 @@ export default function ProblemItem({ id, question }: ProblemItemProps) {
           <Button
             leftIcon={<MdAdd />}
             onClick={() => {
-              setOptions([...options, '']);
+              setAnswers([
+                ...answers,
+                {
+                  id: uuidv4(),
+                  media_id: [],
+                  answer: '',
+                  is_solution: false,
+                } as AnswerOption,
+              ]);
             }}
           >
             Tambah opsi
@@ -67,9 +109,21 @@ export default function ProblemItem({ id, question }: ProblemItemProps) {
         <FormLabel htmlFor="answer" mt={5}>
           Kunci Jawaban
         </FormLabel>
-        <Select name="answer">
-          {options.map((o) => (
-            <option value={o}>{o}</option>
+        <Select
+          name="answer"
+          value={answers.find((a) => a.is_solution)?.answer}
+          onChange={(e) => {
+            setAnswers(
+              answers.map((a) =>
+                a.answer === e.target.value ? { ...a, is_solution: true } : a
+              )
+            );
+          }}
+        >
+          {answers.map((o) => (
+            <option key={o.id} value={o.answer}>
+              {o.answer}
+            </option>
           ))}
         </Select>
         <FormLabel htmlFor="explanation" mt={5}>

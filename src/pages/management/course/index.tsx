@@ -24,6 +24,8 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
@@ -43,6 +45,7 @@ export default function CourseManagement() {
     onOpen: onOpenDelete,
     onClose: onCloseDelete,
   } = useDisclosure();
+  const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
   const [majors, setMajors] = useState<Major[]>([]);
   const [courseId, setCourseId] = useState('');
@@ -98,7 +101,7 @@ export default function CourseManagement() {
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courses]);
+  }, []);
 
   const handleEditButton = (course: Course) => {
     setCourseId(course.id);
@@ -249,20 +252,40 @@ export default function CourseManagement() {
             <Tbody>
               {courses.map((c: Course) => (
                 <Tr key={c.id}>
-                  <Td>{c.name}</Td>
+                  <Td>
+                    <Text>{c.name}</Text>
+                    <HStack my={1}>
+                      <Link href={router.asPath + '/'}>
+                        <Button size="sm" onClick={onOpenEdit}>
+                          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
+                            Materi
+                          </Text>
+                        </Button>
+                      </Link>
+                      <Link href={router.asPath + '/'}>
+                        <Button size="sm" onClick={onOpenEdit}>
+                          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
+                            Quiz
+                          </Text>
+                        </Button>
+                      </Link>
+                    </HStack>
+                  </Td>
                   {/* TODO: ask backend for abbreviation */}
                   <Td>{c.id.slice(0, 2)}</Td>
                   <Td>{c.lecturer.length > 0 ? c.lecturer : '-'}</Td>
                   <Td>{c.id}</Td>
                   <Td>
-                    <RowAction
-                      onOpenEdit={() => {
-                        handleEditButton(c);
-                      }}
-                      onOpenDelete={() => {
-                        handleDeleteButton(c);
-                      }}
-                    />
+                    <HStack>
+                      <RowAction
+                        onOpenEdit={() => {
+                          handleEditButton(c);
+                        }}
+                        onOpenDelete={() => {
+                          handleDeleteButton(c);
+                        }}
+                      />
+                    </HStack>
                   </Td>
                 </Tr>
               ))}

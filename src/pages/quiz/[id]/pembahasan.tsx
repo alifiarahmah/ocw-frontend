@@ -1,4 +1,8 @@
-import Layout from "@/components/layout";
+import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { getAvailableUserData } from '@/lib/token';
+import { Problem } from '@/types/problem';
+import { UserAnswer } from '@/types/user_answer';
 import {
   Box,
   Button,
@@ -8,40 +12,88 @@ import {
   RadioGroup,
   Stack,
   Text,
-  background,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 function Pembahasan() {
+  const router = useRouter();
+  const [name, setName] = useState('');
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
+
+  useEffect(() => {
+    setUserAnswers(JSON.parse(router.query.userAnswers as string));
+    http
+      .get(`/quiz/${router.query.id}/solution`, {
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
+      })
+      .then((res) => {
+        setName(res.data.data.name);
+        setProblems(res.data.data.problems);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  }, [router.query.id, router.query.userAnswers]);
+
   return (
     <Layout>
-      <Heading>Pembahasan Latihan Clustering 1</Heading>
+      <Heading my={5}>Pembahasan {name}</Heading>
       <Stack gap={3} mt={10}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
-        <><Box key="item" bg="white" borderRadius="lg" p={5}>
-            <Text fontWeight="bold">Nomor {item}</Text>
-            <Text my={3}>Ini adalah soalnya...</Text>
-            <RadioGroup>
-              <Stack gap={2}>
-                <Radio borderWidth='thick' borderColor='green' isReadOnly value="a">Jawaban A</Radio>
-                <Radio isReadOnly value="b">Jawaban B</Radio> 
-                <Radio borderWidth='thick' borderColor='red' isReadOnly value="c">Jawaban C</Radio>
-                <Radio isReadOnly value="d">Jawaban D</Radio>
-                {/* colorScheme untuk warna ketika dipilih, bgColor untuk warna lingkaran dalam, borderColor untuk warna ring luar */}
-              </Stack>
-            </RadioGroup>
-            {/* <form>
-            </form> */}
-          </Box><Box key="item" bg="white" borderRadius="lg" p={5}>
-              <Text fontWeight="bold">Pembahasan Nomor {item}</Text>
-              <Text my={3}>Ini adalah pembahasannya... 
-            </Text>
-          </Box></>        
-        
-     
+        {problems.map((problem, index) => (
+          <>
+            <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
+              <Text fontWeight="bold">Nomor {index + 1}</Text>
+              <Text my={3}>{problem.question}</Text>
+              <RadioGroup>
+                <Stack gap={2}>
+                  {problem.answers.map((answer) => (
+                    <Radio
+                      key={answer.id}
+                      value={answer.id}
+                      borderWidth="thick"
+                      borderColor={
+                        answer.is_solution
+                          ? 'green.500'
+                          : userAnswers.find(
+                              (userAnswer) =>
+                                userAnswer.problem_id == problem.id &&
+                                userAnswer.answer_id == answer.id
+                            )
+                          ? 'red.500'
+                          : 'gray.300'
+                      }
+                      isReadOnly
+                    >
+                      {answer.answer}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+            </Box>
+            <Flex key={problem.id} bg="white" borderRadius="lg" p={5}>
+              <Text fontWeight="bold">Jawaban:</Text>
+              <Text ml={3}>
+                {
+                  // find the answer that has is_solution = true
+                  problem.answers.find((answer) => answer.is_solution == true)
+                    ?.answer || 'Tidak ada jawaban'
+                }
+              </Text>
+            </Flex>
+          </>
         ))}
-        </Stack>
+      </Stack>
       <Flex justifyContent="flex-end" mt={10}>
-        <Button bg="biru.600" color="white">Selesai</Button>
+        <Link href="/">
+          <Button bg="biru.600" color="white">
+            Selesai
+          </Button>
+        </Link>
       </Flex>
     </Layout>
   );

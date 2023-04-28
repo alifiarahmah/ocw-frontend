@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import RowAction from '@/components/admin/row-action';
 import Layout from '@/components/layout';
 import Modal from '@/components/modal';
+import http from '@/lib/http';
+import { getAvailableUserData } from '@/lib/token';
 import { User } from '@/types/user';
 import {
   Button,
@@ -22,12 +25,9 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import http from '@/lib/http';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
-import RowAction from '../components/admin/row-action';
-import { getAvailableUserData } from '@/lib/token';
-import { useRouter } from 'next/router';
 
 export default function Admin() {
   const {
@@ -96,64 +96,87 @@ export default function Admin() {
 
   const handleDeleteButton = (user: User) => {
     setSelectedUser(user);
+    setEmail(user.email);
     onOpenDelete();
   };
 
   const handleAdd = () => {
-    // TODO: change to use API
-    setUsers([
-      ...users,
-      {
-        email: '',
-        name: '',
-        role: 'student',
-        activated: false,
-        created_at: '',
-        updated_at: '',
-      },
-    ]);
-    toast({
-      title: `Pengguna ${name} berhasil ditambahkan.`,
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+    http
+      .post(
+        `/admin/user`,
+        {
+          name,
+          email,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getAvailableUserData()}`,
+          },
+        }
+      )
+      .then(() => {
+        toast({
+          title: `Pengguna ${name} berhasil ditambahkan.`,
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     onCloseAdd();
   };
 
   const handleEdit = (user: User) => {
-    // TODO: change to use API
-    setUsers(
-      users.map((u) => {
-        if (u.email === user.email) {
-          return {
-            ...u,
-            name,
-            email,
-            role,
-          } as User;
+    http
+      .patch(
+        `/admin/user/${email}`,
+        {
+          name,
+          email,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getAvailableUserData()}`,
+          },
         }
-        return u;
+      )
+      .then(() => {
+        toast({
+          title: `Data pengguna ${name} berhasil diubah.`,
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
       })
-    );
-    toast({
-      title: `Data pengguna ${name} berhasil diubah.`,
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+      .catch((err) => {
+        console.log(err);
+      });
     onCloseEdit();
   };
 
   const handleDelete = (user: User) => {
-    // TODO: change to use API
-    setUsers(users.filter((u) => u.email !== user.email));
-    toast({
-      title: `Pengguna ${name} berhasil dihapus.`,
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+    console.log(email);
+    http
+      .delete(`/admin/user/${email}`, {
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
+      })
+      .then(() => {
+        toast({
+          title: `Pengguna ${name} berhasil dihapus.`,
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     onCloseDelete();
   };
 
@@ -263,6 +286,7 @@ export default function Admin() {
               name="email"
               placeholder="john@doe.com"
               value={email}
+              isDisabled
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
