@@ -47,6 +47,7 @@ const EditContentPage = ({
   material_code
 } : GetContentProps) : ReactElement => {
   const toast = useToast();
+  const router = useRouter();
   const [courseBannerProps, setCourseBannerProps] = useState({
     course_code: 'IF3270',
     course_name: 'Pembelajaran Mesin',
