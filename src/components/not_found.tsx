@@ -4,9 +4,9 @@ const NotFound = () => {
   return (
     <Center>
       <Stack direction={'column'}>
-        <Image src="@/asset/error.png" boxSize={100} align={'center'}/>
-        <Text fontWeight={700} fontSize={48} align={'center'}>404</Text>
-        <Text fontWeight={600} fontSize={24} align={'center'}>Page Not Found</Text>
+        <Image src="/error.png" boxSize={100} alignSelf={'center'} alt='error.png'/>
+        <Text fontWeight={700} fontSize={48} align={'center'}>Oh Tidak! :(</Text>
+        <Text fontWeight={600} fontSize={24} align={'center'}>Halaman yang Anda cari tidak ditemukan</Text>
       </Stack>
     </Center>
   );
