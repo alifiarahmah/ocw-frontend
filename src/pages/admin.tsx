@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import RowAction from '@/components/admin/row-action';
 import Layout from '@/components/layout';
 import Modal from '@/components/modal';
+import http from '@/lib/http';
+import { getAvailableUserData } from '@/lib/token';
 import { User } from '@/types/user';
 import {
   Button,
@@ -22,12 +25,9 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import http from '@/lib/http';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
-import RowAction from '../components/admin/row-action';
-import { getAvailableUserData } from '@/lib/token';
-import { useRouter } from 'next/router';
 
 export default function Admin() {
   const {
@@ -101,17 +101,20 @@ export default function Admin() {
 
   const handleAdd = () => {
     // TODO: change to use API
-    setUsers([
-      ...users,
+    console.log(name, email, role);
+    http.post(
+      `/admin/user`,
       {
-        email: '',
-        name: '',
-        role: 'student',
-        activated: false,
-        created_at: '',
-        updated_at: '',
+        name,
+        email,
+        role,
       },
-    ]);
+      {
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
+      }
+    );
     toast({
       title: `Pengguna ${name} berhasil ditambahkan.`,
       status: 'success',
