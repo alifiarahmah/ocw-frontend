@@ -1,6 +1,7 @@
-import RowAction from '@/components/course/row_action';
 import CourseBanner from '@/components/course_banner';
 import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { Material } from '@/types/material';
 import {
   Box,
   Button,
@@ -18,10 +19,26 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MdArrowBackIos, MdPlayArrow } from 'react-icons/md';
+import { useEffect, useState } from 'react';
+import { MdArrowBackIos, MdAttachFile, MdPlayArrow } from 'react-icons/md';
 
 export default function CourseDetails() {
   const router = useRouter();
+  const [courseName, setCourseName] = useState('');
+  const [lecturer, setLecturer] = useState('');
+  const [materials, setMaterials] = useState<Material[]>([]);
+
+  useEffect(() => {
+    if (router.query.id) {
+      http.get(`/course/${router.query.id}`).then((res) => {
+        setCourseName(res.data.data.name);
+        setLecturer(res.data.data.lecturer);
+      });
+      http.get(`/course/${router.query.id}/materials`).then((res) => {
+        setMaterials(res.data.data);
+      });
+    }
+  }, [router.query.id]);
 
   return (
     <Layout p={0}>
@@ -52,16 +69,38 @@ export default function CourseDetails() {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr key="">
-                  <Td>Introduction</Td>
-                  <Td>1</Td>
-                  <Td>
-                    <RowAction
-                      videoLink="/content_video"
-                      handoutLink="/content_slide"
-                    />
-                  </Td>
-                </Tr>
+                {materials.map((material) => (
+                  <Tr key="">
+                    <Td>{material.name}</Td>
+                    <Td>{material.week}</Td>
+                    <Td>
+                      <HStack my={0} py={0}>
+                        {material.contents.map((content) => (
+                          <Link href={content.link} key={content.id}>
+                            <Button
+                              size="sm"
+                              colorScheme={
+                                content.type === 'video' ? 'red' : 'yellow'
+                              }
+                            >
+                              {content.type === 'video' ? (
+                                <MdPlayArrow />
+                              ) : (
+                                <MdAttachFile />
+                              )}
+                              <Text
+                                ml={2}
+                                display={{ base: 'none', lg: 'flex' }}
+                              >
+                                {content.type}
+                              </Text>
+                            </Button>
+                          </Link>
+                        ))}
+                      </HStack>
+                    </Td>
+                  </Tr>
+                ))}
               </Tbody>
             </Table>
           </TableContainer>
@@ -104,9 +143,9 @@ export default function CourseDetails() {
           </TableContainer>
         </Box>
         <CourseBanner
-          course_code="IF4020"
-          course_name="Pengantar Sistem Informasi"
-          lecturer="Siti Nuraini, S.Kom., M.Kom."
+          course_code={router.query.id as string}
+          course_name={courseName}
+          lecturer={lecturer}
         />
       </HStack>
     </Layout>
