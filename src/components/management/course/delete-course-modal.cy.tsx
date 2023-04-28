@@ -1,10 +1,11 @@
-import React from 'react';
 import DeleteCourseModal from './delete-course-modal';
+
+import { mount } from 'cypress/react18';
 
 describe('<DeleteCourseModal />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(
+    mount(
       <DeleteCourseModal
         isOpen={false}
         onClose={function (): void {

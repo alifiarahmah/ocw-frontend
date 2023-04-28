@@ -37,7 +37,7 @@ const MockRouter = ({ children, ...props }: MockRouterProps) => {
   const router = createRouter(props);
 
   return (
-    <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
+    <RouterContext.Provider value={router as NextRouter}>{children}</RouterContext.Provider>
   );
 };
 

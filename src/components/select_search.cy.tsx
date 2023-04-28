@@ -1,5 +1,6 @@
-import React from 'react';
 import { SelectSearch } from './select_search';
+
+import { mount } from 'cypress/react18';
 
 describe('<SelectSearch />', () => {
   it('renders', () => {
@@ -10,6 +11,6 @@ describe('<SelectSearch />', () => {
     cy.intercept('GET', '/course/faculty', {
       fixture: 'faculty.json',
     });
-    cy.mount(<SelectSearch />);
+    mount(<SelectSearch />);
   });
 });

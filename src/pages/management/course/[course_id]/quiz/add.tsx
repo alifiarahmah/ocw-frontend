@@ -1,5 +1,6 @@
 import Layout from '@/components/layout';
 import ProblemItem from '@/components/management/course/quiz/problem-item';
+import { Problem } from '@/types/problem';
 import {
   Box,
   Button,
@@ -13,13 +14,12 @@ import {
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
-import { Question } from '@/types/question';
 
 export default function NewQuiz() {
   const router = useRouter();
   const toast = useToast();
-  const [questions, setQuestions] = useState<Question[]>(
-    Array(1).fill({} as Question)
+  const [problems, setProblems] = useState<Problem[]>(
+    Array(1).fill({} as Problem)
   );
 
   const handleSubmit = () => {
@@ -41,7 +41,7 @@ export default function NewQuiz() {
         <FormLabel htmlFor="week">Week</FormLabel>
         <Input name="week" />
         <Divider my={5} />
-        {questions.map((q, i) => (
+        {problems.map((q, i) => (
           <>
             <ProblemItem id={i + 1} question={q} />
             <Divider my={5} />
@@ -52,7 +52,7 @@ export default function NewQuiz() {
             leftIcon={<MdAdd />}
             bg="biru.600"
             color="white"
-            onClick={() => setQuestions([...questions, {} as Question])}
+            onClick={() => setProblems([...problems, {} as Problem])}
           >
             Soal
           </Button>

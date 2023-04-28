@@ -1,9 +1,11 @@
 import RightSidebar from './right-sidebar';
 
+import { mount } from 'cypress/react18';
+
 describe('<RightSidebar />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(
+    mount(
       <RightSidebar kodeMataKuliah={''} mataKuliah={''} dosenPengajar={''} />
     );
   });

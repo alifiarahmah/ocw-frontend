@@ -1,5 +1,6 @@
 export interface Quiz {
-  id: number;
-  title: string;
-  week: number;
+  id: string;
+  nama: string;
+  course_id: string;
+  creator_email: string;
 }
