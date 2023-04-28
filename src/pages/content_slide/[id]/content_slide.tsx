@@ -8,9 +8,9 @@ import http from '@/lib/http';
 
 export default function ContentSlide() {
   const [courseBannerProps, setCourseBannerProps] = useState({
-    course_code: 'IF3270',
-    course_name: 'Pembelajaran Mesin',
-    lecturer: 'Dr. Nur Ulfa Maulidevi, ST, M.Sc.',
+    course_code: '-',
+    course_name: '-',
+    lecturer: '-',
   });
   
   const toast = useToast();
@@ -69,6 +69,7 @@ export default function ContentSlide() {
             _hover={{ color: 'darkgrey', opacity: '100%' }}
             background={'transparent'}
             fontSize={'6xl'}
+            onClick={router.back}
           >
             ←
           </Button>

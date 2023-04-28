@@ -9,9 +9,9 @@ import { useRouter } from 'next/router';
 
 export default function ContentVideo() {
   const [courseBannerProps, setCourseBannerProps] = useState({
-    course_code: 'IF3270',
-    course_name: 'Pembelajaran Mesin',
-    lecturer: 'Dr. Nur Ulfa Maulidevi, ST, M.Sc.',
+    course_code: '-',
+    course_name: '-',
+    lecturer: '-',
   });
   const toast = useToast();
   const[links, setLinks] = useState<string[]>([]);
@@ -70,6 +70,7 @@ export default function ContentVideo() {
             _hover={{ color: 'darkgrey', opacity: '100%' }}
             background={'transparent'}
             fontSize={'6xl'}
+            onClick={router.back}
           >
             ←
           </Button>

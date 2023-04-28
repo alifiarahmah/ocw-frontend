@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { MdArrowBackIos } from 'react-icons/md';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function EditContent() {
   const [courseBannerProps, setCourseBannerProps] = useState({
@@ -24,6 +25,7 @@ export default function EditContent() {
     course_name: 'Pembelajaran Mesin',
     lecturer: 'Dr. Nur Ulfa Maulidevi, ST, M.Sc.',
   });
+  const router = useRouter();
   return (
     <Layout title="Edit Content" py={0} px={0}>
       <CourseBanner {...courseBannerProps}>
@@ -34,6 +36,7 @@ export default function EditContent() {
                 aria-label="back"
                 icon={<MdArrowBackIos />}
                 variant="ghost"
+                onClick={router.back}
               />
               <Heading size="lg" mt={10} mb={5} as="h1">
                 Decision Tree Learning (DTL)

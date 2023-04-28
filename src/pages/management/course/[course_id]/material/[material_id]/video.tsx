@@ -48,6 +48,7 @@ const EditContentPage = ({
   material_code,
 }: GetContentProps): ReactElement => {
   const toast = useToast();
+  const router = useRouter();
   const courseBannerProps: CourseBannerProps = {
     course_code: course_code!,
     course_name: course_name!,
@@ -108,6 +109,7 @@ const EditContentPage = ({
               aria-label="back"
               icon={<MdArrowBackIos />}
               variant="ghost"
+              onClick={router.back}
             />
             <Heading size="lg" mt={10} mb={5} as="h1">
               Decision Tree Learning (DTL)
