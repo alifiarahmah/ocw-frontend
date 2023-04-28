@@ -94,6 +94,7 @@ export default function CourseDetails() {
                                     content.link
                                   : content.link
                               }
+                              target="_blank"
                               key={content.id}
                             >
                               <Button
