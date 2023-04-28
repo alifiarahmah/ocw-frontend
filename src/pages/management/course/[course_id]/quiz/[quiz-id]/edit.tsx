@@ -1,5 +1,6 @@
 import Layout from '@/components/layout';
 import ProblemItem from '@/components/management/course/quiz/problem-item';
+import { Problem } from '@/types/problem';
 import {
   Box,
   Button,
@@ -13,13 +14,12 @@ import {
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
-import { Question } from '@/types/question';
 
 export default function EditQuiz() {
   const router = useRouter();
   const toast = useToast();
-  const [questions, setQuestions] = useState<Question[]>(
-    Array(1).fill({} as Question)
+  const [questions, setProblems] = useState<Problem[]>(
+    Array(1).fill({} as Problem)
   );
 
   const handleSubmit = () => {
@@ -52,7 +52,7 @@ export default function EditQuiz() {
             leftIcon={<MdAdd />}
             bg="biru.600"
             color="white"
-            onClick={() => setQuestions([...questions, {} as Question])}
+            onClick={() => setProblems([...questions, {} as Problem])}
           >
             Soal
           </Button>

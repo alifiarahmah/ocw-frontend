@@ -1,4 +1,4 @@
-export interface Question {
+export interface Problem {
   number: string;
   statement: string;
   options: string[];
