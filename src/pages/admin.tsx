@@ -96,6 +96,7 @@ export default function Admin() {
 
   const handleDeleteButton = (user: User) => {
     setSelectedUser(user);
+    setEmail(user.email);
     onOpenDelete();
   };
 
@@ -129,20 +130,6 @@ export default function Admin() {
   };
 
   const handleEdit = (user: User) => {
-    // setUsers(
-    //   users.map((u) => {
-    //     if (u.email === user.email) {
-    //       return {
-    //         ...u,
-    //         name,
-    //         email,
-    //         role,
-    //       } as User;
-    //     }
-    //     return u;
-    //   })
-    // );
-    console.log(name, email, role);
     http
       .patch(
         `/admin/user/${email}`,
@@ -172,14 +159,24 @@ export default function Admin() {
   };
 
   const handleDelete = (user: User) => {
-    // TODO: change to use API
-    setUsers(users.filter((u) => u.email !== user.email));
-    toast({
-      title: `Pengguna ${name} berhasil dihapus.`,
-      status: 'success',
-      duration: 1000,
-      isClosable: true,
-    });
+    console.log(email);
+    http
+      .delete(`/admin/user/${email}`, {
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
+      })
+      .then(() => {
+        toast({
+          title: `Pengguna ${name} berhasil dihapus.`,
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     onCloseDelete();
   };
 
