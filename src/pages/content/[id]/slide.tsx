@@ -12,7 +12,7 @@ export default function ContentSlide() {
     course_name: '-',
     lecturer: '-',
   });
-  
+
   const toast = useToast();
   const[links, setLinks] = useState<string[]>([]);
   const router = useRouter();
@@ -23,11 +23,11 @@ export default function ContentSlide() {
     .then((res) => {
     const material_url : string[] = [];
     console.log(res);
-    res.data.data.contents.forEach((content) => {
+    res.data.data.contents.forEach((content: any) => {
       if (content.type == 'handout'){
         material_url.push(content.link)
       }
-    }); 
+    });
     setLinks(material_url);
     const course_id = res.data.data.course_id
     http.get(`${process.env.NEXT_PUBLIC_API_URL}/course/${course_id}`)
@@ -56,9 +56,9 @@ export default function ContentSlide() {
         duration : 9000,
         isClosable: true,
       });
-    
+
     });
-    
+
   },[router.query.id, courseBannerProps] );
 
   return (

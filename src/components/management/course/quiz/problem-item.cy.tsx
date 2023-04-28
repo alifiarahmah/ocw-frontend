@@ -37,6 +37,13 @@ describe('<ProblemItem />', () => {
         },
       ],
     };
-    mount(<ProblemItem id={0} question={question} />);
+    mount(
+      <ProblemItem
+        number={5}
+        problems={[question]}
+        problem={question}
+        setProblems={() => {}}
+      />
+    );
   });
 });

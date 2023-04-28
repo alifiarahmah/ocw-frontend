@@ -20,17 +20,17 @@ export default function ContentVideo() {
   const id = query.id;
 
   useEffect(() => {
-    
+
 
     http.get(`${process.env.NEXT_PUBLIC_API_URL}/material/${id}`)
     .then((res) => {
     const material_url : string[] = [];
     console.log(res);
-    res.data.data.contents.forEach((content) => {
+    res.data.data.contents.forEach((content: any) => {
       if (content.type == 'video'){
         material_url.push(content.link)
       }
-    }); 
+    });
     setLinks(material_url);
     const course_id = res.data.data.course_id
     http.get(`${process.env.NEXT_PUBLIC_API_URL}/course/${course_id}`)
@@ -61,7 +61,7 @@ export default function ContentVideo() {
       });
     });
   },[router.query.id]);
- 
+
   return (
     <Layout title="Content Layout" py={0} px={0}>
       <CourseBanner {...courseBannerProps}>
