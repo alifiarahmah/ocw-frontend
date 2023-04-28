@@ -86,7 +86,16 @@ export default function CourseDetails() {
                       <Td>
                         <HStack my={0} py={0}>
                           {material.contents.map((content) => (
-                            <Link href={content.link} key={content.id}>
+                            <Link
+                              href={
+                                content.type === 'handout'
+                                  ? process.env.NEXT_PUBLIC_BUCKET_URL +
+                                    '/' +
+                                    content.link
+                                  : content.link
+                              }
+                              key={content.id}
+                            >
                               <Button
                                 size="sm"
                                 colorScheme={
