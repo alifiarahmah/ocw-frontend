@@ -1,4 +1,8 @@
 import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { getAvailableUserData } from '@/lib/token';
+import { Problem } from '@/types/problem';
+import { UserAnswer } from '@/types/user_answer';
 import {
   Box,
   Button,
@@ -14,6 +18,9 @@ import { useEffect, useState } from 'react';
 import { MdTimer } from 'react-icons/md';
 
 function Quiz() {
+  const [quizName, setQuizName] = useState('');
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   // create countdown from 100 minutes
   const [minutes, setMinutes] = useState(30);
   const [seconds, setSeconds] = useState(0);
@@ -37,37 +44,93 @@ function Quiz() {
     return () => clearInterval(interval);
   }, [minutes, seconds]);
 
+  // if minutes is 0, then the quiz is over
+  useEffect(() => {
+    if (minutes === 0 && seconds === 0) {
+      alert('Waktu habis!');
+      router.push(router.asPath + '/../result');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minutes, seconds]);
+
   const hours = Math.floor(minutes / 60);
+
+  useEffect(() => {
+    http
+      .post(`/quiz/${router.query.id}/take`, {
+        Authorization: `Bearer ${getAvailableUserData()}`,
+      })
+      .then((res) => {
+        setQuizName(res.data.data.name);
+        setProblems(res.data.data.problems);
+      });
+  });
+
+  const handleChangeAnswer = (problemId: string, answerId: string) => {
+    // if same problemId already exists, then replace it
+    if (userAnswers.some((userAnswer) => userAnswer.problem_id === problemId)) {
+      setUserAnswers(
+        userAnswers.map((userAnswer) =>
+          userAnswer.problem_id === problemId
+            ? { ...userAnswer, answer_id: answerId }
+            : userAnswer
+        )
+      );
+    } else {
+      setUserAnswers([
+        ...userAnswers,
+        {
+          problem_id: problemId,
+          answer_id: answerId,
+        },
+      ]);
+    }
+  };
+
+  const handleSubmit = () => {
+    router.push({
+      pathname: router.asPath + '/../result',
+      query: { userAnswers: JSON.stringify(userAnswers) },
+    });
+  };
 
   return (
     <>
-      <Layout p={0}>
+      <Layout p={0} title={`${quizName}`}>
         <Stack mb={10} px={{ base: 5, md: 20 }} py={{ base: 5, md: 10 }}>
-          <Heading my={5}>Latihan Soal Clustering 1</Heading>
+          <Heading my={5}>{quizName}</Heading>
           <Stack gap={3} mt={10}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
-              <Box key="item" bg="white" borderRadius="lg" p={5}>
-                <Text fontWeight="bold">Nomor {item}</Text>
-                <Text my={3}>Ini adalah soalnya...</Text>
-                <form>
-                  <RadioGroup>
-                    <Stack gap={2}>
-                      <Radio value="a">Jawaban A</Radio>
-                      <Radio value="b">Jawaban B</Radio>
-                      <Radio value="c">Jawaban C</Radio>
-                      <Radio value="d">Jawaban D</Radio>
-                    </Stack>
-                  </RadioGroup>
-                </form>
+            {problems.map((problem, index) => (
+              <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
+                <Text fontWeight="bold">Nomor {index + 1}</Text>
+                <Text my={3}>{problem.question}</Text>
+                <RadioGroup>
+                  <Stack gap={2}>
+                    {problem.answers.map((answer) => (
+                      <Radio
+                        key={answer.id}
+                        value={answer.id}
+                        onChange={(e: any) =>
+                          handleChangeAnswer(problem.id, e.target.value)
+                        }
+                        checked={
+                          userAnswers.some(
+                            (userAnswer) =>
+                              userAnswer.problem_id === problem.id &&
+                              userAnswer.answer_id === answer.id
+                          ) ?? false
+                        }
+                      >
+                        {answer.answer}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
               </Box>
             ))}
           </Stack>
           <Flex justifyContent="flex-end" mt={20}>
-            <Button
-              bg="biru.600"
-              color="white"
-              onClick={() => router.push(router.asPath + '/../result')}
-            >
+            <Button bg="biru.600" color="white" onClick={handleSubmit}>
               Selesai
             </Button>
           </Flex>

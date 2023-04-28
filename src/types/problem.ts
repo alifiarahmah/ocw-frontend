@@ -1,7 +1,8 @@
+import { AnswerOption } from './answer_option';
+
 export interface Problem {
-  number: string;
-  statement: string;
-  options: string[];
-  answer: string;
-  explanation: string;
+  id: string;
+  media_id?: any[];
+  question: string;
+  answers: AnswerOption[];
 }

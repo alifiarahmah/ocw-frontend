@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { MdAdd, MdDelete } from 'react-icons/md';
 
 export interface ProblemItemProps {
-  id: number;
+  id: number | string;
   question: Problem;
 }
 

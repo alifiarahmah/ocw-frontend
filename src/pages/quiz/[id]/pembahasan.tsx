@@ -1,4 +1,5 @@
 import Layout from '@/components/layout';
+import { UserAnswer } from '@/types/user_answer';
 import {
   Box,
   Button,
@@ -10,8 +11,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 function Pembahasan() {
+  const router = useRouter();
+  const userAnswers = JSON.parse(
+    router.query.userAnswers as string
+  ) as UserAnswer[];
+
   return (
     <Layout>
       <Heading>Pembahasan Latihan Clustering 1</Heading>
