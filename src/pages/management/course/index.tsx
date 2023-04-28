@@ -10,8 +10,8 @@ import { Major } from '@/types/major';
 import { UserClaim } from '@/types/token';
 import {
   Button,
-  Heading,
   HStack,
+  Heading,
   Table,
   TableContainer,
   Tbody,
@@ -81,7 +81,7 @@ export default function CourseManagement() {
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courses]);
+  }, []);
 
   useEffect(() => {
     http
@@ -98,7 +98,7 @@ export default function CourseManagement() {
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courses]);
+  }, []);
 
   const handleEditButton = (course: Course) => {
     setCourseId(course.id);
