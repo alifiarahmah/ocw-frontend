@@ -14,7 +14,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdTimer } from 'react-icons/md';
 
 function Quiz() {
@@ -88,14 +88,14 @@ function Quiz() {
   };
 
   const handleSubmit = () => {
-    console.log(userAnswers);
-    // router.push(router.asPath + '/../result')
+    router.push({
+      pathname: router.asPath + '/../result',
+      query: { userAnswers: JSON.stringify(userAnswers) },
+    });
   };
 
-  const QuizContext = createContext(userAnswers);
-
   return (
-    <QuizContext.Provider value={userAnswers}>
+    <>
       <Layout p={0} title={`${quizName}`}>
         <Stack mb={10} px={{ base: 5, md: 20 }} py={{ base: 5, md: 10 }}>
           <Heading my={5}>{quizName}</Heading>
@@ -104,28 +104,28 @@ function Quiz() {
               <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
                 <Text fontWeight="bold">Nomor {index + 1}</Text>
                 <Text my={3}>{problem.question}</Text>
-                  <RadioGroup>
-                    <Stack gap={2}>
-                      {problem.answers.map((answer) => (
-                        <Radio
-                          key={answer.id}
-                          value={answer.id}
-                          onChange={(e: any) =>
-                            handleChangeAnswer(problem.id, e.target.value)
-                          }
-                          checked={
-                            userAnswers.some(
-                              (userAnswer) =>
-                                userAnswer.problem_id === problem.id &&
-                                userAnswer.answer_id === answer.id
-                            ) ?? false
-                          }
-                        >
-                          {answer.answer}
-                        </Radio>
-                      ))}
-                    </Stack>
-                  </RadioGroup>
+                <RadioGroup>
+                  <Stack gap={2}>
+                    {problem.answers.map((answer) => (
+                      <Radio
+                        key={answer.id}
+                        value={answer.id}
+                        onChange={(e: any) =>
+                          handleChangeAnswer(problem.id, e.target.value)
+                        }
+                        checked={
+                          userAnswers.some(
+                            (userAnswer) =>
+                              userAnswer.problem_id === problem.id &&
+                              userAnswer.answer_id === answer.id
+                          ) ?? false
+                        }
+                      >
+                        {answer.answer}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
               </Box>
             ))}
           </Stack>
@@ -154,7 +154,7 @@ function Quiz() {
           {seconds}
         </Text>
       </Flex>
-    </QuizContext.Provider>
+    </>
   );
 }
 

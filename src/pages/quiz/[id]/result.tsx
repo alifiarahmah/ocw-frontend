@@ -1,10 +1,32 @@
 import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { getAvailableUserData } from '@/lib/token';
+import { UserAnswer } from '@/types/user_answer';
 import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 function Result() {
   const router = useRouter();
+  const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    // parse user answer as UserAnswer[] from router.query.userAnswers
+    const userAnswers = JSON.parse(
+      router.query.userAnswers as string
+    ) as UserAnswer[];
+    // POST
+    http
+      .post(`/quiz/${router.query.id}/finish`, {
+        Authorization: `Bearer ${getAvailableUserData()}`,
+        userAnswers,
+      })
+      .then((res) => {
+        console.log(res.data.data);
+      });
+  }, []);
+
   return (
     <Layout>
       <Flex w="100%" h="70vh" justifyContent="center" alignItems="center">
@@ -18,7 +40,7 @@ function Result() {
           <Text fontSize="2xl">Kuis Selesai</Text>
           <Text mt={10}>Nilai:</Text>
           <Text mx={10} fontSize="3xl" fontFamily="Merriweather">
-            29 / 100
+            {score} / 100
           </Text>
           <Stack
             mt={10}
