@@ -1,3 +1,4 @@
+import { Problem } from '@/types/problem';
 import {
   Box,
   Button,
@@ -12,13 +13,12 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import { MdAdd, MdDelete } from 'react-icons/md';
 import { useState } from 'react';
-import { Question } from '@/types/question';
+import { MdAdd, MdDelete } from 'react-icons/md';
 
 export interface ProblemItemProps {
   id: number;
-  question: Question;
+  question: Problem;
 }
 
 export default function ProblemItem({ id, question }: ProblemItemProps) {

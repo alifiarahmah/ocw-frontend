@@ -1,11 +1,10 @@
-import React from 'react';
+import { Problem } from '@/types/problem';
 import ProblemItem from './problem-item';
-import { Question } from '@/types/question';
 
 describe('<ProblemItem />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    const question: Question = {
+    const question: Problem = {
       number: '0',
       statement: 'Pertanyaan?',
       options: ['Jawaban A', 'Jawaban B', 'Jawaban C'],
