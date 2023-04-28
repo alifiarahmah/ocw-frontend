@@ -44,6 +44,15 @@ function Quiz() {
     return () => clearInterval(interval);
   }, [minutes, seconds]);
 
+  // if minutes is 0, then the quiz is over
+  useEffect(() => {
+    if (minutes === 0 && seconds === 0) {
+      alert('Waktu habis!');
+      router.push(router.asPath + '/../result');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minutes, seconds]);
+
   const hours = Math.floor(minutes / 60);
 
   useEffect(() => {
