@@ -15,9 +15,9 @@ import { useRouter } from 'next/router';
 
 function Pembahasan() {
   const router = useRouter();
-  const userAnswers = JSON.parse(
-    router.query.userAnswers as string
-  ) as UserAnswer[];
+  // const userAnswers: UserAnswer[] = JSON.parse(
+  //   router.query.userAnswers as string
+  // );
 
   return (
     <Layout>

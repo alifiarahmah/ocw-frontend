@@ -1,10 +1,11 @@
-import React from 'react';
 import AddCourseModal from './edit-course-modal';
+
+import { mount } from 'cypress/react18';
 
 describe('<AddCourseModal />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(
+    mount(
       <AddCourseModal
         isOpen={false}
         onClose={function (): void {

@@ -26,19 +26,16 @@ import Modal from '@/components/modal';
 
 const quizzes = [
   {
-    id: 1,
-    title: 'Latihan Soal Clustering 1',
-    week: 1,
+    id: '440e9a7b-5fe5-481c-a98d-a1736e91f42b',
+    nama: 'Latihan Sample',
+    course_id: 'IF3270',
+    creator_email: 'contributor@example.com',
   },
   {
-    id: 2,
-    title: 'Latihan Soal Clustering 2',
-    week: 2,
-  },
-  {
-    id: 3,
-    title: 'Latihan Soal Clustering 3',
-    week: 3,
+    id: 'ca45c775-bb74-422e-943c-08e9601d6d41',
+    nama: 'Latihan Beneran',
+    course_id: 'IF3270',
+    creator_email: 'contributor@example.com',
   },
 ];
 
@@ -79,15 +76,13 @@ export default function QuizManagement() {
             <Thead textTransform="capitalize">
               <Tr>
                 <Th>Judul Latihan Soal</Th>
-                <Th>Week</Th>
                 <Th>Action</Th>
               </Tr>
             </Thead>
             <Tbody>
               {quizzes.map((q: Quiz) => (
                 <Tr key={q.id}>
-                  <Td>{q.title}</Td>
-                  <Td>{q.week}</Td>
+                  <Td>{q.nama}</Td>
                   <Td>
                     <RowAction
                       onOpenEdit={() => {

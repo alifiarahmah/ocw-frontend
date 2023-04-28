@@ -1,9 +1,10 @@
-import React from 'react';
 import RowAction from './row-action';
+
+import { mount } from 'cypress/react18';
 
 describe('<RowAction />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<RowAction onOpenEdit={() => {}} onOpenDelete={() => {}} />);
+    mount(<RowAction onOpenEdit={() => {}} onOpenDelete={() => {}} />);
   });
 });

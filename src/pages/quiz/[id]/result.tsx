@@ -10,12 +10,11 @@ import { useEffect, useState } from 'react';
 function Result() {
   const router = useRouter();
   const [score, setScore] = useState(0);
-  const userAnswers = JSON.parse(
-    router.query.userAnswers as string
-  ) as UserAnswer[];
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
 
   useEffect(() => {
     // parse user answer as UserAnswer[] from router.query.userAnswers
+    setUserAnswers(JSON.parse(router.query.userAnswers as string));
     // POST
     http
       .post(`/quiz/${router.query.id}/finish`, {
@@ -50,10 +49,12 @@ function Result() {
             justifyContent="space-between"
             direction={{ base: 'column', lg: 'row' }}
           >
-            <Link href={{
-              pathname: router.asPath + '/../pembahasan',
-              query: { userAnswers: JSON.stringify(userAnswers) },
-              }}>
+            <Link
+              href={{
+                pathname: router.asPath + '/../pembahasan',
+                query: { userAnswers: JSON.stringify(userAnswers) },
+              }}
+            >
               <Button bg="#4F4F4F" color="white">
                 Cek Pembahasan
               </Button>

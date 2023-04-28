@@ -1,10 +1,12 @@
 import MockRouter from '../../cypress/utils/router';
 import Navbar from './navbar';
 
+import { mount } from 'cypress/react18';
+
 describe('<Navbar />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(
+    mount(
       <MockRouter>
         <Navbar />
       </MockRouter>
