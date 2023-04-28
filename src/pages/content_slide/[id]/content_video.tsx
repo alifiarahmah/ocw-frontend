@@ -58,12 +58,12 @@ export default function ContentVideo() {
           <Text fontSize={'3xl'}>Decision Tree Learning (DTL)</Text>
         </HStack>
         <Center flexDirection={'column'}>
-          <VStack>
+          <VStack maxHeight={'fit-content'} width={'100%'}>
           {
             links.map((url, idx) => (
               <Container
-                // maxWidth={'5xl'}
-                // maxHeight={'7xl'}
+                maxWidth={'5xl'}
+                maxHeight={'7xl'}
                 className={styles.containercontent}
                 key={idx}
               >

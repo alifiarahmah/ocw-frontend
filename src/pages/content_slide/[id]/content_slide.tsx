@@ -1,8 +1,10 @@
 import styles from '@/styles/verifcation.module.css';
 import Layout from '@/components/layout';
-import { useState } from 'react';
-import { Text, HStack, Button, Container, Center } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Text, HStack, VStack, Button, Container, Center, useToast } from '@chakra-ui/react';
 import CourseBanner from '@/components/course_banner';
+import { useRouter } from 'next/router';
+import http from '@/lib/http';
 
 export default function ContentSlide() {
   const [courseBannerProps, setCourseBannerProps] = useState({
@@ -10,6 +12,35 @@ export default function ContentSlide() {
     course_name: 'Pembelajaran Mesin',
     lecturer: 'Dr. Nur Ulfa Maulidevi, ST, M.Sc.',
   });
+  
+  const toast = useToast();
+  const[links, setLinks] = useState<string[]>([]);
+  const router = useRouter();
+  const query = router.query;
+  const id = query.id;
+  useEffect(() => {
+    http.get(`${process.env.NEXT_PUBLIC_API_URL}/material/${id}`)
+    .then((res) => {
+    const material_url : string[] = [];
+    console.log(res);
+    res.data.data.contents.forEach((content) => {
+      if (content.type == 'handout'){
+        material_url.push(content.link)
+      }
+    }); 
+    setLinks(material_url);
+    })
+    .catch((err) => {
+      toast({
+        title: 'Gagal mengambil data konten.',
+        description : err.message,
+        status: 'error',
+        duration : 9000,
+        isClosable: true,
+      });
+    });
+  },[router.query.id]);
+
   return (
     <Layout title="Content Layout" py={0} px={0}>
       <CourseBanner {...courseBannerProps}>
@@ -24,19 +55,26 @@ export default function ContentSlide() {
           <Text fontSize={'3xl'}>Decision Tree Learning (DTL)</Text>
         </HStack>
         <Center flexDirection={'column'}>
-          <Container
-            // marginStart={'10vw'}
-            maxWidth={'5xl'}
-            maxHeight={'7xl'}
-            className={styles.containercontent}
-          >
-            <iframe
-              src="/static/testing.pdf"
-              width="100%"
-              height="100%"
-              style={{ border: 'none' }}
-            />
-          </Container>
+          <VStack maxHeight={'fit-content'} width={'100%'}>
+            {
+              links.map((url,idx) => (
+                <Container
+                  // marginStart={'10vw'}
+                  maxWidth={'5xl'}
+                  maxHeight={'7xl'}
+                  className={styles.containercontent}
+                  key={idx}
+                >
+                  <iframe
+                    src={`https://ocw-bucket.s3.idcloudhost.com/static/${url}`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 'none' }}
+                  />
+                </Container>
+              ))
+            }
+          </VStack>
         </Center>
       </CourseBanner>
     </Layout>
