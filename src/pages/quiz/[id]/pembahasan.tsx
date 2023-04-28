@@ -12,12 +12,16 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 function Pembahasan() {
   const router = useRouter();
-  // const userAnswers: UserAnswer[] = JSON.parse(
-  //   router.query.userAnswers as string
-  // );
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
+
+  useEffect(() => {
+    // parse user answer as UserAnswer[] from router.query.userAnswers
+    setUserAnswers(JSON.parse(router.query.userAnswers as string));
+  }, [router.query.userAnswers]);
 
   return (
     <Layout>
