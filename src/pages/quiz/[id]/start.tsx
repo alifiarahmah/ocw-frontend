@@ -48,7 +48,7 @@ function Quiz() {
   useEffect(() => {
     if (minutes === 0 && seconds === 0) {
       alert('Waktu habis!');
-      router.push(router.asPath + '/../result');
+      handleSubmit();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minutes, seconds]);
