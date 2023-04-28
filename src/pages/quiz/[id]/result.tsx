@@ -16,16 +16,20 @@ function Result() {
     const userAnswers = JSON.parse(
       router.query.userAnswers as string
     ) as UserAnswer[];
+    console.log(userAnswers);
     // POST
     http
       .post(`/quiz/${router.query.id}/finish`, {
-        Authorization: `Bearer ${getAvailableUserData()}`,
-        userAnswers,
+        data: userAnswers,
+        headers: {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        },
       })
       .then((res) => {
         console.log(res.data.data);
+        setScore(res.data.data.score);
       });
-  }, []);
+  }, [router.query.id, router.query.userAnswers]);
 
   return (
     <Layout>
