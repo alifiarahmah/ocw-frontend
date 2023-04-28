@@ -1,4 +1,8 @@
 import Layout from '@/components/layout';
+import http from '@/lib/http';
+import { getAvailableUserData } from '@/lib/token';
+import { Problem } from '@/types/problem';
+import { UserAnswer } from '@/types/user_answer';
 import {
   Box,
   Button,
@@ -14,6 +18,9 @@ import { useEffect, useState } from 'react';
 import { MdTimer } from 'react-icons/md';
 
 function Quiz() {
+  const [quizName, setQuizName] = useState('');
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   // create countdown from 100 minutes
   const [minutes, setMinutes] = useState(30);
   const [seconds, setSeconds] = useState(0);
@@ -39,23 +46,35 @@ function Quiz() {
 
   const hours = Math.floor(minutes / 60);
 
+  useEffect(() => {
+    http
+      .post(`/quiz/${router.query.id}/take`, {
+        Authorization: `Bearer ${getAvailableUserData()}`,
+      })
+      .then((res) => {
+        setQuizName(res.data.data.name);
+        setProblems(res.data.data.problems);
+      });
+  });
+
   return (
     <>
-      <Layout p={0}>
+      <Layout p={0} title={`${quizName}`}>
         <Stack mb={10} px={{ base: 5, md: 20 }} py={{ base: 5, md: 10 }}>
-          <Heading my={5}>Latihan Soal Clustering 1</Heading>
+          <Heading my={5}>{quizName}</Heading>
           <Stack gap={3} mt={10}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
+            {problems.map((problem, index) => (
               <Box key="item" bg="white" borderRadius="lg" p={5}>
-                <Text fontWeight="bold">Nomor {item}</Text>
-                <Text my={3}>Ini adalah soalnya...</Text>
+                <Text fontWeight="bold">Nomor {index + 1}</Text>
+                <Text my={3}>{problem.question}</Text>
                 <form>
                   <RadioGroup>
                     <Stack gap={2}>
-                      <Radio value="a">Jawaban A</Radio>
-                      <Radio value="b">Jawaban B</Radio>
-                      <Radio value="c">Jawaban C</Radio>
-                      <Radio value="d">Jawaban D</Radio>
+                      {problem.answers.map((answer, index) => (
+                        <Radio key={answer.id} value={answer.id}>
+                          {answer.answer}
+                        </Radio>
+                      ))}
                     </Stack>
                   </RadioGroup>
                 </form>
