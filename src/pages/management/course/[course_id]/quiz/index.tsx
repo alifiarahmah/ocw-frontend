@@ -1,13 +1,12 @@
 import RowAction from '@/components/admin/row-action';
 import Layout from '@/components/layout';
+import Modal from '@/components/modal';
 import { Quiz } from '@/types/quiz';
 import {
   Box,
   Button,
   Heading,
   HStack,
-  ModalContent,
-  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
@@ -22,7 +21,6 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MdAdd } from 'react-icons/md';
-import Modal from '@/components/modal';
 
 const quizzes = [
   {
@@ -56,7 +54,7 @@ export default function QuizManagement() {
 
   return (
     <>
-      <Layout>
+      <Layout title="Quiz Management">
         <HStack justifyContent="space-between">
           <Box>
             <Heading>Daftar Latihan</Heading>

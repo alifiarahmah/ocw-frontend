@@ -31,7 +31,7 @@ export default function ProblemItem({
   problems,
   setProblems,
 }: ProblemItemProps) {
-  const [answers, setAnswers] = useState<AnswerOption[]>([]);
+  const [answers, setAnswers] = useState<AnswerOption[]>(problem.answers);
 
   const handleChangeQuestion = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setProblems(
@@ -47,7 +47,7 @@ export default function ProblemItem({
         p.id === problem.id ? { ...p, answers: answers } : p
       )
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]);
 
   return (
@@ -59,6 +59,7 @@ export default function ProblemItem({
           placeholder="Pertanyaan..."
           my={5}
           onChange={handleChangeQuestion}
+          value={problem.question}
         />
         <Stack gap={2}>
           {answers.map((o, i) => (
@@ -110,6 +111,7 @@ export default function ProblemItem({
         </FormLabel>
         <Select
           name="answer"
+          value={answers.find((a) => a.is_solution)?.answer}
           onChange={(e) => {
             setAnswers(
               answers.map((a) =>
