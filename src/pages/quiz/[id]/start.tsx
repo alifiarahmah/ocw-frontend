@@ -14,7 +14,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { MdTimer } from 'react-icons/md';
 
 function Quiz() {
@@ -66,36 +66,71 @@ function Quiz() {
       });
   });
 
+  const handleChangeAnswer = (problemId: string, answerId: string) => {
+    // if same problemId already exists, then replace it
+    if (userAnswers.some((userAnswer) => userAnswer.problem_id === problemId)) {
+      setUserAnswers(
+        userAnswers.map((userAnswer) =>
+          userAnswer.problem_id === problemId
+            ? { ...userAnswer, answer_id: answerId }
+            : userAnswer
+        )
+      );
+    } else {
+      setUserAnswers([
+        ...userAnswers,
+        {
+          problem_id: problemId,
+          answer_id: answerId,
+        },
+      ]);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log(userAnswers);
+    // router.push(router.asPath + '/../result')
+  };
+
+  const QuizContext = createContext(userAnswers);
+
   return (
-    <>
+    <QuizContext.Provider value={userAnswers}>
       <Layout p={0} title={`${quizName}`}>
         <Stack mb={10} px={{ base: 5, md: 20 }} py={{ base: 5, md: 10 }}>
           <Heading my={5}>{quizName}</Heading>
           <Stack gap={3} mt={10}>
             {problems.map((problem, index) => (
-              <Box key="item" bg="white" borderRadius="lg" p={5}>
+              <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
                 <Text fontWeight="bold">Nomor {index + 1}</Text>
                 <Text my={3}>{problem.question}</Text>
-                <form>
                   <RadioGroup>
                     <Stack gap={2}>
-                      {problem.answers.map((answer, index) => (
-                        <Radio key={answer.id} value={answer.id}>
+                      {problem.answers.map((answer) => (
+                        <Radio
+                          key={answer.id}
+                          value={answer.id}
+                          onChange={(e: any) =>
+                            handleChangeAnswer(problem.id, e.target.value)
+                          }
+                          checked={
+                            userAnswers.some(
+                              (userAnswer) =>
+                                userAnswer.problem_id === problem.id &&
+                                userAnswer.answer_id === answer.id
+                            ) ?? false
+                          }
+                        >
                           {answer.answer}
                         </Radio>
                       ))}
                     </Stack>
                   </RadioGroup>
-                </form>
               </Box>
             ))}
           </Stack>
           <Flex justifyContent="flex-end" mt={20}>
-            <Button
-              bg="biru.600"
-              color="white"
-              onClick={() => router.push(router.asPath + '/../result')}
-            >
+            <Button bg="biru.600" color="white" onClick={handleSubmit}>
               Selesai
             </Button>
           </Flex>
@@ -119,7 +154,7 @@ function Quiz() {
           {seconds}
         </Text>
       </Flex>
-    </>
+    </QuizContext.Provider>
   );
 }
 
