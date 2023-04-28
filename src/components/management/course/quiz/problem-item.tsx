@@ -47,6 +47,7 @@ export default function ProblemItem({
         p.id === problem.id ? { ...p, answers: answers } : p
       )
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]);
 
   return (
