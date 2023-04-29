@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
+  projectId: 'd434om',
   env: {
     NEXT_PUBLIC_API_URL: 'http://localhost:8888',
   },
