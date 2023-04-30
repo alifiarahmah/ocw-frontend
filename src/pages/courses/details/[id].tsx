@@ -85,38 +85,42 @@ export default function CourseDetails() {
                       <Td>{material.week}</Td>
                       <Td>
                         <HStack my={0} py={0}>
-                          {material.contents.map((content) => (
-                            <Link
-                              href={
-                                content.type === 'handout'
-                                  ? process.env.NEXT_PUBLIC_BUCKET_URL +
-                                    '/' +
-                                    content.link
-                                  : content.link
+                          {/* {material.contents.map((content) => (
+                          ))} */}
+                          <Link href={`/content/${material.id}/slide`}>
+                            <Button
+                              size="sm"
+                              colorScheme={
+                                'yellow'
                               }
-                              target="_blank"
-                              key={content.id}
                             >
-                              <Button
-                                size="sm"
-                                colorScheme={
-                                  content.type === 'video' ? 'red' : 'yellow'
-                                }
+                            <MdAttachFile />
+                           
+                              <Text
+                                ml={2}
+                                display={{ base: 'none', lg: 'flex' }}
                               >
-                                {content.type === 'video' ? (
-                                  <MdPlayArrow />
-                                ) : (
-                                  <MdAttachFile />
-                                )}
-                                <Text
-                                  ml={2}
-                                  display={{ base: 'none', lg: 'flex' }}
-                                >
-                                  {content.type}
-                                </Text>
-                              </Button>
-                            </Link>
-                          ))}
+                                handout
+                              </Text>
+                            </Button>
+                          </Link>
+                          <Link href={`/content/${material.id}/video`}>
+                            <Button
+                              size="sm"
+                              colorScheme={
+                                'red'
+                              }
+                            >
+                            <MdPlayArrow />
+                           
+                              <Text
+                                ml={2}
+                                display={{ base: 'none', lg: 'flex' }}
+                              >
+                                video
+                              </Text>
+                            </Button>
+                          </Link>
                         </HStack>
                       </Td>
                     </Tr>
