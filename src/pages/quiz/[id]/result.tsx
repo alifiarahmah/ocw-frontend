@@ -9,12 +9,16 @@ import { useEffect, useState } from 'react';
 
 function Result() {
   const router = useRouter();
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(-1);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [isDoneLoading, setIsDoneLoading] = useState(false);
 
   useEffect(() => {
     if (!router.query.id || !router.query.userAnswers) {
+      return;
+    }
+    // if score is already calculated, return
+    if (score !== -1) {
       return;
     }
     // parse user answer as UserAnswer[] from router.query.userAnswers
