@@ -29,21 +29,24 @@ http.interceptors.response.use(
   async (err) => {
     if (axios.isAxiosError(err)) {
       const config = err.config as any;
+      console.log(err.response?.status == HttpResponse.BadRequest);
       if (
         (err.response?.status == HttpResponse.Unauthorized ||
-          err.response?.status == HttpResponse.UnprocessableEntity) &&
-        config.url === '/auth/refresh'
-      ) {
+          err.response?.status == HttpResponse.UnprocessableEntity ||
+          err.response?.status == HttpResponse.BadRequest) &&
+          config.url === '/auth/refresh'
+          ) {
         unsetToken();
       }
 
       if (
-        err.response?.status == HttpResponse.Unauthorized &&
+        (err.response?.status == HttpResponse.Unauthorized ||
+         err.response?.status == HttpResponse.BadRequest) &&
         !config?.sent &&
         config.url !== `/auth/refresh`
       ) {
         const refreshKey = localStorage.getItem(TOKEN_REFRESH_KEY);
-
+        
         if (refreshKey) {
           try {
             const {
@@ -56,9 +59,9 @@ http.interceptors.response.use(
                   authorization: `Bearer ${refreshKey}`,
                 },
               }
-            );
-
-            const newToken = data.token.access as string;
+              );
+              
+              const newToken = data.access_token as string;
             sessionStorage.setItem(TOKEN_ACCESS_KEY, newToken);
 
             config.sent = true;
@@ -70,7 +73,8 @@ http.interceptors.response.use(
             if (axios.isAxiosError(errNew)) {
               if (
                 errNew.response?.status == HttpResponse.Unauthorized ||
-                errNew.response?.status == HttpResponse.UnprocessableEntity
+                errNew.response?.status == HttpResponse.UnprocessableEntity ||
+                errNew.response?.status == HttpResponse.BadRequest
               ) {
                 unsetToken();
               }

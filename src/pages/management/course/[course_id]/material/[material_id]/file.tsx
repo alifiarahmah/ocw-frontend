@@ -83,7 +83,7 @@ const EditContentPage = ({
           console.log("success req to endpoint");
           const upload_link = res.data.data.upload_link;
           axios
-            .put(upload_link, file, {
+              .put(upload_link, file, {
               headers: {
                 'Content-Type' : file!.type,
                 'x-amz-acl' : 'public-read',
