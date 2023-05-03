@@ -50,8 +50,8 @@ const AddContentModal = ({
         <FormControl isRequired>
           <FormLabel>Tipe Materi</FormLabel>
           <Select onChange={(e) => {setType(e.target.value)}}>
-            <option value="video">Video</option>
             <option value="handout">File</option>
+            <option value="video">Video</option>
           </Select>
         </FormControl>
         {

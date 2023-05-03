@@ -20,8 +20,9 @@ import {
   Tr,
   Td,
   Th,
+  IconButton
 } from "@chakra-ui/react";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdArrowBackIos } from "react-icons/md";
 import AddMaterialModal from "@/components/management/material/add-material-modal";
 import DeleteMaterialModal from "@/components/management/material/delete-material-modal";
 import RowAction from '@/components/admin/row-action';
@@ -188,12 +189,20 @@ const MaterialManagementPage = () => {
     <>
       <Layout title="Edit Material" py={0} px={0}>
         <CourseBanner {...courseBannerProps}>
-          <HStack justifyContent="space-between">
-            <Heading>Daftar Materi</Heading>
+        <HStack justifyContent="space-between">
+            <HStack>
+              <IconButton
+                aria-label="back"
+                icon={<MdArrowBackIos />}
+                variant="ghost"
+                onClick={router.back}
+              />
+              <Heading>Daftar Materi</Heading>
+            </HStack>
             <Button bg="biru.600" color="white" onClick={onOpenAdd}>
               <MdAdd />
               <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
-                New Material
+                New Content
               </Text>
             </Button>
           </HStack>

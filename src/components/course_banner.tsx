@@ -6,6 +6,7 @@ import {
   Text,
   Divider,
   BoxProps,
+  Skeleton
 } from '@chakra-ui/react';
 
 export interface BannerProps extends BoxProps {
@@ -41,27 +42,33 @@ const CourseBanner: React.FC<BannerProps> = ({
             <Text align={'start'} fontSize={'m'}>
               Kode Mata Kuliah
             </Text>
-            <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
-              {course_code}
-            </Text>
+            <Skeleton isLoaded={course_code.length > 0}>
+              <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
+                {course_code}
+              </Text>
+            </Skeleton>
           </VStack>
           <Divider borderColor={'black'} borderWidth={'1px'} w="75%" my={4} />
           <VStack spacing="1" align={'start'}>
             <Text align={'start'} fontSize={'m'}>
               Mata Kuliah
             </Text>
-            <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
-              {course_name}
-            </Text>
+            <Skeleton isLoaded={course_name.length > 0}>
+              <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
+                {course_name}
+              </Text>
+            </Skeleton>
           </VStack>
           <Divider borderColor={'black'} borderWidth={'1px'} w="75%" my={4} />
           <VStack spacing="1" align={'start'}>
             <Text align={'start'} fontSize={'m'}>
               Dosen Pengajar
             </Text>
-            <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
-              {lecturer}
-            </Text>
+            <Skeleton isLoaded={lecturer.length > 0}>
+              <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
+                {lecturer}
+              </Text>
+            </Skeleton>
           </VStack>
         </VStack>
       </Container>

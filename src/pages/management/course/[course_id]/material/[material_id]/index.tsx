@@ -20,12 +20,16 @@ import {
   AccordionIcon,
   Box,
   Card,
+  IconButton,
+  VStack,
+  Skeleton,
 } from "@chakra-ui/react";
-import { MdAdd, MdDelete } from "react-icons/md";
+import { MdAdd, MdDelete, MdArrowBackIos } from "react-icons/md";
 import AddContentModal from "@/components/management/content/add-content-modal";
 import DeleteContentModal from "@/components/management/content/delete-content-modal";
 import { Material } from "@/types/material";
 import { Content } from "@/types/content";
+import axios from "axios";
 
 interface CourseBannerProps {
   course_code : string;
@@ -66,9 +70,10 @@ const ContentManagementPage = () => {
   });
   const [isValid, setIsValid] = useState<boolean>(true);
   const [file, setFile] = useState<File|undefined>();
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState<string>('handout');
   const [link, setLink] = useState<string>('');
   const [contentID, setContentID] = useState<string>('');
+  const [indexExpanded, setIndexExpanded] = useState<number>(-1);
 
   useEffect(() => {
     if(!router.isReady) return;
@@ -164,19 +169,51 @@ const ContentManagementPage = () => {
 
   const handleAdd = () => {
     const body = {
-      type : type,
       link : (type === "handout") ? "" : link,
+      type : type
     }
     http
-      .post(`/material/${material_id}`,body).then((res) => {
-        toast({
-          title: 'Success',
-          description: 'Berhasil menambah materi',
-          status: 'success',
-          duration: 1000,
-          isClosable: true,
-        });
-        setMaterialReady(false);
+      .post(`/material/${material_id}/content`,body).then((res) => {
+        if(type === "video"){
+          toast({
+            title: 'Success',
+            description: 'Berhasil menambah materi',
+            status: 'success',
+            duration: 1000,
+            isClosable: true,
+          });
+          setMaterialReady(false);
+        }else{
+          const upload_link = res.data.data.upload_link;
+          axios
+            .put(upload_link, file, {
+              headers: {
+                'Content-Type' : file!.type,
+                'x-amz-acl' : 'public-read',
+              }
+            })
+            .then(
+              res => {
+                console.log(res);
+                toast({
+                  title: 'Adding material success!',
+                  description: res.data.message,
+                  status: 'success',
+                  duration: 9000,
+                  isClosable: true
+                });
+              }, res => {
+                console.log(res);
+                toast({
+                  title: 'Adding material failed!',
+                  description: res.message,
+                  status: 'error',
+                  duration: 9000,
+                  isClosable: true,
+                })
+              }
+            )
+        }
       }).catch((err) => {
         toast({
           title: 'Gagal menambah material',
@@ -195,6 +232,16 @@ const ContentManagementPage = () => {
   }
 
   const handleDelete = () => {
+    if(!contentID){
+      toast({
+        title: 'Gagal menghapus',
+        description: 'Konten belum dipilih',
+        status: 'error',
+        duration: 1000,
+        isClosable: true,
+      });
+      return;
+    }
     http.delete(`/material/${material_id}/content/${contentID}`).then(
       (res) => {
         toast({
@@ -207,10 +254,11 @@ const ContentManagementPage = () => {
         setMaterialReady(false);
       }
     ).catch(
-      (res) => {
+      err => {
+        console.log(err);
         toast({
           title: 'Gagal menghapus materi',
-          description: 'Entah mengapa',
+          description: err.message,
           status: 'error',
           duration: 1000,
           isClosable: true,
@@ -222,10 +270,23 @@ const ContentManagementPage = () => {
   
   if(isValid) return (
     <>
-      <Layout title="Edit Material" py={0} px={0}>
+      <Layout title="Edit Konten" py={0} px={0}>
         <CourseBanner {...courseBannerProps}>
           <HStack justifyContent="space-between">
-            <Heading>Edit Konten</Heading>
+            <HStack>
+              <IconButton
+                aria-label="back"
+                icon={<MdArrowBackIos />}
+                variant="ghost"
+                onClick={router.back}
+              />
+              <VStack alignItems={'flex-start'}>
+                <Heading>Edit Konten</Heading>
+                <Skeleton isLoaded = {materialReady}>
+                  <Text>{material.name} - Week {material.week}</Text>
+                </Skeleton>
+              </VStack>
+            </HStack>
             <Button bg="biru.600" color="white" onClick={onOpenAdd}>
               <MdAdd />
               <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
@@ -233,20 +294,20 @@ const ContentManagementPage = () => {
               </Text>
             </Button>
           </HStack>
-          <Card mt={10}>
-            <Accordion>
+          <Card mt={10} p={5}>
+            <Accordion allowToggle onChange={(idx) => {setIndexExpanded(idx as number)}}>
               {material.contents.map((c: Content) => (
                 <AccordionItem key={c.id}>
                   <AccordionButton>
                     <Box as="span" flex='1' textAlign='left'>
-                      Content {c.id}
+                      Content {c.type}
                     </Box>
                   </AccordionButton>
                   <AccordionPanel>
                     {
                       //TODO : Tampilin konten di sini
                     }
-                    <Button bg="red" color="white" onClick={onOpenDelete}>
+                    <Button bg="red" color="white" onClick={e => handleDeleteButton(c.id)}>
                       <MdDelete />
                       <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
                         Delete
