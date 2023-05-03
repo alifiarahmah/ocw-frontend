@@ -256,7 +256,7 @@ export default function CourseManagement() {
                     <Text>{c.name}</Text>
                     <HStack my={1}>
                       <Link href={router.asPath + '/'}>
-                        <Button size="sm" onClick={onOpenEdit}>
+                        <Button size="sm" onClick={e => router.push(router.asPath + `/${c.id}/material`)}>
                           <Text display={{ base: 'none', lg: 'flex' }}>
                             Materi
                           </Text>
