@@ -204,6 +204,7 @@ const ContentManagementPage = () => {
                   duration: 9000,
                   isClosable: true
                 });
+                setMaterialReady(false);
               }, res => {
                 console.log(res);
                 toast({
@@ -337,7 +338,7 @@ const ContentManagementPage = () => {
                         </AspectRatio>
                       )
                     }
-                    <Button bg="red" color="white" onClick={e => handleDeleteButton(c.id)}>
+                    <Button bg="red" color="white" onClick={e => handleDeleteButton(c.id)} mt={5}>
                       <MdDelete />
                       <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
                         Delete
