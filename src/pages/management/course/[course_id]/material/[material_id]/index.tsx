@@ -23,6 +23,7 @@ import {
   IconButton,
   VStack,
   Skeleton,
+  AspectRatio,
 } from "@chakra-ui/react";
 import { MdAdd, MdDelete, MdArrowBackIos } from "react-icons/md";
 import AddContentModal from "@/components/management/content/add-content-modal";
@@ -30,6 +31,7 @@ import DeleteContentModal from "@/components/management/content/delete-content-m
 import { Material } from "@/types/material";
 import { Content } from "@/types/content";
 import axios from "axios";
+
 
 interface CourseBannerProps {
   course_code : string;
@@ -303,9 +305,37 @@ const ContentManagementPage = () => {
                       Content {c.type}
                     </Box>
                   </AccordionButton>
-                  <AccordionPanel>
+                  <AccordionPanel overflow={'auto'} maxH={'fit-content'} width={'100%'}>
                     {
                       //TODO : Tampilin konten di sini
+                      c.type == "handout" ? (
+                        <AspectRatio
+                          height={'100%'}
+                          width={'100%'}
+                        >
+                        <iframe
+                          src={`https://ocw-bucket.s3.idcloudhost.com/static/${c.link}`}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 'none' }}
+                          
+                        />
+                        </AspectRatio>
+                      ):(
+                        <AspectRatio
+                        maxWidth={'5xl'}
+                        maxHeight={'7xl'}
+                        >
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          src={c.link.replace("watch?v=","embed/")}
+                          title="video player"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          />
+                        </AspectRatio>
+                      )
                     }
                     <Button bg="red" color="white" onClick={e => handleDeleteButton(c.id)}>
                       <MdDelete />
