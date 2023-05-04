@@ -14,9 +14,7 @@ function Result() {
   const [isDoneLoading, setIsDoneLoading] = useState(false);
 
   useEffect(() => {
-    if (!router.query.id || !router.query.userAnswers) {
-      return;
-    }
+    if (!router.isReady) return;
     // if score is already calculated, return
     if (score !== -1) {
       return;
@@ -46,7 +44,7 @@ function Result() {
       .finally(() => {
         setIsDoneLoading(true);
       });
-  }, [router.query.id, router.query.userAnswers, userAnswers]);
+  }, [router.isReady, router.query.id, router.query.userAnswers, userAnswers]);
 
   return (
     <Layout>

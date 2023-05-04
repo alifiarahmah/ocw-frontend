@@ -24,7 +24,7 @@ function Pembahasan() {
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
 
   useEffect(() => {
-    if (!router.query.id || !router.query.userAnswers) {
+    if (!router.isReady) {
       return;
     }
     setUserAnswers(JSON.parse(router.query.userAnswers as string));
@@ -41,7 +41,7 @@ function Pembahasan() {
       .catch((err) => {
         console.log(err.response.data);
       });
-  }, [router.query.id, router.query.userAnswers]);
+  }, [router.isReady, router.query.id, router.query.userAnswers]);
 
   return (
     <Layout>

@@ -59,22 +59,24 @@ function Quiz() {
   const hours = Math.floor(minutes / 60);
 
   useEffect(() => {
-    if (!router.query.id) {
+    if (!router.isReady) {
       return;
     }
-    http
-      .post(`/quiz/${router.query.id}/take`, {
-        Authorization: `Bearer ${getAvailableUserData()}`,
-      })
-      .then((res) => {
-        setQuizName(res.data.data.name);
-        setProblems(res.data.data.problems);
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-      })
-      .finally(() => setIsDoneLoading(true));
-  }, [router.query.id]);
+    if (problems.length == 0) {
+      http
+        .post(`/quiz/${router.query.id}/take`, {
+          Authorization: `Bearer ${getAvailableUserData()}`,
+        })
+        .then((res) => {
+          setQuizName(res.data.data.name);
+          setProblems(res.data.data.problems);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        })
+        .finally(() => setIsDoneLoading(true));
+    }
+  }, [problems.length, router.isReady, router.query.id]);
 
   const handleChangeAnswer = (problemId: string, answerId: string) => {
     // if same problemId already exists, then replace it
