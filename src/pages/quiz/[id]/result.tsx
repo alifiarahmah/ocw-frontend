@@ -15,35 +15,34 @@ function Result() {
 
   useEffect(() => {
     if (!router.isReady) return;
-    // if score is already calculated, return
-    if (score !== -1) {
-      return;
-    }
     // parse user answer as UserAnswer[] from router.query.userAnswers
-    setUserAnswers(JSON.parse(router.query.userAnswers as string));
-    // POST
-    http
-      .post(
-        `/quiz/${router.query.id}/finish`,
-        {
-          data: userAnswers,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${getAvailableUserData()}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data.data);
-        setScore(res.data.data.score);
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-      })
-      .finally(() => {
-        setIsDoneLoading(true);
-      });
+    if (score == -1) {
+      setUserAnswers(JSON.parse(router.query.userAnswers as string));
+      if (userAnswers.length != 0) {
+        http
+          .post(
+            `/quiz/${router.query.id}/finish`,
+            {
+              data: userAnswers,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${getAvailableUserData()}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res.data.data);
+            setScore(res.data.data.score);
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+          })
+          .finally(() => {
+            setIsDoneLoading(true);
+          });
+      }
+    }
   }, [router.isReady, router.query.id, router.query.userAnswers, userAnswers]);
 
   return (
