@@ -115,7 +115,6 @@ const MaterialManagementPage = () => {
         } else {
           toast({
             title: 'Forbidden Page',
-            description: 'Gaboleh edit course',
             status: 'error',
             duration: 9000,
             isClosable: true,
