@@ -278,7 +278,7 @@ const MaterialManagementPage = () => {
                             onOpenEdit={() => {
                               handleEditButton(m.id);
                             }}
-                            onOpenDeleteMaterial={() => {
+                            onOpenDelete={() => {
                               handleDeleteButton(m.id);
                             }}
                           />
