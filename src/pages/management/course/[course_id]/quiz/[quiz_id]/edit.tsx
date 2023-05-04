@@ -51,11 +51,7 @@ export default function EditQuiz() {
         axios
           .get(`${process.env.NEXT_PUBLIC_BUCKET_URL}/${link}`)
           .then((res) => {
-            console.log('res.data.problems');
-            console.log(res.data.problems);
             setProblems(res.data.problems);
-            console.log('Problems');
-            console.log(problems);
           })
           .catch((err) => console.log(err));
       })
@@ -65,7 +61,7 @@ export default function EditQuiz() {
 
   const handleSubmit = () => {
     http
-      .put(
+      .patch(
         `/quiz/${quizId}`,
         {
           name: quizName,
@@ -79,14 +75,27 @@ export default function EditQuiz() {
       )
       .then((res) => {
         console.log(res.data);
+        const id = res.data.data.id;
         const uploadLink = res.data.data.upload_link;
         axios
-          .put(uploadLink, problems, {
-            headers: {
-              'Content-Type': 'application/json',
-              'x-amz-acl': 'public-read',
+          .put(
+            uploadLink,
+            {
+              id,
+              name: quizName,
+              course_id,
+              description: '',
+              help: '',
+              media: [],
+              problems,
             },
-          })
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'x-amz-acl': 'public-read',
+              },
+            }
+          )
           .then((res) => {
             console.log(res.data);
             if (res.status === 200) {
@@ -106,13 +115,6 @@ export default function EditQuiz() {
       .catch((err) => {
         console.log(err);
       });
-    // toast({
-    //   title: 'Latihan berhasil dibuat',
-    //   status: 'success',
-    //   duration: 3000,
-    //   isClosable: true,
-    // });
-    // router.back();
   };
 
   return (
