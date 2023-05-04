@@ -1,12 +1,12 @@
 import {
-  HStack,
-  VStack,
   Box,
-  Container,
-  Text,
-  Divider,
   BoxProps,
-  Skeleton
+  Container,
+  Divider,
+  HStack,
+  Skeleton,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 
 export interface BannerProps extends BoxProps {
@@ -42,7 +42,7 @@ const CourseBanner: React.FC<BannerProps> = ({
             <Text align={'start'} fontSize={'m'}>
               Kode Mata Kuliah
             </Text>
-            <Skeleton isLoaded={course_code.length > 0}>
+            <Skeleton isLoaded={course_code != null}>
               <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
                 {course_code}
               </Text>
@@ -53,7 +53,7 @@ const CourseBanner: React.FC<BannerProps> = ({
             <Text align={'start'} fontSize={'m'}>
               Mata Kuliah
             </Text>
-            <Skeleton isLoaded={course_name.length > 0}>
+            <Skeleton isLoaded={course_name != null}>
               <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
                 {course_name}
               </Text>
@@ -64,11 +64,9 @@ const CourseBanner: React.FC<BannerProps> = ({
             <Text align={'start'} fontSize={'m'}>
               Dosen Pengajar
             </Text>
-            <Skeleton isLoaded={lecturer.length > 0}>
-              <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
-                {lecturer}
-              </Text>
-            </Skeleton>
+            <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
+              {lecturer ?? '-'}
+            </Text>
           </VStack>
         </VStack>
       </Container>
