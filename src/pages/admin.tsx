@@ -190,12 +190,12 @@ export default function Admin() {
       >
         <HStack justifyContent="space-between">
           <Heading>Daftar Pengguna</Heading>
-          <Button bg="biru.600" color="white" onClick={onOpenAdd}>
+          {/* <Button bg="biru.600" color="white" onClick={onOpenAdd}>
             <MdAdd />
             <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
               Tambah Pengguna
             </Text>
-          </Button>
+          </Button> */}
         </HStack>
         <TableContainer>
           <Table variant="simple" bg={'white'} borderRadius="lg" mt={5}>
