@@ -75,6 +75,7 @@ const MaterialManagementPage = () => {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [contents, setContents] = useState<Content[]>([]);
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [selectedQuizId, setSelectedQuizId] = useState<string>('');
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -211,11 +212,7 @@ const MaterialManagementPage = () => {
   const handleConfirmDeleteQuiz = () => {
     onCloseDeleteQuiz();
     http
-      .delete(`/quiz/${router.query.quiz_id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-      })
+      .delete(`/quiz/${selectedQuizId}`)
       .then(() => {
         toast({
           title: 'Latihan berhasil dihapus',
@@ -319,7 +316,10 @@ const MaterialManagementPage = () => {
                           onOpenEdit={() => {
                             router.push(`${router.asPath}/quiz/${q.id}/edit`);
                           }}
-                          onOpenDelete={onOpenDeleteQuiz}
+                          onOpenDelete={() => {
+                            setSelectedQuizId(q.id);
+                            onOpenDeleteQuiz();
+                          }}
                         />
                       </Td>
                     </Tr>
