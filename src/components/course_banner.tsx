@@ -36,7 +36,7 @@ const CourseBanner: React.FC<BannerProps> = ({
       >
         {children}
       </Box>
-      <Container minHeight="90vh" bgColor="biru.500" width="50vh" padding={10}>
+      <Container minHeight="90vh" bgColor="biru.500" width="50vh" padding={10} display={{ base: 'none', lg: 'flex' }}>
         <VStack align={'start'} spacing="6" marginStart="2vh" maxWidth="30vh">
           <VStack spacing="1" align={'start'}>
             <Text align={'start'} fontSize={'m'}>
