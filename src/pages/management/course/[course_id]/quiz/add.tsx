@@ -22,7 +22,6 @@ import { v4 as uuidv4 } from 'uuid';
 export default function NewQuiz() {
   const router = useRouter();
   const toast = useToast();
-  const quizId = uuidv4();
   const course_id = router.query.course_id as string;
   const [quizName, setQuizName] = useState('');
   const [problems, setProblems] = useState<Problem[]>([]);
@@ -30,7 +29,7 @@ export default function NewQuiz() {
   const handleSubmit = () => {
     http
       .put(
-        `/quiz/${quizId}`,
+        `/quiz`,
         {
           name: quizName,
           course_id,

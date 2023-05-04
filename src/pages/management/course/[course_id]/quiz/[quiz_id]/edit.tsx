@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function NewQuiz() {
+export default function EditQuiz() {
   const router = useRouter();
   const toast = useToast();
   const quizId = router.query.quiz_id as string;
@@ -47,13 +47,17 @@ export default function NewQuiz() {
       })
       .then((res) => {
         // parse the link
-        const link = res.data.data.upload_link;
+        const link = res.data.data.path;
         axios
           .get(`${process.env.NEXT_PUBLIC_BUCKET_URL}/${link}`)
           .then((res) => {
+            console.log('res.data.problems');
+            console.log(res.data.problems);
             setProblems(res.data.problems);
+            console.log('Problems');
             console.log(problems);
-          });
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
     // eslint-disable-next-line react-hooks/exhaustive-deps
