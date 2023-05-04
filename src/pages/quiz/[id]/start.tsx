@@ -24,25 +24,28 @@ function Quiz() {
   // create countdown from 100 minutes
   const [minutes, setMinutes] = useState(30);
   const [seconds, setSeconds] = useState(0);
+  const [isDoneLoading, setIsDoneLoading] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-      if (seconds === 0) {
-        if (minutes === 0) {
-          clearInterval(interval);
-        } else {
-          setMinutes(minutes - 1);
-          setSeconds(59);
+    if (isDoneLoading) {
+      const interval = setInterval(() => {
+        if (seconds > 0) {
+          setSeconds(seconds - 1);
         }
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [minutes, seconds]);
+        if (seconds === 0) {
+          if (minutes === 0) {
+            clearInterval(interval);
+          } else {
+            setMinutes(minutes - 1);
+            setSeconds(59);
+          }
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isDoneLoading, minutes, seconds]);
 
   // if minutes is 0, then the quiz is over
   useEffect(() => {
@@ -56,6 +59,9 @@ function Quiz() {
   const hours = Math.floor(minutes / 60);
 
   useEffect(() => {
+    if (!router.query.id) {
+      return;
+    }
     http
       .post(`/quiz/${router.query.id}/take`, {
         Authorization: `Bearer ${getAvailableUserData()}`,
@@ -63,8 +69,12 @@ function Quiz() {
       .then((res) => {
         setQuizName(res.data.data.name);
         setProblems(res.data.data.problems);
-      });
-  });
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      })
+      .finally(() => setIsDoneLoading(true));
+  }, [router.query.id]);
 
   const handleChangeAnswer = (problemId: string, answerId: string) => {
     // if same problemId already exists, then replace it
@@ -100,34 +110,38 @@ function Quiz() {
         <Stack mb={10} px={{ base: 5, md: 20 }} py={{ base: 5, md: 10 }}>
           <Heading my={5}>{quizName}</Heading>
           <Stack gap={3} mt={10}>
-            {problems.map((problem, index) => (
-              <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
-                <Text fontWeight="bold">Nomor {index + 1}</Text>
-                <Text my={3}>{problem.question}</Text>
-                <RadioGroup>
-                  <Stack gap={2}>
-                    {problem.answers.map((answer) => (
-                      <Radio
-                        key={answer.id}
-                        value={answer.id}
-                        onChange={(e: any) =>
-                          handleChangeAnswer(problem.id, e.target.value)
-                        }
-                        checked={
-                          userAnswers.some(
-                            (userAnswer) =>
-                              userAnswer.problem_id === problem.id &&
-                              userAnswer.answer_id === answer.id
-                          ) ?? false
-                        }
-                      >
-                        {answer.answer}
-                      </Radio>
-                    ))}
-                  </Stack>
-                </RadioGroup>
-              </Box>
-            ))}
+            {isDoneLoading ? (
+              problems.map((problem, index) => (
+                <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
+                  <Text fontWeight="bold">Nomor {index + 1}</Text>
+                  <Text my={3}>{problem.question}</Text>
+                  <RadioGroup>
+                    <Stack gap={2}>
+                      {problem.answers.map((answer) => (
+                        <Radio
+                          key={answer.id}
+                          value={answer.id}
+                          onChange={(e: any) =>
+                            handleChangeAnswer(problem.id, e.target.value)
+                          }
+                          checked={
+                            userAnswers.some(
+                              (userAnswer) =>
+                                userAnswer.problem_id === problem.id &&
+                                userAnswer.answer_id === answer.id
+                            ) ?? false
+                          }
+                        >
+                          {answer.answer}
+                        </Radio>
+                      ))}
+                    </Stack>
+                  </RadioGroup>
+                </Box>
+              ))
+            ) : (
+              <Text>Loading...</Text>
+            )}
           </Stack>
           <Flex justifyContent="flex-end" mt={20}>
             <Button bg="biru.600" color="white" onClick={handleSubmit}>

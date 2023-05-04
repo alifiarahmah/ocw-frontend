@@ -1,11 +1,12 @@
 import {
-  HStack,
-  VStack,
   Box,
-  Container,
-  Text,
-  Divider,
   BoxProps,
+  Container,
+  Divider,
+  HStack,
+  Skeleton,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 
 export interface BannerProps extends BoxProps {
@@ -35,24 +36,28 @@ const CourseBanner: React.FC<BannerProps> = ({
       >
         {children}
       </Box>
-      <Container minHeight="90vh" bgColor="biru.500" width="50vh" padding={10}>
+      <Container minHeight="90vh" bgColor="biru.500" width="50vh" padding={10} display={{ base: 'none', lg: 'flex' }}>
         <VStack align={'start'} spacing="6" marginStart="2vh" maxWidth="30vh">
           <VStack spacing="1" align={'start'}>
             <Text align={'start'} fontSize={'m'}>
               Kode Mata Kuliah
             </Text>
-            <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
-              {course_code}
-            </Text>
+            <Skeleton isLoaded={course_code != null}>
+              <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
+                {course_code}
+              </Text>
+            </Skeleton>
           </VStack>
           <Divider borderColor={'black'} borderWidth={'1px'} w="75%" my={4} />
           <VStack spacing="1" align={'start'}>
             <Text align={'start'} fontSize={'m'}>
               Mata Kuliah
             </Text>
-            <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
-              {course_name}
-            </Text>
+            <Skeleton isLoaded={course_name != null}>
+              <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
+                {course_name}
+              </Text>
+            </Skeleton>
           </VStack>
           <Divider borderColor={'black'} borderWidth={'1px'} w="75%" my={4} />
           <VStack spacing="1" align={'start'}>
@@ -60,7 +65,7 @@ const CourseBanner: React.FC<BannerProps> = ({
               Dosen Pengajar
             </Text>
             <Text align={'start'} fontSize={'xl'} wordBreak="break-word">
-              {lecturer}
+              {lecturer ?? '-'}
             </Text>
           </VStack>
         </VStack>

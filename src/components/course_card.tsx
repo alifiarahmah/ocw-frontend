@@ -36,7 +36,10 @@ export default function CourseCard({
       >
         <Image
           alt="Course Thumbnail"
-          src={thumbnail ?? 'https://via.placeholder.com/150x100'}
+          src={
+            thumbnail ??
+            'https://images.unsplash.com/photo-1495465798138-718f86d1a4bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&q=80'
+          }
           borderRadius="inherit"
         />
         <Box mt={{ base: 2, lg: 5 }} mb={2}>

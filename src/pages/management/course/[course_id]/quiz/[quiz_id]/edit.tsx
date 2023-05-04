@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function NewQuiz() {
+export default function EditQuiz() {
   const router = useRouter();
   const toast = useToast();
   const quizId = router.query.quiz_id as string;
@@ -47,13 +47,13 @@ export default function NewQuiz() {
       })
       .then((res) => {
         // parse the link
-        const link = res.data.data.upload_link;
+        const link = res.data.data.path;
         axios
           .get(`${process.env.NEXT_PUBLIC_BUCKET_URL}/${link}`)
           .then((res) => {
             setProblems(res.data.problems);
-            console.log(problems);
-          });
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,7 +61,7 @@ export default function NewQuiz() {
 
   const handleSubmit = () => {
     http
-      .put(
+      .patch(
         `/quiz/${quizId}`,
         {
           name: quizName,
@@ -75,14 +75,27 @@ export default function NewQuiz() {
       )
       .then((res) => {
         console.log(res.data);
+        const id = res.data.data.id;
         const uploadLink = res.data.data.upload_link;
         axios
-          .put(uploadLink, problems, {
-            headers: {
-              'Content-Type': 'application/json',
-              'x-amz-acl': 'public-read',
+          .put(
+            uploadLink,
+            {
+              id,
+              name: quizName,
+              course_id,
+              description: '',
+              help: '',
+              media: [],
+              problems,
             },
-          })
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'x-amz-acl': 'public-read',
+              },
+            }
+          )
           .then((res) => {
             console.log(res.data);
             if (res.status === 200) {
@@ -102,13 +115,6 @@ export default function NewQuiz() {
       .catch((err) => {
         console.log(err);
       });
-    // toast({
-    //   title: 'Latihan berhasil dibuat',
-    //   status: 'success',
-    //   duration: 3000,
-    //   isClosable: true,
-    // });
-    // router.back();
   };
 
   return (

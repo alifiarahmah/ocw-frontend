@@ -31,7 +31,7 @@ export default function ProblemItem({
   problems,
   setProblems,
 }: ProblemItemProps) {
-  const [answers, setAnswers] = useState<AnswerOption[]>(problem.answers);
+  const [answers, setAnswers] = useState<AnswerOption[]>(problem.answers ?? []);
 
   const handleChangeQuestion = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setProblems(

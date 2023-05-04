@@ -252,25 +252,17 @@ export default function CourseManagement() {
             <Tbody>
               {courses.map((c: Course) => (
                 <Tr key={c.id}>
-                  <Td>
-                    <Text>{c.name}</Text>
-                    <HStack my={1}>
-                      <Link href={router.asPath + '/'}>
-                        <Button size="sm" onClick={onOpenEdit}>
-                          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
-                            Materi
-                          </Text>
-                        </Button>
-                      </Link>
-                      <Link href={router.asPath + '/'}>
-                        <Button size="sm" onClick={onOpenEdit}>
-                          <Text ml={2} display={{ base: 'none', lg: 'flex' }}>
-                            Quiz
-                          </Text>
-                        </Button>
-                      </Link>
-                    </HStack>
-                  </Td>
+                  <Link href={`/management/course/${c.id}`}>
+                    <Td>
+                      <Text
+                        _hover={{
+                          textDecoration: 'underline',
+                        }}
+                      >
+                        {c.name}
+                      </Text>
+                    </Td>
+                  </Link>
                   {/* TODO: ask backend for abbreviation */}
                   <Td>{c.id.slice(0, 2)}</Td>
                   <Td>{c.lecturer.length > 0 ? c.lecturer : '-'}</Td>

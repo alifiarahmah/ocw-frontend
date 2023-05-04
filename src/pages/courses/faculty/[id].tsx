@@ -20,6 +20,8 @@ import { MdArrowBackIos, MdSearch } from 'react-icons/md';
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [rawCourses, setRawCourses] = useState<Course[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [faculty, setFaculty] = useState<Faculty>();
   const toast = useToast();
 
@@ -32,6 +34,7 @@ export default function Courses() {
     http
       .get(`/course/faculty/courses/${id}`)
       .then((res) => {
+        setRawCourses(res.data.data);
         setCourses(res.data.data);
       })
       .catch((err) => {
@@ -42,6 +45,23 @@ export default function Courses() {
         });
       });
   }, [id]);
+
+  useEffect(() => {
+    if (searchQuery === '') {
+      setCourses(rawCourses);
+      return;
+    }
+    console.log(searchQuery);
+    // filter courses name or lecturer name or course code
+    setCourses(
+      rawCourses.filter(
+        (c) =>
+          c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.lecturer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.id.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [searchQuery]);
 
   useEffect(() => {
     if (!id) return;
@@ -77,7 +97,12 @@ export default function Courses() {
             <InputLeftElement>
               <MdSearch />
             </InputLeftElement>
-            <Input name="search" placeholder="Cari Mata Kuliah" bg="white" />
+            <Input
+              name="search"
+              placeholder="Cari Mata Kuliah"
+              bg="white"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </InputGroup>
         </Stack>
         <Heading size="lg">

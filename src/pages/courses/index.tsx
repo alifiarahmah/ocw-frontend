@@ -18,6 +18,8 @@ import { MdArrowBackIos, MdSearch } from 'react-icons/md';
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [rawCourses, setRawCourses] = useState<Course[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const toast = useToast();
 
   const router = useRouter();
@@ -26,6 +28,7 @@ export default function Courses() {
     http
       .get('/course')
       .then((res) => {
+        setRawCourses(res.data.data);
         setCourses(res.data.data);
       })
       .catch((err) => {
@@ -37,6 +40,23 @@ export default function Courses() {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (searchQuery === '') {
+      setCourses(rawCourses);
+      return;
+    }
+    console.log(searchQuery);
+    // filter courses name or lecturer name or course code
+    setCourses(
+      rawCourses.filter(
+        (c) =>
+          c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.lecturer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.id.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [searchQuery]);
 
   return (
     <Layout title="Courses List">
@@ -56,7 +76,12 @@ export default function Courses() {
             <InputLeftElement>
               <MdSearch />
             </InputLeftElement>
-            <Input name="search" placeholder="Cari Mata Kuliah" bg="white" />
+            <Input
+              name="search"
+              placeholder="Cari Mata Kuliah"
+              bg="white"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </InputGroup>
         </Stack>
       </Stack>

@@ -24,6 +24,9 @@ function Pembahasan() {
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
 
   useEffect(() => {
+    if (!router.query.id || !router.query.userAnswers) {
+      return;
+    }
     setUserAnswers(JSON.parse(router.query.userAnswers as string));
     http
       .get(`/quiz/${router.query.id}/solution`, {
@@ -44,49 +47,53 @@ function Pembahasan() {
     <Layout>
       <Heading my={5}>Pembahasan {name}</Heading>
       <Stack gap={3} mt={10}>
-        {problems.map((problem, index) => (
-          <>
-            <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
-              <Text fontWeight="bold">Nomor {index + 1}</Text>
-              <Text my={3}>{problem.question}</Text>
-              <RadioGroup>
-                <Stack gap={2}>
-                  {problem.answers.map((answer) => (
-                    <Radio
-                      key={answer.id}
-                      value={answer.id}
-                      borderWidth="thick"
-                      borderColor={
-                        answer.is_solution
-                          ? 'green.500'
-                          : userAnswers.find(
-                              (userAnswer) =>
-                                userAnswer.problem_id == problem.id &&
-                                userAnswer.answer_id == answer.id
-                            )
-                          ? 'red.500'
-                          : 'gray.300'
-                      }
-                      isReadOnly
-                    >
-                      {answer.answer}
-                    </Radio>
-                  ))}
-                </Stack>
-              </RadioGroup>
-            </Box>
-            <Flex key={problem.id} bg="white" borderRadius="lg" p={5}>
-              <Text fontWeight="bold">Jawaban:</Text>
-              <Text ml={3}>
-                {
-                  // find the answer that has is_solution = true
-                  problem.answers.find((answer) => answer.is_solution == true)
-                    ?.answer || 'Tidak ada jawaban'
-                }
-              </Text>
-            </Flex>
-          </>
-        ))}
+        {problems.length > 0 ? (
+          problems.map((problem, index) => (
+            <>
+              <Box key={problem.id} bg="white" borderRadius="lg" p={5}>
+                <Text fontWeight="bold">Nomor {index + 1}</Text>
+                <Text my={3}>{problem.question}</Text>
+                <RadioGroup>
+                  <Stack gap={2}>
+                    {problem.answers.map((answer) => (
+                      <Radio
+                        key={answer.id}
+                        value={answer.id}
+                        borderWidth="thick"
+                        borderColor={
+                          answer.is_solution
+                            ? 'green.500'
+                            : userAnswers.find(
+                                (userAnswer) =>
+                                  userAnswer.problem_id == problem.id &&
+                                  userAnswer.answer_id == answer.id
+                              )
+                            ? 'red.500'
+                            : 'gray.300'
+                        }
+                        isReadOnly
+                      >
+                        {answer.answer}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Box>
+              <Flex key={problem.id} bg="white" borderRadius="lg" p={5}>
+                <Text fontWeight="bold">Jawaban:</Text>
+                <Text ml={3}>
+                  {
+                    // find the answer that has is_solution = true
+                    problem.answers.find((answer) => answer.is_solution == true)
+                      ?.answer || 'Tidak ada jawaban'
+                  }
+                </Text>
+              </Flex>
+            </>
+          ))
+        ) : (
+          <Text>Belum ada pembahasan</Text>
+        )}
       </Stack>
       <Flex justifyContent="flex-end" mt={10}>
         <Link href="/">
