@@ -15,6 +15,11 @@ export default function ContentSlide() {
 
   const toast = useToast();
   const[links, setLinks] = useState<string[]>([]);
+  const[title, setTitle] = useState(
+    {
+      title : '-',
+    }
+  );
   const router = useRouter();
   const query = router.query;
   const id = query.id;
@@ -28,6 +33,7 @@ export default function ContentSlide() {
         material_url.push(content.link)
       }
     });
+    // const material_title;
     setLinks(material_url);
     const course_id = res.data.data.course_id
     http.get(`${process.env.NEXT_PUBLIC_API_URL}/course/${course_id}`)
@@ -37,6 +43,10 @@ export default function ContentSlide() {
         course_name : red.data.data.name,
         lecturer : red.data.data.lecturer,
       });
+      setTitle({
+        title : red.data.data.name,
+      })
+      // material_title = setTitle({title = red.data.data.title})
     })
     .catch((err) => {
       toast({
@@ -73,7 +83,7 @@ export default function ContentSlide() {
           >
             ←
           </Button>
-          <Text fontSize={'3xl'}>Decision Tree Learning (DTL)</Text>
+          <Text fontSize={'3xl'}>{title.title}</Text>
         </HStack>
         <Center flexDirection={'column'}>
           <VStack maxHeight={'fit-content'} width={'100%'}>
